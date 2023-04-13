@@ -1,0 +1,2 @@
+@set ASEPRITE="C:\Program Files (x86)\Steam\steamapps\common\Aseprite\Aseprite.exe"
+%ASEPRITE% -b harvester.aseprite --save-as ..\src\main\resources\assets\agriculturalenhancements\textures\{slice}.png

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "SCS",
+    "HFH"
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "tag": "minecraft:stone_tool_materials"
+    },
+    "C": {
+      "tag": "forge:chests/wooden"
+    },
+    "H": {
+      "item": "minecraft:iron_hoe"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "agriculturalenhancements:harvester",
+    "count": 1
+  }
+}

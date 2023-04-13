@@ -1,0 +1,12 @@
+{
+  "block.agriculturalenhancements.harvester": "Harvester",
+  "screen.agriculturalenhancements.harvester": "Harvester",
+  "itemGroup.agriculturalenhancements": "Agricultural Enhancements",
+  "message.agriculturalenhancements.fuelslot": "Fuel Slot",
+  "message.agriculturalenhancements.harvester_1": "Harvests crops up tp 9 blocks away",
+  "message.agriculturalenhancements.harvester_2": "Requires fuel to operate",
+  "agriculturalenhancements.config.furnaceUpgradedExperience": "Augmented Furnace Experience",
+  "agriculturalenhancements.config.furnaceUpgradedEfficiency": "Augmented Furnace Efficiency",
+  "agriculturalenhancements.config.title": "Agricultural Enhancements Config Settings",
+  "agriculturalenhancements.harvester.jei_info": "Fuel-powered block that harvests crop blocks up to nine blocks away from itself.\nWhen placed, it faces away from the player.\nWill consume fuel that exceeds the fuel storage only when the fuel level is lower than one unit of work (potentially wasteful with high-value modded fuels)"
+}

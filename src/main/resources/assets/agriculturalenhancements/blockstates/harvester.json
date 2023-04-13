@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "agriculturalenhancements:block/harvester"
+    },
+    "facing=south": {
+      "model": "agriculturalenhancements:block/harvester",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "agriculturalenhancements:block/harvester",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "agriculturalenhancements:block/harvester",
+      "y": 90
+    }
+  }
+}
