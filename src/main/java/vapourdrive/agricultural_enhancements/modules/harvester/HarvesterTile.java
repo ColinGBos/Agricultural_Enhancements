@@ -5,12 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -21,10 +17,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.modules.BaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.modules.IFuelUser;
+import vapourdrive.agricultural_enhancements.modules.AbstractBaseFuelUserTile;
 import vapourdrive.agricultural_enhancements.modules.itemhandlers.FuelHandler;
 import vapourdrive.agricultural_enhancements.modules.itemhandlers.OutputHandler;
 import vapourdrive.agricultural_enhancements.utils.MachineUtils;
@@ -34,9 +28,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.HARVESTER_TILE;
-import static vapourdrive.agricultural_enhancements.utils.MachineUtils.tryConsumeFuelStack;
 
-public class HarvesterTile extends BaseFuelUserTile {
+public class HarvesterTile extends AbstractBaseFuelUserTile {
 
     private final FuelHandler fuelHandler = new FuelHandler(this, FUEL_SLOT.length);
     private final OutputHandler outputHandler = new OutputHandler(this, OUTPUT_SLOTS.length);
@@ -44,26 +37,10 @@ public class HarvesterTile extends BaseFuelUserTile {
     private final CombinedInvWrapper combined = new CombinedInvWrapper(fuelHandler, outputHandler);
     private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
 
-    public final int maxFuel = 6400000;
-    public final int minWorkFuel = 2500;
-    public int wait = 0;
-
-    public int toAdd = 0;
-    public int increment = 0;
-
-    private ItemStack currentFuelStack = ItemStack.EMPTY;
-    private int currentBurn = 0;
-
     public final HarvesterData harvesterData = new HarvesterData();
 
-
-    public static final int[] FUEL_SLOT = {0};
-
-    public static final int[] OUTPUT_SLOTS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-
-
     public HarvesterTile(BlockPos pos, BlockState state) {
-        super(HARVESTER_TILE.get(), pos, state);
+        super(HARVESTER_TILE.get(), pos, state, 6400000, 2500, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14});
     }
 
     public void tickServer(BlockState state) {
@@ -104,14 +81,14 @@ public class HarvesterTile extends BaseFuelUserTile {
                             }
                         }
 //                        AgriculturalEnhancements.debugLog("Drops post-cull: " + drops);
-//                            AgriculturalEnhancements.debugLog("Seed: "+seed);
+//                        AgriculturalEnhancements.debugLog("Seed: "+seed);
 
                         if (MachineUtils.canPushAllOutputs(drops, this)) {
                             for (ItemStack stack : drops) {
                                 MachineUtils.pushOutput(stack, false, this);
                             }
 //                            AgriculturalEnhancements.debugLog("Server Success");
-                            animate(level, pos, level.getRandom());
+                            MachineUtils.animate(level, pos, level.getRandom(), SoundEvents.CROP_BREAK);
                             level.setBlockAndUpdate(pos, targetState.setValue(crop.getAgeProperty(), 1));
                             consumeFuel(getMinFuelToWork(), false);
                         }
@@ -128,29 +105,6 @@ public class HarvesterTile extends BaseFuelUserTile {
             return false;
         }
         return !outputHandler.isFull();
-    }
-
-    public void animate(Level world, BlockPos pos, RandomSource rand) {
-//        double d0 = (double)pos.getX() + 0.5D;
-//        double d1 = pos.getY();
-//        double d2 = (double)pos.getZ() + 0.5D;
-//        AgriculturalEnhancements.debugLog("Playing Sound");
-        float randPitch = (rand.nextFloat() - 0.5f) / 2f;
-        float randVolume = (rand.nextFloat() - 0.5f) / 2f;
-        world.playSound(null, pos, SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 1.0F + randVolume, 1.0F + randPitch);
-
-//        double d3 = 0.52D;
-//        double d4 = rand.nextDouble();
-//        double d6 = rand.nextDouble();
-//        AgriculturalEnhancements.debugLog("Spawning Particle Sound");
-//        world.addParticle(ParticleTypes.ASH, d0+d4, d1 + d6, d2+d3, 0.0D, 0.0D, 0.0D);
-//        if (!world.isClientSide()){
-//            ServerLevel serverLevel = (ServerLevel) level;
-//            assert serverLevel != null;
-//            BlockParticleOption particle = new BlockParticleOption(ParticleTypes.BLOCK, world.getBlockState(pos));
-//            serverLevel.sendParticles(particle, 0.5, 0.5, 0.8, 10, 0.0D, 0.0D, 0.0D, 0.0D);
-//        }
-//        world.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
     }
 
     @Override
@@ -200,64 +154,16 @@ public class HarvesterTile extends BaseFuelUserTile {
     }
 
     @Override
-    public int getMaxFuel() {
-        return this.maxFuel;
-    }
-
-    @Override
-    public int getMinFuelToWork() {
-        return this.minWorkFuel;
-    }
-
-    @Override
-    public int getIncrementalFuelToAdd(){
-        return this.increment;
-    }
-    @Override
-    public void setIncrementalFuelToAdd(int increment){
-        this.increment = increment;
-    }
-
-    @Override
-    public int getFuelToAdd(){
-        return toAdd;
-    }
-    @Override
-    public void setFuelToAdd(int toAdd){
-        this.toAdd = toAdd;
-    }
-
-    @Override
-    public int getCurrentBurn(){
-        return this.currentBurn;
-    }
-
-    @Override
-    public void setCurrentBurn(int burn){
-        this.currentBurn = burn;
-    }
-
-    @Override
-    public ItemStack getCurrentFuelStack() {
-        return this.currentFuelStack;
-    }
-
-    @Override
-    public void setCurrentFuelStack(ItemStack stack) {
-        this.currentFuelStack = stack;
-    }
-
-    @Override
     public int getCurrentFuel() {
         return harvesterData.get(HarvesterData.Data.FUEL);
     }
 
     @Override
     public boolean addFuel(int toAdd, boolean simulate) {
-        if(toAdd + getCurrentFuel() > getMaxFuel()){
+        if (toAdd + getCurrentFuel() > getMaxFuel()) {
             return false;
         }
-        if(!simulate) {
+        if (!simulate) {
             harvesterData.set(HarvesterData.Data.FUEL, getCurrentFuel() + toAdd);
         }
 
@@ -266,10 +172,10 @@ public class HarvesterTile extends BaseFuelUserTile {
 
     @Override
     public boolean consumeFuel(int toConsume, boolean simulate) {
-        if(getCurrentFuel() < toConsume){
+        if (getCurrentFuel() < toConsume) {
             return false;
         }
-        if(!simulate) {
+        if (!simulate) {
             harvesterData.set(HarvesterData.Data.FUEL, getCurrentFuel() - toConsume);
         }
         return true;
@@ -277,11 +183,6 @@ public class HarvesterTile extends BaseFuelUserTile {
 
     public HarvesterData getHarvesterData() {
         return harvesterData;
-    }
-
-    @Override
-    public int[] getOutputSlots(){
-        return OUTPUT_SLOTS;
     }
 
     @Override

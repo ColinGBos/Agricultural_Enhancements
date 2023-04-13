@@ -1,5 +1,9 @@
 package vapourdrive.agricultural_enhancements.utils;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
@@ -7,7 +11,6 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.modules.IFuelUser;
 
 import java.util.ArrayList;
@@ -80,6 +83,29 @@ public class MachineUtils {
         return ret;
     }
 
+    public static void animate(Level world, BlockPos pos, RandomSource rand, SoundEvent sound) {
+//        double d0 = (double)pos.getX() + 0.5D;
+//        double d1 = pos.getY();
+//        double d2 = (double)pos.getZ() + 0.5D;
+//        AgriculturalEnhancements.debugLog("Playing Sound");
+        float randPitch = (rand.nextFloat() - 0.5f) / 2f;
+        float randVolume = (rand.nextFloat() - 0.5f) / 2f;
+        world.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F + randVolume, 1.0F + randPitch);
+
+//        double d3 = 0.52D;
+//        double d4 = rand.nextDouble();
+//        double d6 = rand.nextDouble();
+//        AgriculturalEnhancements.debugLog("Spawning Particle Sound");
+//        world.addParticle(ParticleTypes.ASH, d0+d4, d1 + d6, d2+d3, 0.0D, 0.0D, 0.0D);
+//        if (!world.isClientSide()){
+//            ServerLevel serverLevel = (ServerLevel) level;
+//            assert serverLevel != null;
+//            BlockParticleOption particle = new BlockParticleOption(ParticleTypes.BLOCK, world.getBlockState(pos));
+//            serverLevel.sendParticles(particle, 0.5, 0.5, 0.8, 10, 0.0D, 0.0D, 0.0D, 0.0D);
+//        }
+//        world.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+    }
+
     public static void doFuelProcess(ItemStack fuel, int wait, IFuelUser user) {
         if (wait % 10 == 0) {
 //            AgriculturalEnhancements.debugLog("Doing fuel process");
@@ -91,7 +117,7 @@ public class MachineUtils {
         } else {
             if (user.getFuelToAdd() > 0) {
                 user.addFuel(user.getIncrementalFuelToAdd(), false);
-                user.setFuelToAdd(user.getFuelToAdd()-user.getIncrementalFuelToAdd());
+                user.setFuelToAdd(user.getFuelToAdd() - user.getIncrementalFuelToAdd());
             }
         }
     }
@@ -119,7 +145,6 @@ public class MachineUtils {
                     user.setCurrentFuelStack(ItemStack.EMPTY);
                     user.setCurrentBurn((int) (getBurnDuration(fuel) * user.getEfficiencyMultiplier()));
                 }
-//                furnaceData.fuel += toAdd;
 //                AgriculturalEnhancements.debugLog("CurrentBurn: "+user.getCurrentBurn());
                 return user.getCurrentBurn();
             }

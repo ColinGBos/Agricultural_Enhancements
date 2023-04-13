@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class BaseFuelUserTile extends BlockEntity implements IFuelUser {
+public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IFuelUser {
 
     public final int maxFuel;
     public final int minWorkFuel;
@@ -21,7 +21,8 @@ public abstract class BaseFuelUserTile extends BlockEntity implements IFuelUser 
     public final int[] FUEL_SLOT = {0};
 
     public int[] OUTPUT_SLOTS;
-    public BaseFuelUserTile(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, int maxFuel, int minWorkFuel, int[] OUTPUT_SLOTS) {
+
+    public AbstractBaseFuelUserTile(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, int maxFuel, int minWorkFuel, int[] OUTPUT_SLOTS) {
         super(pType, pPos, pBlockState);
         this.maxFuel = maxFuel;
         this.minWorkFuel = minWorkFuel;
@@ -50,7 +51,7 @@ public abstract class BaseFuelUserTile extends BlockEntity implements IFuelUser 
 
     @Override
     public void setCurrentBurn(int burn) {
-
+        this.currentBurn = burn;
     }
 
     @Override
@@ -76,21 +77,6 @@ public abstract class BaseFuelUserTile extends BlockEntity implements IFuelUser 
     }
 
     @Override
-    public boolean addFuel(int toAdd, boolean simulate) {
-        return false;
-    }
-
-    @Override
-    public boolean consumeFuel(int toConsume, boolean simulate) {
-        return false;
-    }
-
-    @Override
-    public boolean canWork() {
-        return false;
-    }
-
-    @Override
     public ItemStack getCurrentFuelStack() {
         return this.currentFuelStack;
     }
@@ -101,7 +87,8 @@ public abstract class BaseFuelUserTile extends BlockEntity implements IFuelUser 
     }
 
     @Override
-    public int[] getOutputSlots(){
+    public int[] getOutputSlots() {
         return this.OUTPUT_SLOTS;
     }
+
 }
