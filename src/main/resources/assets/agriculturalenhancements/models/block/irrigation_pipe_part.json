@@ -1,0 +1,7 @@
+{
+    "parent": "agriculturalenhancements:block/pipe_part",
+    "textures": {
+        "0": "agriculturalenhancements:block/irrigation_pipe",
+        "particle": "agriculturalenhancements:block/irrigation_pipe"
+    }
+}
