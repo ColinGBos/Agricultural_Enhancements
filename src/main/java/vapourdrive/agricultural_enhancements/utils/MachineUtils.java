@@ -78,14 +78,16 @@ public class MachineUtils {
         return ret;
     }
 
-    public static void animate(Level world, BlockPos pos, RandomSource rand, SoundEvent sound) {
+    public static void animate(Level world, BlockPos pos, RandomSource rand, SoundEvent sound, float pitch) {
 //        double d0 = (double)pos.getX() + 0.5D;
 //        double d1 = pos.getY();
 //        double d2 = (double)pos.getZ() + 0.5D;
 //        AgriculturalEnhancements.debugLog("Playing Sound");
-        float randPitch = (rand.nextFloat() - 0.5f) / 2f;
+        if (pitch == 0f) {
+            pitch = (rand.nextFloat() - 0.5f) / 2f;
+        }
         float randVolume = (rand.nextFloat() - 0.5f) / 2f;
-        world.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F + randVolume, 1.0F + randPitch);
+        world.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F + randVolume, 1.0F + pitch);
 
 //        double d3 = 0.52D;
 //        double d4 = rand.nextDouble();

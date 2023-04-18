@@ -1,5 +1,8 @@
 {
   "block.agriculturalenhancements.harvester": "Harvester",
+  "block.agriculturalenhancements.irrigation_pipe": "Irrigation Pipe",
+  "block.agriculturalenhancements.sprayer_pipe": "Irrigation Sprayer",
+  "block.agriculturalenhancements.harvester": "Harvester",
   "screen.agriculturalenhancements.harvester": "Harvester",
   "itemGroup.agriculturalenhancements": "Agricultural Enhancements",
   "message.agriculturalenhancements.fuelslot": "Fuel Slot",

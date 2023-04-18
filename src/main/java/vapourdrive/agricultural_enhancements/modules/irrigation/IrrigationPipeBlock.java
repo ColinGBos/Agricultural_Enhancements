@@ -2,35 +2,47 @@ package vapourdrive.agricultural_enhancements.modules.irrigation;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
+import net.minecraft.core.PositionImpl;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
-import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 
-public class IrrigationPipeBlock extends PipeBlock {
-    public static final IntegerProperty POWER = BlockStateProperties.POWER;
+public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
+
+    public static final IntegerProperty IRRIGATION = IntegerProperty.create("irrigation", 0, 15);
+
     public IrrigationPipeBlock() {
         super(0.125F, BlockBehaviour.Properties.of(Material.METAL)
                 .sound(SoundType.METAL)
                 .strength(1.5f)
                 .requiresCorrectToolForDrops()
         );
-        this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, Boolean.FALSE).setValue(EAST, Boolean.FALSE).setValue(SOUTH, Boolean.FALSE).setValue(WEST, Boolean.FALSE).setValue(UP, Boolean.FALSE).setValue(DOWN, Boolean.FALSE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, Boolean.FALSE).setValue(EAST, Boolean.FALSE).setValue(SOUTH, Boolean.FALSE).setValue(WEST, Boolean.FALSE).setValue(UP, Boolean.FALSE).setValue(DOWN, Boolean.FALSE).setValue(IRRIGATION, 0));
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        return this.getStateForPlacement(pContext.getLevel(), pContext.getClickedPos());
     }
 
     public BlockState getStateForPlacement(BlockGetter pLevel, BlockPos pPos) {
@@ -40,10 +52,171 @@ public class IrrigationPipeBlock extends PipeBlock {
         BlockState blockstate3 = pLevel.getBlockState(pPos.east());
         BlockState blockstate4 = pLevel.getBlockState(pPos.south());
         BlockState blockstate5 = pLevel.getBlockState(pPos.west());
-        return this.defaultBlockState().setValue(UP, canConnect(blockstate)).setValue(DOWN, canConnect(blockstate1)).setValue(NORTH, canConnect(blockstate2)).setValue(EAST, canConnect(blockstate3)).setValue(SOUTH, canConnect(blockstate4)).setValue(WEST, canConnect(blockstate5));    }
+        BlockState[] states = {blockstate, blockstate1, blockstate2, blockstate3, blockstate4, blockstate5};
+        int irrigation = 0;
+        for (BlockState state : states) {
+            if (state.hasProperty(IRRIGATION)) {
+                int neighbor_irrigation = state.getValue(IRRIGATION);
+//                AgriculturalEnhancements.debugLog("Neighbor"+ state+" Irrigation: "+ irrigation);
+                if (neighbor_irrigation > irrigation) {
+                    irrigation = neighbor_irrigation;
+                }
+            }
+        }
+        if (irrigation > 0) {
+            irrigation -= 1;
+        }
+        AgriculturalEnhancements.debugLog("Irrigation: " + irrigation);
+        return this.defaultBlockState().setValue(IRRIGATION, irrigation).setValue(UP, canConnect(blockstate1)).setValue(DOWN, canConnect(blockstate)).setValue(NORTH, canConnect(blockstate2)).setValue(EAST, canConnect(blockstate3)).setValue(SOUTH, canConnect(blockstate4)).setValue(WEST, canConnect(blockstate5));
+    }
 
-    public boolean canConnect(BlockState state){
-        return state.getBlock() instanceof IrrigationPipeBlock;
+    public BlockState updateIrrigationStrength(BlockGetter pLevel, BlockPos pPos, BlockState pState) {
+        BlockState blockstate = pLevel.getBlockState(pPos.below());
+        BlockState blockstate1 = pLevel.getBlockState(pPos.above());
+        BlockState blockstate2 = pLevel.getBlockState(pPos.north());
+        BlockState blockstate3 = pLevel.getBlockState(pPos.east());
+        BlockState blockstate4 = pLevel.getBlockState(pPos.south());
+        BlockState blockstate5 = pLevel.getBlockState(pPos.west());
+        BlockState[] states = {blockstate, blockstate1, blockstate2, blockstate3, blockstate4, blockstate5};
+        int irrigation = 0;
+        if (pState != null) {
+            irrigation = pState.getValue(IRRIGATION);
+        }
+        for (BlockState state : states) {
+            if (state.hasProperty(IRRIGATION)) {
+                int neighbor_irrigation = state.getValue(IRRIGATION);
+//                AgriculturalEnhancements.debugLog("Neighbor"+ state+" Irrigation: "+ irrigation);
+                if (neighbor_irrigation > irrigation) {
+                    irrigation = neighbor_irrigation;
+                }
+            }
+        }
+        if (irrigation > 0) {
+            irrigation -= 1;
+        }
+//        AgriculturalEnhancements.debugLog("Irrigation: "+ irrigation);
+        return this.defaultBlockState().setValue(IRRIGATION, irrigation);
+    }
+
+    public boolean canConnect(BlockState state) {
+        return state.getBlock() instanceof IIrrigationBlock;
+    }
+
+    @Override
+    public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
+        if (!pOldState.is(pState.getBlock()) && !pLevel.isClientSide) {
+            pState = this.updateIrrigationStrength(pLevel, pPos, pState);
+            int my_level = pState.getValue(IRRIGATION);
+//            AgriculturalEnhancements.debugLog("Irrigation (onPlace): "+my_level);
+            for (Direction direction : Direction.values()) {
+                BlockState neighbor = pLevel.getBlockState(pPos.relative(direction));
+                if (neighbor.getBlock() instanceof IIrrigationBlock pipe) {
+                    if (my_level > 1) {
+                        if (my_level - neighbor.getValue(IRRIGATION) > 0) {
+                            AgriculturalEnhancements.debugLog("Irrigation (updating): " + my_level);
+                            pLevel.setBlockAndUpdate(pPos.relative(direction), neighbor.setValue(IRRIGATION, my_level - 1));
+                            pipe.bringNeighboursUp(direction.getOpposite(), pLevel, pPos.relative(direction), my_level - 1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if (!pIsMoving && !pState.is(pNewState.getBlock())) {
+            int level = pState.getValue(IRRIGATION);
+            super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+            if (!pLevel.isClientSide) {
+                for (Direction direction : Direction.values()) {
+                    BlockState neighbor = pLevel.getBlockState(pPos.relative(direction));
+                    if (neighbor.getBlock() instanceof IIrrigationBlock pipe) {
+                        int neighborLevel = neighbor.getValue(IRRIGATION);
+//                        if (level >= neighborLevel && neighborLevel > 0) {
+                        if (neighborLevel > 0) {
+                            pLevel.setBlock(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0),2);
+                            neighbor.updateShape(direction, neighbor.setValue(IRRIGATION, 0), pLevel, pPos, pPos.relative(direction));
+
+                            pLevel.setBlockAndUpdate(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0));
+                            pipe.bringNeighboursDown(direction.getOpposite(), pLevel, pPos.relative(direction), neighborLevel, pPos);
+                        }
+//                        else if(neighborLevel > level){
+//                            pipe.bringNeighboursUp(direction.getOpposite(), pLevel, pPos.relative(direction), neighborLevel);
+//                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void bringNeighboursUp(Direction fromDirection, Level pLevel, BlockPos pPos, int level) {
+        if (level > 1) {
+            for (Direction direction : Direction.values()) {
+                if (direction != fromDirection) {
+                    BlockState neighbor = pLevel.getBlockState(pPos.relative(direction));
+                    if (neighbor.getBlock() instanceof IIrrigationBlock pipe) {
+                        if (level - neighbor.getValue(IRRIGATION) > 0) {
+                            pLevel.setBlockAndUpdate(pPos.relative(direction), neighbor.setValue(IRRIGATION, level - 1));
+                            pipe.bringNeighboursUp(direction.getOpposite(), pLevel, pPos.relative(direction), level - 1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void bringNeighboursDown(Direction fromDirection, Level pLevel, BlockPos pPos, int level, BlockPos originPos) {
+        if(!pPos.closerToCenterThan(new PositionImpl(originPos.getX(), originPos.getY(), originPos.getZ()),16)){
+            return;
+        }
+        for (Direction direction : Direction.values()) {
+            if (direction != fromDirection) {
+                BlockState neighbor = pLevel.getBlockState(pPos.relative(direction));
+                if (neighbor.getBlock() instanceof IIrrigationBlock pipe) {
+                    int neighborLevel = neighbor.getValue(IRRIGATION);
+                    //if (level >= neighborLevel && neighborLevel > 0) {
+                    if (neighborLevel > 0) {
+//                        neighbor.updateShape(direction, neighbor.setValue(IRRIGATION, 0), pLevel, pPos, pPos.relative(direction));
+//                        pLevel.setBlock(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0),2);
+
+                        pLevel.setBlockAndUpdate(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0));
+                        AgriculturalEnhancements.debugLog("Irrigation: " + pLevel.getBlockState(pPos.relative(direction)).getValue(IRRIGATION));
+                        pipe.bringNeighboursDown(direction.getOpposite(), pLevel, pPos.relative(direction), level, originPos);
+                    }
+//                    else if (neighborLevel>level){
+//                        pipe.bringNeighboursUp(null, pLevel, pPos.relative(direction), neighborLevel);
+//                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult trace) {
+        if (level.isClientSide) {
+            ItemStack stick = player.getMainHandItem();
+            if (stick.is(Items.STICK)) {
+//                MachineUtils.animate(level, pos, level.getRandom(), SoundEvents.CROP_BREAK);
+                int irrigation_level = state.getValue(IRRIGATION);
+                float pitch = 1.4f;
+                if (irrigation_level > 0) {
+                    pitch = 1f - (((float) irrigation_level / 70f));
+                }
+                float randVolume = (level.getRandom().nextFloat() - 0.5f) / 2f;
+                level.playSound(player, pos, SoundEvents.COPPER_BREAK, SoundSource.BLOCKS, 1.0F, pitch);
+                AgriculturalEnhancements.debugLog("Irrigation: " + state.getValue(IRRIGATION));
+            }
+        } else if(AgriculturalEnhancements.debugMode) {
+            if (player.isCrouching()) {
+                level.setBlockAndUpdate(pos, state.setValue(IRRIGATION, 15));
+                IIrrigationBlock pipe = (IIrrigationBlock) state.getBlock();
+                pipe.bringNeighboursUp(null, level, pos, 15);
+                AgriculturalEnhancements.debugLog("Irrigation: " + state.getValue(IRRIGATION));
+            }
+        }
+        return InteractionResult.PASS;
     }
 
     /**
@@ -54,17 +227,17 @@ public class IrrigationPipeBlock extends PipeBlock {
      */
     @Override
     public @NotNull BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos) {
+//        AgriculturalEnhancements.debugLog("Direction: "+ pFacing);
         if (pFacing == Direction.UP) {
             return pState.setValue(PROPERTY_BY_DIRECTION.get(pFacing), pFacingState.is(this));
-        }
-        else {
-            return pState.setValue(PROPERTY_BY_DIRECTION.get(pFacing), pFacingState.getBlock() instanceof IrrigationPipeBlock);
+        } else {
+            return pState.setValue(PROPERTY_BY_DIRECTION.get(pFacing), canConnect(pFacingState));
         }
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN);
+        pBuilder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN, IRRIGATION);
     }
 
     @Override

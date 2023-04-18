@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "agriculturalenhancements:harvester"
+    "agriculturalenhancements:harvester",
+    "agriculturalenhancements:irrigation_pipe",
+    "agriculturalenhancements:sprayer_pipe"
   ]
 }

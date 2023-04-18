@@ -88,7 +88,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
                                 MachineUtils.pushOutput(stack, false, this);
                             }
 //                            AgriculturalEnhancements.debugLog("Server Success");
-                            MachineUtils.animate(level, pos, level.getRandom(), SoundEvents.CROP_BREAK);
+                            MachineUtils.animate(level, pos, level.getRandom(), SoundEvents.CROP_BREAK, 0f);
                             level.setBlockAndUpdate(pos, targetState.setValue(crop.getAgeProperty(), 1));
                             consumeFuel(getMinFuelToWork(), false);
                         }
