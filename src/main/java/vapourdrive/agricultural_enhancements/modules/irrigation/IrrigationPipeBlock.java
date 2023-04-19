@@ -116,7 +116,8 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
     }
 
     @Override
-    public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
+    @SuppressWarnings("deprecation")
+    public void onPlace(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
         if (!pOldState.is(pState.getBlock()) && !pLevel.isClientSide) {
             pState = this.updateIrrigationStrength(pLevel, pPos, pState);
             int my_level = pState.getValue(IRRIGATION);
@@ -137,9 +138,9 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
     }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+    @SuppressWarnings("deprecation")
+    public void onRemove(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pState.is(pNewState.getBlock())) {
-            int level = pState.getValue(IRRIGATION);
             super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
             if (!pLevel.isClientSide) {
                 for (Direction direction : Direction.values()) {
@@ -148,8 +149,8 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
                         int neighborLevel = neighbor.getValue(IRRIGATION);
 //                        if (level >= neighborLevel && neighborLevel > 0) {
                         if (neighborLevel > 0) {
-                            pLevel.setBlock(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0), 2);
-                            neighbor.updateShape(direction, neighbor.setValue(IRRIGATION, 0), pLevel, pPos, pPos.relative(direction));
+//                            pLevel.setBlock(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0), 2);
+//                            neighbor.updateShape(direction, neighbor.setValue(IRRIGATION, 0), pLevel, pPos, pPos.relative(direction));
 
                             pLevel.setBlockAndUpdate(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0));
                             pipe.bringNeighboursDown(direction.getOpposite(), pLevel, pPos.relative(direction), neighborLevel, pPos);
@@ -207,6 +208,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult trace) {
         if (level.isClientSide) {
             ItemStack stick = player.getMainHandItem();
@@ -217,7 +219,6 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
                 if (irrigation_level > 0) {
                     pitch = 1f - (((float) irrigation_level / 70f));
                 }
-                float randVolume = (level.getRandom().nextFloat() - 0.5f) / 2f;
                 level.playSound(player, pos, SoundEvents.COPPER_BREAK, SoundSource.BLOCKS, 1.0F, pitch);
                 AgriculturalEnhancements.debugLog("Irrigation: " + state.getValue(IRRIGATION));
             }
@@ -239,7 +240,8 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
      * Note that this method should ideally consider only the specific direction passed in.
      */
     @Override
-    public @NotNull BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos) {
+    @SuppressWarnings("deprecation")
+    public @NotNull BlockState updateShape(@NotNull BlockState pState, @NotNull Direction pFacing, @NotNull BlockState pFacingState, @NotNull LevelAccessor pLevel, @NotNull BlockPos pCurrentPos, @NotNull BlockPos pFacingPos) {
 //        AgriculturalEnhancements.debugLog("Direction: "+ pFacing);
         if (pFacing == Direction.UP) {
             return pState.setValue(PROPERTY_BY_DIRECTION.get(pFacing), pFacingState.is(this));
@@ -254,7 +256,8 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
     }
 
     @Override
-    public boolean isPathfindable(BlockState pState, BlockGetter pLevel, BlockPos pPos, PathComputationType pType) {
+    @SuppressWarnings("deprecation")
+    public boolean isPathfindable(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull PathComputationType pType) {
         return true;
     }
 

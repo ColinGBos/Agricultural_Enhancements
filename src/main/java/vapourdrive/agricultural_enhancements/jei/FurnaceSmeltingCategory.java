@@ -34,7 +34,7 @@ public class FurnaceSmeltingCategory implements IRecipeCategory<SmeltingRecipe> 
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, SmeltingRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull SmeltingRecipe recipe, @NotNull IFocusGroup focuses) {
 
     }
 }

@@ -51,7 +51,7 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
      * Note that this method should ideally consider only the specific direction passed in.
      */
     @Override
-    public @NotNull BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pFacingPos) {
+    public @NotNull BlockState updateShape(@NotNull BlockState pState, @NotNull Direction pFacing, @NotNull BlockState pFacingState, @NotNull LevelAccessor pLevel, @NotNull BlockPos pCurrentPos, @NotNull BlockPos pFacingPos) {
         if (pFacing != Direction.DOWN) {
             int irrigation = pState.getValue(IRRIGATION);
             if (pFacingState.hasProperty(IRRIGATION)) {

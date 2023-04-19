@@ -6,7 +6,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.ItemStackHandler;
 import vapourdrive.agricultural_enhancements.modules.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.modules.harvester.HarvesterTile;
 
 import javax.annotation.Nonnull;
 

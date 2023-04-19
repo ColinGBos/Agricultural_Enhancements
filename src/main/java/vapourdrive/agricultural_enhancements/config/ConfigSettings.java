@@ -20,20 +20,21 @@ public class ConfigSettings {
 
     static {
         ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
-        ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+//        ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 
         SERVER_BUILDER.comment("FurnaceMk2 settings").push(CATEGORY_FURNACE);
 
-        setupFirstBlockConfig(SERVER_BUILDER, CLIENT_BUILDER);
+        setupFirstBlockConfig(SERVER_BUILDER);
+//        setupFirstBlockConfig(SERVER_BUILDER, CLIENT_BUILDER);
 
         SERVER_BUILDER.pop();
 
 
         SERVER_CONFIG = SERVER_BUILDER.build();
-        CLIENT_CONFIG = CLIENT_BUILDER.build();
+//        CLIENT_CONFIG = CLIENT_BUILDER.build();
     }
 
-    private static void setupFirstBlockConfig(ForgeConfigSpec.Builder SERVER_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
+    private static void setupFirstBlockConfig(ForgeConfigSpec.Builder SERVER_BUILDER) {
         SERVER_BUILDER.comment("Furnace settings").push(SUBCATEGORY_FURNACEMK2);
 
         FURNACE_BASE_EFFICIENCY = SERVER_BUILDER.comment("Base efficiency multiplier for the FurnaceMk2").defineInRange("furnaceBaseEfficiency", 1.25, 0.5, 10.0);

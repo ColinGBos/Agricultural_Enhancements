@@ -30,16 +30,16 @@ public class HarvesterContainer extends AbstractContainerMenu {
     protected final Level world;
     private final HarvesterData furnaceData;
 
-    private static final int HOTBAR_SLOT_COUNT = 9;
-    private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
-    private static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
-    private static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
+//    private static final int HOTBAR_SLOT_COUNT = 9;
+//    private static final int PLAYER_INVENTORY_ROW_COUNT = 3;
+//    private static final int PLAYER_INVENTORY_COLUMN_COUNT = 9;
+//    private static final int PLAYER_INVENTORY_SLOT_COUNT = PLAYER_INVENTORY_COLUMN_COUNT * PLAYER_INVENTORY_ROW_COUNT;
 
     // slot index is the unique index for all slots in this container i.e. 0 - 35 for invPlayer then 36 - 45 for furnaceContents
-    private static final int VANILLA_FIRST_SLOT_INDEX = 0;
-    private static final int HOTBAR_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX;
-    private static final int PLAYER_INVENTORY_FIRST_SLOT_INDEX = HOTBAR_FIRST_SLOT_INDEX + HOTBAR_SLOT_COUNT;
-    private static final int FIRST_FUEL_SLOT_INDEX = PLAYER_INVENTORY_FIRST_SLOT_INDEX + PLAYER_INVENTORY_SLOT_COUNT;
+//    private static final int VANILLA_FIRST_SLOT_INDEX = 0;
+//    private static final int HOTBAR_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX;
+//    private static final int PLAYER_INVENTORY_FIRST_SLOT_INDEX = HOTBAR_FIRST_SLOT_INDEX + HOTBAR_SLOT_COUNT;
+//    private static final int FIRST_FUEL_SLOT_INDEX = PLAYER_INVENTORY_FIRST_SLOT_INDEX + PLAYER_INVENTORY_SLOT_COUNT;
 
     // gui position of the player inventory grid
     public static final int PLAYER_INVENTORY_XPOS = 8;

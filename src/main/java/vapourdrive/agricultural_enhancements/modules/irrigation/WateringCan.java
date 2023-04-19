@@ -14,6 +14,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class WateringCan extends Item {
     public WateringCan(Item.Properties properties) {
@@ -21,7 +22,7 @@ public class WateringCan extends Item {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext ctx) {
+    public @NotNull InteractionResult useOn(UseOnContext ctx) {
         BlockPos pos = ctx.getClickedPos();
 
         water(pos, ctx.getLevel());
@@ -31,7 +32,7 @@ public class WateringCan extends Item {
 
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
         BlockPos pos = pPlayer.getOnPos().relative(Direction.UP).relative(pPlayer.getDirection());
         water(pos, pLevel);
 

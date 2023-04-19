@@ -9,7 +9,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.FurnaceBlock;
@@ -32,7 +31,7 @@ import javax.annotation.Nullable;
 import static net.minecraft.world.Containers.dropItemStack;
 
 public class HarvesterBlock extends FurnaceBlock implements EntityBlock {
-    private Class<? extends BlockEntity> blockEntity;
+//    private Class<? extends BlockEntity> blockEntity;
 
     public HarvesterBlock() {
         super(BlockBehaviour.Properties.of(Material.STONE)
@@ -42,10 +41,10 @@ public class HarvesterBlock extends FurnaceBlock implements EntityBlock {
         );
     }
 
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
-    }
+//    @Override
+//    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+//        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+//    }
 
     @Nullable
     @Override
@@ -117,6 +116,7 @@ public class HarvesterBlock extends FurnaceBlock implements EntityBlock {
 
 
     @Override
+    @SuppressWarnings("deprecation")
     public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
     }
