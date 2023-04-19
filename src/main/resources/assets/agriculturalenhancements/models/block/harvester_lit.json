@@ -3,8 +3,8 @@
   "textures": {
     "down": "agriculturalenhancements:block/harvester_bottom",
     "up": "agriculturalenhancements:block/harvester_top",
-    "north": "agriculturalenhancements:block/harvester_front",
-    "south": "agriculturalenhancements:block/harvester_back",
+    "north": "agriculturalenhancements:block/harvester_front_lit",
+    "south": "agriculturalenhancements:block/harvester_back_lit",
     "east": "agriculturalenhancements:block/harvester_side",
     "west": "agriculturalenhancements:block/harvester_side",
     "particle": "agriculturalenhancements:block/harvester_side"

@@ -18,10 +18,10 @@ import java.util.List;
 public class IrrigationControllerScreen extends AbstractContainerScreen<IrrigationControllerContainer> {
     private final IrrigationControllerContainer container;
 
-    private final ResourceLocation GUI = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/harvester_gui.png");
+    private final ResourceLocation GUI = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/irrigation_controller_gui.png");
 
-    final static int FUEL_XPOS = 12;
-    final static int FUEL_YPOS = 8;
+    final static int FUEL_XPOS = 43;
+    final static int FUEL_YPOS = 7;
     final static int FUEL_ICONX = 176;   // texture position of flame icon [u,v]
     final static int FUEL_ICONY = 0;
     final static int FUEL_HEIGHT = 47;
@@ -32,8 +32,8 @@ public class IrrigationControllerScreen extends AbstractContainerScreen<Irrigati
     public IrrigationControllerScreen(IrrigationControllerContainer container, Inventory inv, Component name) {
         super(container, inv, name);
         this.container = container;
-        this.titleLabelX = 28;
-        this.inventoryLabelX = 28;
+        this.titleLabelX = 36;
+        this.titleLabelY = -10;
     }
 
     @Override
@@ -52,7 +52,8 @@ public class IrrigationControllerScreen extends AbstractContainerScreen<Irrigati
 //            drawString(matrixStack, Minecraft.getInstance().font, "Exp: " + menu.getFurnaceData(2), horStart, 50, 0xffffff);
 //            drawString(matrixStack, Minecraft.getInstance().font, String.format("Cooking: %.2f", menu.getCookProgress()), horStart, 60, 0xffffff);
         }
-        super.renderLabels(matrixStack, mouseX, mouseY);
+        this.font.draw(matrixStack, this.title, (float) this.titleLabelX, (float) this.titleLabelY, 16777215);
+//        this.font.draw(matrixStack, this.playerInventoryTitle, (float)this.inventoryLabelX, (float)this.inventoryLabelY, 4210752);
     }
 
     @Override

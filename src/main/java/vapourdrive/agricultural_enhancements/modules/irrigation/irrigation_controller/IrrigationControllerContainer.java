@@ -45,15 +45,15 @@ public class IrrigationControllerContainer extends AbstractContainerMenu {
     public static final int PLAYER_INVENTORY_XPOS = 8;
     public static final int PLAYER_INVENTORY_YPOS = 84;
 
-    public static final int OUTPUT_INVENTORY_XPOS = 44;
-    public static final int OUTPUT_INVENTORY_YPOS = 17;
+    public static final int OUTPUT_INVENTORY_XPOS = 62;
+    public static final int OUTPUT_INVENTORY_YPOS = 58;
 
 //    public FurnaceMk2Container(int windowId, Level world, BlockPos pos, Inventory inv, Player player) {
 //        this(windowId, world, pos, inv, player, new FurnaceData());
 //    }
 
     public IrrigationControllerContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, IrrigationControllerData machineData) {
-        super(Registration.HARVESTER_CONTAINER.get(), windowId);
+        super(Registration.IRRIGATION_CONTROLLER_CONTAINER.get(), windowId);
         tileEntity = (IrrigationControllerTile) world.getBlockEntity(pos);
         this.playerEntity = player;
         this.playerInventory = new InvWrapper(inv);
@@ -67,7 +67,11 @@ public class IrrigationControllerContainer extends AbstractContainerMenu {
 
         if (tileEntity != null) {
             tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(h -> {
-                addSlot(new SlotFuel(h, 0, 8, 59));
+                addSlot(new SlotFuel(h, 0, 39, 58));
+                addSlot(new SlotOutput(h, 1, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
+                addSlot(new SlotOutput(h, 2, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
+                addSlot(new SlotOutput(h, 3, OUTPUT_INVENTORY_XPOS + (18 * 2), OUTPUT_INVENTORY_YPOS));
+                addSlot(new SlotOutput(h, 4, OUTPUT_INVENTORY_XPOS + (18 * 3), OUTPUT_INVENTORY_YPOS));
             });
         }
     }
@@ -106,7 +110,7 @@ public class IrrigationControllerContainer extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player playerIn) {
-        return stillValid(ContainerLevelAccess.create(Objects.requireNonNull(tileEntity.getLevel()), tileEntity.getBlockPos()), playerEntity, Registration.HARVESTER_BLOCK.get());
+        return stillValid(ContainerLevelAccess.create(Objects.requireNonNull(tileEntity.getLevel()), tileEntity.getBlockPos()), playerEntity, Registration.IRRIGATION_CONTROLLER_BLOCK.get());
     }
 
     @Override
@@ -119,6 +123,15 @@ public class IrrigationControllerContainer extends AbstractContainerMenu {
         if (slot.hasItem()) {
             ItemStack stack = slot.getItem();
             itemstack = stack.copy();
+
+            //Furnace outputs to Inventory
+            if (index >= 37 && index <= 40) {
+                AgriculturalEnhancements.debugLog("From furnace output");
+                if (!this.moveItemStackTo(stack, 0, 36, false)) {
+                    return ItemStack.EMPTY;
+                }
+                slot.onQuickCraft(stack, itemstack);
+            }
 
             //Non-output slots to Inventory
             if (index == 36) {

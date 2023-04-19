@@ -5,6 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IFuelUser {
 
@@ -27,6 +28,15 @@ public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IF
         this.maxFuel = maxFuel;
         this.minWorkFuel = minWorkFuel;
         this.OUTPUT_SLOTS = OUTPUT_SLOTS;
+    }
+
+    public void changeStateIfNecessary(BlockState state, Boolean working) {
+        assert this.level != null;
+        if (state.getValue(BlockStateProperties.LIT) && !working) {
+            this.level.setBlockAndUpdate(worldPosition, state.setValue(BlockStateProperties.LIT, false));
+        } else if (!state.getValue(BlockStateProperties.LIT) && working) {
+            this.level.setBlockAndUpdate(worldPosition, state.setValue(BlockStateProperties.LIT, true));
+        }
     }
 
     @Override

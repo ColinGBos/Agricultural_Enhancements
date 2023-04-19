@@ -1,9 +1,11 @@
 {
   "block.agriculturalenhancements.harvester": "Harvester",
+  "block.agriculturalenhancements.irrigation_controller": "Irrigation Controller",
   "block.agriculturalenhancements.irrigation_pipe": "Irrigation Pipe",
   "block.agriculturalenhancements.sprayer_pipe": "Irrigation Sprayer",
-  "block.agriculturalenhancements.harvester": "Harvester",
+  "item.agriculturalenhancements.watering_can": "Watering Can",
   "screen.agriculturalenhancements.harvester": "Harvester",
+  "screen.agriculturalenhancements.irrigation_controller": "Irrigation Controller",
   "itemGroup.agriculturalenhancements": "Agricultural Enhancements",
   "message.agriculturalenhancements.fuelslot": "Fuel Slot",
   "message.agriculturalenhancements.harvester_1": "Harvests crops up tp 9 blocks away",

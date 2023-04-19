@@ -4,7 +4,7 @@
 	"textures": {
 		"0": "agriculturalenhancements:block/irrigation_controller_back",
 		"1": "agriculturalenhancements:block/irrigation_controller_bottom",
-		"2": "agriculturalenhancements:block/irrigation_controller_front",
+		"2": "agriculturalenhancements:block/irrigation_controller_front_lit",
 		"3": "agriculturalenhancements:block/irrigation_controller_side",
 		"4": "agriculturalenhancements:block/irrigation_controller_top",
 		"particle": "agriculturalenhancements:block/irrigation_controller_back"

@@ -9,7 +9,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.FurnaceBlock;
@@ -41,11 +40,6 @@ public class IrrigationControllerBlock extends FurnaceBlock implements EntityBlo
         );
     }
 
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection());
-    }
-
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
@@ -70,6 +64,8 @@ public class IrrigationControllerBlock extends FurnaceBlock implements EntityBlo
     public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult trace) {
         if (!level.isClientSide) {
             openContainer(level, pos, player);
+        } else {
+            AgriculturalEnhancements.debugLog("State: " + state);
         }
         return InteractionResult.SUCCESS;
     }
@@ -81,7 +77,7 @@ public class IrrigationControllerBlock extends FurnaceBlock implements EntityBlo
             MenuProvider containerProvider = new MenuProvider() {
                 @Override
                 public @NotNull Component getDisplayName() {
-                    return Component.translatable("screen." + AgriculturalEnhancements.MODID + ".harvester");
+                    return Component.translatable("screen." + AgriculturalEnhancements.MODID + ".irrigation_controller");
                 }
 
                 @Override

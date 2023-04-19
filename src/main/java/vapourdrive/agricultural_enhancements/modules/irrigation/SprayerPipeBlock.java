@@ -2,7 +2,6 @@ package vapourdrive.agricultural_enhancements.modules.irrigation;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.setup.Registration;
 
 public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigationBlock {
     public SprayerPipeBlock() {
@@ -40,7 +40,7 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
             irrigation -= 1;
         }
 
-        return this.defaultBlockState().setValue(IRRIGATION, irrigation).setValue(DOWN, canConnect(blockstate1)).setValue(NORTH, canConnect(blockstate2)).setValue(EAST, canConnect(blockstate3)).setValue(SOUTH, canConnect(blockstate4)).setValue(WEST, canConnect(blockstate5));
+        return this.defaultBlockState().setValue(IRRIGATION, irrigation).setValue(DOWN, false).setValue(UP, canConnect(blockstate1, Direction.NORTH)).setValue(NORTH, canConnect(blockstate2, Direction.NORTH)).setValue(EAST, canConnect(blockstate3, Direction.EAST)).setValue(SOUTH, canConnect(blockstate4, Direction.SOUTH)).setValue(WEST, canConnect(blockstate5, Direction.WEST));
     }
 
 
@@ -60,9 +60,17 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
                     irrigation = neighbor_irrigation - 1;
                 }
             }
-            return pState.setValue(PROPERTY_BY_DIRECTION.get(pFacing), canConnect(pFacingState)).setValue(IRRIGATION, irrigation);
+            return pState.setValue(PROPERTY_BY_DIRECTION.get(pFacing), canConnect(pFacingState, pFacing)).setValue(IRRIGATION, irrigation);
         }
         return pState.setValue(PROPERTY_BY_DIRECTION.get(pFacing), false);
+    }
+
+    @Override
+    public boolean canConnect(BlockState state, Direction direction) {
+        if (direction == Direction.DOWN) {
+            return false;
+        }
+        return state.getBlock() instanceof IIrrigationBlock || state.is(Registration.IRRIGATION_CONTROLLER_BLOCK.get());
     }
 
     @Override
@@ -102,10 +110,10 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
                     if (!state.isAir() && state.getBlock() instanceof CropBlock crop) {
                         for (int l = 0; l < 10; l++) {
                             crop.randomTick(state, pLevel, blockPos, pRandom);
-                            double d0 = (double)blockPos.getX() + pRandom.nextDouble();
-                            double d1 = (double)blockPos.getY() - 0.05D+1;
-                            double d2 = (double)blockPos.getZ() + pRandom.nextDouble();
-                            pLevel.addParticle(ParticleTypes.DRIPPING_WATER, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                            double d0 = (double) blockPos.getX() + pRandom.nextDouble();
+                            double d1 = (double) blockPos.getY() - 0.05D + 1;
+                            double d2 = (double) blockPos.getZ() + pRandom.nextDouble();
+                            animateTick(pState, pLevel, pPos, pRandom);
                         }
                     }
                 }
@@ -115,15 +123,15 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
 
     @Override
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
-        if(pState.getValue(IRRIGATION)<=0){
+        if (pState.getValue(IRRIGATION) <= 0) {
             return;
         }
-        if(pRandom.nextFloat()>0.9f) {
-            for (int l = 0; l <=100; l++) {
-                double d0 = (pRandom.nextDouble()-0.5)*0.2;
-                double d2 = (pRandom.nextDouble()-0.5)*0.2;
+        if (pRandom.nextFloat() > 0.8f) {
+            for (int l = 0; l <= 100; l++) {
+                double d0 = (pRandom.nextDouble() - 0.5) * 0.15;
+                double d2 = (pRandom.nextDouble() - 0.5) * 0.15;
 //                AgriculturalEnhancements.debugLog("X speed: "+d0+" Z speed"+d2);
-                pLevel.addParticle(ParticleTypes.SPLASH, pPos.getX()+0.5+d0*5, pPos.getY()+0.2, pPos.getZ()+0.5+d2*5, d0, 0.0D, d2);
+                pLevel.addParticle(ParticleTypes.SPLASH, pPos.getX() + 0.5 + d0 * 5, pPos.getY() + 0.2, pPos.getZ() + 0.5 + d2 * 5, d0, 0.0D, d2);
             }
 
         }

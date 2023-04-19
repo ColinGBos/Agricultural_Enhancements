@@ -15,6 +15,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.setup.Registration;
 
 public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
 
@@ -67,7 +69,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
             irrigation -= 1;
         }
         AgriculturalEnhancements.debugLog("Irrigation: " + irrigation);
-        return this.defaultBlockState().setValue(IRRIGATION, irrigation).setValue(UP, canConnect(blockstate1)).setValue(DOWN, canConnect(blockstate)).setValue(NORTH, canConnect(blockstate2)).setValue(EAST, canConnect(blockstate3)).setValue(SOUTH, canConnect(blockstate4)).setValue(WEST, canConnect(blockstate5));
+        return this.defaultBlockState().setValue(IRRIGATION, irrigation).setValue(UP, canConnect(blockstate1, Direction.UP)).setValue(DOWN, canConnect(blockstate, Direction.DOWN)).setValue(NORTH, canConnect(blockstate2, Direction.NORTH)).setValue(EAST, canConnect(blockstate3, Direction.EAST)).setValue(SOUTH, canConnect(blockstate4, Direction.SOUTH)).setValue(WEST, canConnect(blockstate5, Direction.WEST));
     }
 
     public BlockState updateIrrigationStrength(BlockGetter pLevel, BlockPos pPos, BlockState pState) {
@@ -98,8 +100,19 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
         return this.defaultBlockState().setValue(IRRIGATION, irrigation);
     }
 
-    public boolean canConnect(BlockState state) {
-        return state.getBlock() instanceof IIrrigationBlock;
+    public boolean canConnect(BlockState state, Direction direction) {
+        if (direction == Direction.UP) {
+            return state.is(this);
+        }
+        if (state.getBlock() instanceof IIrrigationBlock) {
+            return true;
+        }
+        if (state.is(Registration.IRRIGATION_CONTROLLER_BLOCK.get()) && state.hasProperty(HorizontalDirectionalBlock.FACING)) {
+            if (direction == Direction.DOWN) {
+                return true;
+            } else return state.getValue(HorizontalDirectionalBlock.FACING).equals(direction);
+        }
+        return false;
     }
 
     @Override
@@ -125,7 +138,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (!pIsMoving && !pState.is(pNewState.getBlock())) {
+        if (!pState.is(pNewState.getBlock())) {
             int level = pState.getValue(IRRIGATION);
             super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
             if (!pLevel.isClientSide) {
@@ -135,7 +148,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
                         int neighborLevel = neighbor.getValue(IRRIGATION);
 //                        if (level >= neighborLevel && neighborLevel > 0) {
                         if (neighborLevel > 0) {
-                            pLevel.setBlock(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0),2);
+                            pLevel.setBlock(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0), 2);
                             neighbor.updateShape(direction, neighbor.setValue(IRRIGATION, 0), pLevel, pPos, pPos.relative(direction));
 
                             pLevel.setBlockAndUpdate(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0));
@@ -168,7 +181,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
     }
 
     public void bringNeighboursDown(Direction fromDirection, Level pLevel, BlockPos pPos, int level, BlockPos originPos) {
-        if(!pPos.closerToCenterThan(new PositionImpl(originPos.getX(), originPos.getY(), originPos.getZ()),16)){
+        if (!pPos.closerToCenterThan(new PositionImpl(originPos.getX(), originPos.getY(), originPos.getZ()), 16)) {
             return;
         }
         for (Direction direction : Direction.values()) {
@@ -208,7 +221,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
                 level.playSound(player, pos, SoundEvents.COPPER_BREAK, SoundSource.BLOCKS, 1.0F, pitch);
                 AgriculturalEnhancements.debugLog("Irrigation: " + state.getValue(IRRIGATION));
             }
-        } else if(AgriculturalEnhancements.debugMode) {
+        } else if (AgriculturalEnhancements.debugMode) {
             if (player.isCrouching()) {
                 level.setBlockAndUpdate(pos, state.setValue(IRRIGATION, 15));
                 IIrrigationBlock pipe = (IIrrigationBlock) state.getBlock();
@@ -231,7 +244,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
         if (pFacing == Direction.UP) {
             return pState.setValue(PROPERTY_BY_DIRECTION.get(pFacing), pFacingState.is(this));
         } else {
-            return pState.setValue(PROPERTY_BY_DIRECTION.get(pFacing), canConnect(pFacingState));
+            return pState.setValue(PROPERTY_BY_DIRECTION.get(pFacing), canConnect(pFacingState, pFacing));
         }
     }
 

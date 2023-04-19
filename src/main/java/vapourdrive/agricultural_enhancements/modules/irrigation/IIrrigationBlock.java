@@ -10,7 +10,7 @@ public interface IIrrigationBlock {
 
     BlockState updateIrrigationStrength(BlockGetter pLevel, BlockPos pPos, BlockState pState);
 
-    boolean canConnect(BlockState state);
+    boolean canConnect(BlockState state, Direction direction);
 
     void bringNeighboursDown(Direction fromDirection, Level pLevel, BlockPos pPos, int level, BlockPos originPos);
 

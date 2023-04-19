@@ -57,7 +57,8 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
 
     private void doWorkProcesses(BlockState state) {
         if (canWork()) {
-            Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+            changeStateIfNecessary(state, true);
+            Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
 //            AgriculturalEnhancements.debugLog(""+direction);
             assert this.level != null;
             for (int i = 1; i <= 9; i++) {
@@ -96,6 +97,8 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
                 }
 //                AgriculturalEnhancements.debugLog(""+targetState);
             }
+        } else {
+            changeStateIfNecessary(state, false);
         }
     }
 
