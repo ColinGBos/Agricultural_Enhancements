@@ -12,9 +12,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.modules.AbstractBaseFuelUserTile;
+import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
 import vapourdrive.agricultural_enhancements.modules.irrigation.IIrrigationBlock;
 import vapourdrive.agricultural_enhancements.modules.irrigation.IrrigationPipeBlock;
 import vapourdrive.agricultural_enhancements.modules.itemhandlers.FuelHandler;
@@ -87,7 +86,7 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
     @Override
     public boolean canWork() {
         assert this.level != null;
-        AgriculturalEnhancements.debugLog("brightness: " + this.level.getRawBrightness(this.worldPosition.above(), 0));
+//        AgriculturalEnhancements.debugLog("brightness: " + this.level.getRawBrightness(this.worldPosition.above(), 0));
         if (this.level.getRawBrightness(this.worldPosition.above(), 0) < 9) {
             return false;
         }

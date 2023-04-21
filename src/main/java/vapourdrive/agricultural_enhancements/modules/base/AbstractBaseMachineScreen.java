@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.modules.harvester;
+package vapourdrive.agricultural_enhancements.modules.base;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -9,38 +9,35 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller.IrrigationControllerContainer;
 import vapourdrive.agricultural_enhancements.modules.slots.AbstractMachineSlot;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HarvesterScreen extends AbstractContainerScreen<HarvesterContainer> {
-    private final HarvesterContainer container;
+public class AbstractBaseMachineScreen extends AbstractContainerScreen<AbstractBaseMachineContainer> {
+    private final AbstractBaseMachineContainer container;
 
-    private final ResourceLocation GUI = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/harvester_gui.png");
+    private final ResourceLocation GUI;
 
-    final static int FUEL_XPOS = 12;
-    final static int FUEL_YPOS = 8;
-    final static int FUEL_ICONX = 176;   // texture position of flame icon [u,v]
-    final static int FUEL_ICONY = 0;
-    final static int FUEL_HEIGHT = 47;
-    final static int FUEL_WIDTH = 8;
-
-    final static int INFO_XPOS = 158;
-    final static int INFO_YPOS = 6;
-    final static int INFO_ICONX = 184;   // texture position of flame icon [u,v]
-    final static int INFO_ICONY = 0;
-    final static int INFO_HEIGHT = 12;
-    final static int INFO_WIDTH = 12;
+    final int FUEL_XPOS;
+    final int FUEL_YPOS;
+    final int FUEL_ICONX = 176;   // texture position of flame icon [u,v]
+    final int FUEL_ICONY = 0;
+    final int FUEL_HEIGHT = 47;
+    final int FUEL_WIDTH = 8;
 
     DecimalFormat df = new DecimalFormat("#,###");
 
-    public HarvesterScreen(HarvesterContainer container, Inventory inv, Component name) {
+    public AbstractBaseMachineScreen(IrrigationControllerContainer container, Inventory inv, Component name, String path, int fuelX, int fuelY, int helpX, int helpY) {
         super(container, inv, name);
         this.container = container;
-        this.titleLabelX = 28;
-        this.inventoryLabelX = 28;
+        this.titleLabelX = 36;
+        this.titleLabelY = -10;
+        this.FUEL_XPOS = fuelX;
+        this.FUEL_YPOS = fuelY;
+        this.GUI = new ResourceLocation(AgriculturalEnhancements.MODID, path);
     }
 
     @Override
@@ -52,14 +49,7 @@ public class HarvesterScreen extends AbstractContainerScreen<HarvesterContainer>
 
     @Override
     protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
-        if (AgriculturalEnhancements.debugMode) {
-            int horStart = -100;
-//            drawString(matrixStack, Minecraft.getInstance().font, "Cook: " + menu.getFurnaceData(0), horStart, 30, 0xffffff);
-//            drawString(matrixStack, Minecraft.getInstance().font, "MaxCook: " + menu.getFurnaceData(1), horStart, 40, 0xffffff);
-//            drawString(matrixStack, Minecraft.getInstance().font, "Exp: " + menu.getFurnaceData(2), horStart, 50, 0xffffff);
-//            drawString(matrixStack, Minecraft.getInstance().font, String.format("Cooking: %.2f", menu.getCookProgress()), horStart, 60, 0xffffff);
-        }
-        super.renderLabels(matrixStack, mouseX, mouseY);
+        this.font.draw(matrixStack, this.title, (float) this.titleLabelX, (float) this.titleLabelY, 16777215);
     }
 
     @Override
@@ -75,7 +65,6 @@ public class HarvesterScreen extends AbstractContainerScreen<HarvesterContainer>
 
         int m = (int) (container.getFuelPercentage() * (FUEL_HEIGHT));
         this.blit(matrixStack, guiLeft + FUEL_XPOS, guiTop + FUEL_YPOS + FUEL_HEIGHT - m, FUEL_ICONX, FUEL_ICONY + FUEL_HEIGHT - m, FUEL_WIDTH, m);
-        blitAlt(matrixStack, INFO_XPOS, INFO_YPOS, INFO_ICONX, INFO_ICONY, INFO_HEIGHT, INFO_WIDTH, mouseX, mouseY);
 
     }
 
@@ -96,7 +85,6 @@ public class HarvesterScreen extends AbstractContainerScreen<HarvesterContainer>
             }
         }
 
-
         // If the mouse is over the experience bar, add hovering text
         if (notCarrying && isInRect(this.leftPos + FUEL_XPOS, this.topPos + FUEL_YPOS, FUEL_WIDTH, FUEL_HEIGHT, mouseX, mouseY)) {
             int fuel = container.getFuelStored() / 100;
@@ -114,16 +102,6 @@ public class HarvesterScreen extends AbstractContainerScreen<HarvesterContainer>
     // Returns true if the given x,y coordinates are within the given rectangle
     public static boolean isInRect(int x, int y, int xSize, int ySize, int mouseX, int mouseY) {
         return ((mouseX >= x && mouseX <= x + xSize) && (mouseY >= y && mouseY <= y + ySize));
-    }
-
-    public void blitAlt(@NotNull PoseStack matrixStack, int offsetX, int offsetY, int iconX, int iconY, int height, int width, int mouseX, int mouseY){
-        int guiLeft = this.leftPos;
-        int guiTop = this.topPos;
-        if(isInRect(guiLeft+offsetX-1, guiTop+offsetY-1, width+2, height+2, mouseX, mouseY)) {
-            this.blit(matrixStack, guiLeft + offsetX, guiTop + offsetY, iconX, iconY+height, width, height);
-        } else{
-            this.blit(matrixStack, guiLeft + offsetX, guiTop + offsetY, iconX, iconY, width, height);
-        }
     }
 
 }

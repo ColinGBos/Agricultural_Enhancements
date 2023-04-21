@@ -3,48 +3,30 @@ package vapourdrive.agricultural_enhancements.modules.harvester;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.FurnaceBlock;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineBlock;
 
 import javax.annotation.Nullable;
 
-import static net.minecraft.world.Containers.dropItemStack;
 
-public class HarvesterBlock extends FurnaceBlock implements EntityBlock {
-//    private Class<? extends BlockEntity> blockEntity;
+public class HarvesterBlock extends AbstractBaseMachineBlock {
 
     public HarvesterBlock() {
-        super(BlockBehaviour.Properties.of(Material.STONE)
-                .sound(SoundType.STONE)
-                .strength(4.0f)
-                .requiresCorrectToolForDrops()
-        );
+        super(BlockBehaviour.Properties.of(Material.STONE));
     }
-
-//    @Override
-//    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-//        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
-//    }
 
     @Nullable
     @Override
@@ -59,19 +41,11 @@ public class HarvesterBlock extends FurnaceBlock implements EntityBlock {
             return null;
         } else {
             return (level1, pos, state1, tile) -> {
-                if (tile instanceof HarvesterTile furnace) {
-                    furnace.tickServer(state1);
+                if (tile instanceof HarvesterTile machine) {
+                    machine.tickServer(state1);
                 }
             };
         }
-    }
-
-    @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult trace) {
-        if (!level.isClientSide) {
-            openContainer(level, pos, player);
-        }
-        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -97,28 +71,14 @@ public class HarvesterBlock extends FurnaceBlock implements EntityBlock {
 
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onRemove(BlockState state, @NotNull Level world, @NotNull BlockPos blockPos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
-            BlockEntity tileentity = world.getBlockEntity(blockPos);
-            if (tileentity instanceof HarvesterTile machine) {
-                dropContents(world, blockPos, machine.getItemHandler());
+            BlockEntity tileEntity = world.getBlockEntity(blockPos);
+            if (tileEntity instanceof HarvesterTile machine) {
+                AbstractBaseMachineBlock.dropContents(world, blockPos, machine.getItemHandler());
             }
             super.onRemove(state, world, blockPos, newState, isMoving);
         }
     }
-
-    private static void dropContents(Level world, BlockPos blockPos, IItemHandler handler) {
-        for (int i = 0; i < handler.getSlots(); ++i) {
-            dropItemStack(world, blockPos.getX(), blockPos.getY(), blockPos.getZ(), handler.getStackInSlot(i));
-        }
-
-    }
-
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
-        return RenderShape.MODEL;
-    }
-
 }

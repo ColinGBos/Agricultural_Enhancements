@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.modules;
+package vapourdrive.agricultural_enhancements.modules.base;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import vapourdrive.agricultural_enhancements.modules.IFuelUser;
 
 public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IFuelUser {
 

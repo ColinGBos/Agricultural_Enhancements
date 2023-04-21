@@ -22,7 +22,7 @@ public class AgriculturalEnhancements {
     public static boolean debugMode = true;
 
     public AgriculturalEnhancements() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigSettings.CLIENT_CONFIG);
+//        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigSettings.CLIENT_CONFIG);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigSettings.SERVER_CONFIG);
 
         Registration.init();
@@ -33,12 +33,17 @@ public class AgriculturalEnhancements {
     }
 
     public static void debugLog(String toLog) {
-        if (debugMode) {
-            log(toLog);
+        if (isDebugMode()) {
+            LOGGER.log(Level.DEBUG, toLog);
         }
     }
 
-    private static void log(String toLog) {
+    private static boolean isDebugMode(){
+        return java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("jdwp") && debugMode;
+    }
+
+    public static void infolog(String toLog) {
         LOGGER.log(Level.INFO, toLog);
     }
+
 }

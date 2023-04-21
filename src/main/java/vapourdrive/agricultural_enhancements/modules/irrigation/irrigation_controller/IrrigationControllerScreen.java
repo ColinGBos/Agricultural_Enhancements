@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineContainer;
 import vapourdrive.agricultural_enhancements.modules.slots.AbstractMachineSlot;
 
 import java.text.DecimalFormat;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IrrigationControllerScreen extends AbstractContainerScreen<IrrigationControllerContainer> {
-    private final IrrigationControllerContainer container;
+    private final AbstractBaseMachineContainer container;
 
     private final ResourceLocation GUI = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/irrigation_controller_gui.png");
 
@@ -88,7 +89,6 @@ public class IrrigationControllerScreen extends AbstractContainerScreen<Irrigati
                 hoveringText.add(Component.translatable(machineSlot.getTitle()).withStyle(ChatFormatting.GREEN));
             }
         }
-
 
         // If the mouse is over the experience bar, add hovering text
         if (notCarrying && isInRect(this.leftPos + FUEL_XPOS, this.topPos + FUEL_YPOS, FUEL_WIDTH, FUEL_HEIGHT, mouseX, mouseY)) {
