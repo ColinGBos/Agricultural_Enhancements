@@ -7,16 +7,16 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller.IrrigationControllerContainer;
 import vapourdrive.agricultural_enhancements.modules.slots.AbstractMachineSlot;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AbstractBaseMachineScreen extends AbstractContainerScreen<AbstractBaseMachineContainer> {
+public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> extends AbstractContainerScreen<T> {
     private final AbstractBaseMachineContainer container;
 
     private final ResourceLocation GUI;
@@ -28,16 +28,27 @@ public class AbstractBaseMachineScreen extends AbstractContainerScreen<AbstractB
     final int FUEL_HEIGHT = 47;
     final int FUEL_WIDTH = 8;
 
+    final int INFO_XPOS;
+    final int INFO_YPOS;
+    final int INFO_ICONX = 184;   // texture position of flame icon [u,v]
+    final int INFO_ICONY = 0;
+    final int INFO_HEIGHT = 12;
+    final int INFO_WIDTH = 12;
+    final String ID;
+
     DecimalFormat df = new DecimalFormat("#,###");
 
-    public AbstractBaseMachineScreen(IrrigationControllerContainer container, Inventory inv, Component name, String path, int fuelX, int fuelY, int helpX, int helpY) {
+    public AbstractBaseMachineScreen(T container, Inventory inv, Component name, String id, int fuelX, int fuelY, int helpX, int helpY, int titleX) {
         super(container, inv, name);
         this.container = container;
-        this.titleLabelX = 36;
+        this.titleLabelX = titleX;
         this.titleLabelY = -10;
         this.FUEL_XPOS = fuelX;
         this.FUEL_YPOS = fuelY;
-        this.GUI = new ResourceLocation(AgriculturalEnhancements.MODID, path);
+        this.INFO_XPOS = helpX;
+        this.INFO_YPOS = helpY;
+        this.ID=id;
+        this.GUI = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/"+id+"_gui.png");
     }
 
     @Override
@@ -65,16 +76,14 @@ public class AbstractBaseMachineScreen extends AbstractContainerScreen<AbstractB
 
         int m = (int) (container.getFuelPercentage() * (FUEL_HEIGHT));
         this.blit(matrixStack, guiLeft + FUEL_XPOS, guiTop + FUEL_YPOS + FUEL_HEIGHT - m, FUEL_ICONX, FUEL_ICONY + FUEL_HEIGHT - m, FUEL_WIDTH, m);
+        this.blit(matrixStack, guiLeft+INFO_XPOS, guiTop+INFO_YPOS, INFO_ICONX, INFO_ICONY+INFO_HEIGHT, INFO_WIDTH, INFO_HEIGHT);
+        blitAlt(matrixStack, INFO_XPOS, INFO_YPOS+15, INFO_ICONX+INFO_WIDTH, INFO_ICONY, INFO_WIDTH, INFO_HEIGHT, mouseX, mouseY);
 
     }
 
     @Override
     protected void renderTooltip(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
-        //if (!this.minecraft.player.inventory.getCarried().isEmpty()) return;  // no tooltip if the player is dragging something
-
-        assert this.minecraft != null;
-        assert this.minecraft.player != null;
-        boolean notCarrying = this.minecraft.player.inventoryMenu.getCarried().isEmpty();
+        boolean notCarrying = this.menu.getCarried().isEmpty();
 
         List<Component> hoveringText = new ArrayList<>();
 
@@ -91,6 +100,10 @@ public class AbstractBaseMachineScreen extends AbstractContainerScreen<AbstractB
             hoveringText.add(Component.literal("Fuel: ").append(df.format(fuel) + "/" + df.format(container.getMaxFuel() / 100)));
         }
 
+        if (notCarrying && isInRect(this.leftPos + INFO_XPOS-1, this.topPos + INFO_YPOS-1, INFO_WIDTH+2, INFO_HEIGHT+2, mouseX, mouseY)) {
+            hoveringText.add(Component.translatable("agriculturalenhancements."+ID+".info"));
+        }
+
         // If hoveringText is not empty draw the hovering text.  Otherwise, use vanilla to render tooltip for the slots
         if (!hoveringText.isEmpty()) {
             renderComponentTooltip(matrixStack, hoveringText, mouseX, mouseY);
@@ -102,6 +115,16 @@ public class AbstractBaseMachineScreen extends AbstractContainerScreen<AbstractB
     // Returns true if the given x,y coordinates are within the given rectangle
     public static boolean isInRect(int x, int y, int xSize, int ySize, int mouseX, int mouseY) {
         return ((mouseX >= x && mouseX <= x + xSize) && (mouseY >= y && mouseY <= y + ySize));
+    }
+
+    public void blitAlt(@NotNull PoseStack matrixStack, int offsetX, int offsetY, int iconX, int iconY, int width, int height, int mouseX, int mouseY){
+        int guiLeft = this.leftPos;
+        int guiTop = this.topPos;
+        if(isInRect(guiLeft+offsetX-1, guiTop+offsetY-1, width+2, height+2, mouseX, mouseY)) {
+            this.blit(matrixStack, guiLeft + offsetX, guiTop + offsetY, iconX, iconY+height, width, height);
+        } else{
+            this.blit(matrixStack, guiLeft + offsetX, guiTop + offsetY, iconX, iconY, width, height);
+        }
     }
 
 }

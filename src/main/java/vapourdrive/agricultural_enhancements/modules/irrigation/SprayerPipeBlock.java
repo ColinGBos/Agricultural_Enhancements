@@ -79,7 +79,8 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
     }
 
     @Override
-    public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
+    @SuppressWarnings("deprecation")
+    public boolean canSurvive(@NotNull BlockState pState, @NotNull LevelReader pLevel, @NotNull BlockPos pPos) {
         AgriculturalEnhancements.debugLog("Checking if the block can survive");
         for (int x = -2; x <= 2; x++) {
             for (int y = -2; y <= 2; y++) {
@@ -101,7 +102,8 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
     }
 
     @Override
-    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+    @SuppressWarnings("deprecation")
+    public void randomTick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k > -10; k--) {
@@ -110,9 +112,6 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
                     if (!state.isAir() && state.getBlock() instanceof CropBlock crop) {
                         for (int l = 0; l < 10; l++) {
                             crop.randomTick(state, pLevel, blockPos, pRandom);
-                            double d0 = (double) blockPos.getX() + pRandom.nextDouble();
-                            double d1 = (double) blockPos.getY() - 0.05D + 1;
-                            double d2 = (double) blockPos.getZ() + pRandom.nextDouble();
                             animateTick(pState, pLevel, pPos, pRandom);
                         }
                     }
@@ -122,7 +121,7 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
     }
 
     @Override
-    public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
+    public void animateTick(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
         if (pState.getValue(IRRIGATION) <= 0) {
             return;
         }
@@ -131,7 +130,7 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
                 double d0 = (pRandom.nextDouble() - 0.5) * 0.15;
                 double d2 = (pRandom.nextDouble() - 0.5) * 0.15;
 //                AgriculturalEnhancements.debugLog("X speed: "+d0+" Z speed"+d2);
-                pLevel.addParticle(ParticleTypes.SPLASH, pPos.getX() + 0.5 + d0 * 5, pPos.getY() + 0.2, pPos.getZ() + 0.5 + d2 * 5, d0, 0.0D, d2);
+                pLevel.addParticle(ParticleTypes.SPLASH, pPos.getX() + 0.5 + d0 * 10, pPos.getY() + 0.2, pPos.getZ() + 0.5 + d2 * 10, d0, 0.0D, d2);
             }
 
         }
