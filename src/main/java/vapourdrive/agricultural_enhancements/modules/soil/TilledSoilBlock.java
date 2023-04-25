@@ -1,0 +1,205 @@
+package vapourdrive.agricultural_enhancements.modules.soil;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
+import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+
+public class TilledSoilBlock extends Block {
+    public static final IntegerProperty SOIL_MOISTURE = IntegerProperty.create("soil_moisture",0,5);
+    public static final IntegerProperty SOIL_NUTRIENTS = IntegerProperty.create("soil_nutrients",0,5);
+    protected static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+    public static final int MAX_MOISTURE = 5;
+    public static final int MAX_NUTRIENTS = 5;
+
+    public TilledSoilBlock() {
+        super(BlockBehaviour.Properties.of(Material.DIRT));
+        this.registerDefaultState(this.stateDefinition.any().setValue(SOIL_MOISTURE, 2).setValue(SOIL_NUTRIENTS, 3));
+    }
+
+    @Override
+    public boolean isRandomlyTicking(@NotNull BlockState pState) {
+        return true;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public @NotNull BlockState updateShape(@NotNull BlockState pState, @NotNull Direction pFacing, @NotNull BlockState pFacingState, @NotNull LevelAccessor pLevel, @NotNull BlockPos pCurrentPos, @NotNull BlockPos pFacingPos) {
+        AgriculturalEnhancements.debugLog("Facing: "+pFacing+", state: "+pFacingState);
+        pLevel.scheduleTick(pCurrentPos, this, pLevel.getRandom().nextInt(400)+800);
+
+        return super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult trace) {
+        if (level.isClientSide) {
+            AgriculturalEnhancements.debugLog("State: moisture: "+state.getValue(SOIL_MOISTURE)+ ", nutrients: " +state.getValue(SOIL_NUTRIENTS));
+        } else if (player.getItemInHand(InteractionHand.OFF_HAND).is(Items.BONE_MEAL)) {
+            level.setBlockAndUpdate(pos, state.setValue(SOIL_NUTRIENTS,5));
+        }
+//        else{
+//            level.getBlockState(pos).getBlock().randomTick(state, (ServerLevel) level, pos, level.getRandom());
+//        }
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean canSurvive(@NotNull BlockState pState, @NotNull LevelReader pLevel, @NotNull BlockPos pPos) {
+        return true;
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        return !this.defaultBlockState().canSurvive(pContext.getLevel(), pContext.getClickedPos()) ? Blocks.DIRT.defaultBlockState() : super.getStateForPlacement(pContext);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean useShapeForLightOcclusion(@NotNull BlockState pState) {
+        return true;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
+        return SHAPE;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void tick(BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+        int moistureIn = pState.getValue(SOIL_MOISTURE);
+        int moistureOut = moistureIn;
+        int potentialMoisture = getMaxMoisture(pLevel,pPos);
+        if(potentialMoisture-1>moistureIn) {
+            moistureOut++;
+        } else if (moistureIn>=potentialMoisture) {
+            moistureOut--;
+        }
+        moistureOut = Math.max(moistureOut,0);
+
+        if(moistureIn != moistureOut){
+            pLevel.scheduleTick(pPos, this, pRandom.nextInt(400)+800);
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(SOIL_MOISTURE, Math.min(moistureOut, MAX_MOISTURE)));
+        }
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void randomTick(BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+        int moistureIn = pState.getValue(SOIL_MOISTURE);
+        int nutrientIn = pState.getValue(SOIL_NUTRIENTS);
+        int moistureOut = moistureIn;
+        int nutrientOut = nutrientIn;
+        BlockPos blockPos = pPos.above();
+        BlockState state = pLevel.getBlockState(blockPos);
+        if (!state.isAir() && state.getBlock() instanceof CropBlock crop) {
+            for (int l = 0; l < nutrientIn*2+moistureIn; l++) {
+                if(pLevel.getRandom().nextFloat()>0.7) {
+                    crop.randomTick(state, pLevel, blockPos, pRandom);
+                }
+            }
+            if(pLevel.getRandom().nextFloat()>0.8) {
+                nutrientOut--;
+            }
+        }
+        int potentialMoisture = getMaxMoisture(pLevel,pPos);
+        if(potentialMoisture-1>moistureIn) {
+            moistureOut++;
+        } else if (moistureIn>=potentialMoisture) {
+            moistureOut--;
+        }
+        nutrientOut = Math.max(nutrientOut,0);
+        moistureOut = Math.max(moistureOut,0);
+
+        if(nutrientIn!=nutrientOut || moistureIn != moistureOut){
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(SOIL_NUTRIENTS, Math.min(nutrientOut, MAX_NUTRIENTS)).setValue(SOIL_MOISTURE, Math.min(moistureOut, MAX_MOISTURE)));
+        }
+
+    }
+
+    @Override
+    public void fallOn(Level pLevel, @NotNull BlockState pState, @NotNull BlockPos pPos, @NotNull Entity pEntity, float pFallDistance) {
+        if (!pLevel.isClientSide && net.minecraftforge.common.ForgeHooks.onFarmlandTrample(pLevel, pPos, Blocks.DIRT.defaultBlockState(), pFallDistance, pEntity)) { // Forge: Move logic to Entity#canTrample
+            rollBackCrops(pLevel, pPos);
+        }
+
+        super.fallOn(pLevel, pState, pPos, pEntity, pFallDistance);
+    }
+
+    public static void rollBackCrops(Level pLevel, BlockPos pPos) {
+        BlockPos blockPos = pPos.above();
+        BlockState state = pLevel.getBlockState(blockPos);
+        if (!state.isAir() && state.getBlock() instanceof CropBlock crop) {
+            pLevel.setBlockAndUpdate(blockPos, state.setValue(crop.getAgeProperty(), 1));
+        }
+    }
+
+    private static int getMaxMoisture(Level level, BlockPos pPos) {
+        if(level.isRainingAt(pPos.above())){
+            return 6;
+        }
+        if(net.minecraftforge.common.FarmlandWaterManager.hasBlockWaterTicket(level, pPos)){
+            return 6;
+        }
+        BlockState state = level.getBlockState(pPos);
+        int greatestNeighbor = 0;
+        for(Direction direction: Direction.values()) {
+            BlockPos testPos = pPos.relative(direction);
+            if (state.canBeHydrated(level, pPos, level.getFluidState(testPos), testPos)) {
+                return 6;
+            }
+            BlockState testState = level.getBlockState(pPos.relative(direction));
+            if (testState.hasProperty(SOIL_MOISTURE)){
+                int targetMoisture = testState.getValue(SOIL_MOISTURE);
+                greatestNeighbor = Math.max(greatestNeighbor, targetMoisture);
+            }
+        }
+        return greatestNeighbor;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(SOIL_MOISTURE).add(SOIL_NUTRIENTS);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isPathfindable(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull PathComputationType pType) {
+        return false;
+    }
+
+    @Override
+    public boolean canSustainPlant(@NotNull BlockState state, @NotNull BlockGetter world, BlockPos pos, @NotNull Direction facing, net.minecraftforge.common.IPlantable plantable) {
+        net.minecraftforge.common.PlantType type = plantable.getPlantType(world, pos.relative(facing));
+
+        if (net.minecraftforge.common.PlantType.CROP.equals(type)) {
+            return true;
+        } else return net.minecraftforge.common.PlantType.PLAINS.equals(type);
+    }
+}

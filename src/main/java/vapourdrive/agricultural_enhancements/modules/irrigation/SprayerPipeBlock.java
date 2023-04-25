@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.modules.soil.TilledSoilBlock;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigationBlock {
@@ -107,13 +108,28 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k > -10; k--) {
+                    boolean stop = false;
+                    int soilOffset = 0;
                     BlockPos blockPos = pPos.offset(i, k, j);
                     BlockState state = pLevel.getBlockState(blockPos);
                     if (!state.isAir() && state.getBlock() instanceof CropBlock crop) {
+                        soilOffset = -1;
                         for (int l = 0; l < 10; l++) {
                             crop.randomTick(state, pLevel, blockPos, pRandom);
-                            animateTick(pState, pLevel, pPos, pRandom);
+//                            animateTick(pState, pLevel, pPos, pRandom);
+                            stop=true;
                         }
+                    }
+                    BlockPos soilPos = pPos.offset(i, k-soilOffset, j);
+                    BlockState soilState = pLevel.getBlockState(soilPos);
+                    if (!soilState.isAir() && soilState.getBlock() instanceof TilledSoilBlock) {
+                        if (!pLevel.isClientSide()) {
+                            int moisture = soilState.getValue(TilledSoilBlock.SOIL_MOISTURE);
+                            pLevel.setBlock(soilPos, soilState.setValue(TilledSoilBlock.SOIL_MOISTURE, Math.min(TilledSoilBlock.MAX_MOISTURE, moisture+2)),19);
+                        }
+                    }
+                    if(stop){
+                        break;
                     }
                 }
             }
@@ -132,7 +148,6 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
 //                AgriculturalEnhancements.debugLog("X speed: "+d0+" Z speed"+d2);
                 pLevel.addParticle(ParticleTypes.SPLASH, pPos.getX() + 0.5 + d0 * 10, pPos.getY() + 0.2, pPos.getZ() + 0.5 + d2 * 10, d0, 0.0D, d2);
             }
-
         }
     }
 }

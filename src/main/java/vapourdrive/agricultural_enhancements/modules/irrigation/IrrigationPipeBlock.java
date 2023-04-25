@@ -196,7 +196,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
 //                        pLevel.setBlock(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0),2);
 
                         pLevel.setBlockAndUpdate(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0));
-                        AgriculturalEnhancements.debugLog("Irrigation: " + pLevel.getBlockState(pPos.relative(direction)).getValue(IRRIGATION));
+                        AgriculturalEnhancements.debugLog("Bringing irrigation down: " + pLevel.getBlockState(pPos.relative(direction)).getValue(IRRIGATION));
                         pipe.bringNeighboursDown(direction.getOpposite(), pLevel, pPos.relative(direction), level, originPos);
                     }
 //                    else if (neighborLevel>level){

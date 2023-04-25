@@ -30,6 +30,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.modules.soil.TilledSoilBlock;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
@@ -92,12 +93,25 @@ public class WateringCan extends Item {
         AgriculturalEnhancements.debugLog("Water: " + getWater(can));
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
+                int soilOffset = 0;
                 BlockPos blockPos = pos.offset(i, 0, j);
                 BlockState state = level.getBlockState(blockPos);
                 if (!state.isAir() && state.getBlock() instanceof CropBlock crop) {
+                    soilOffset = -1;
                     if (level.getRandom().nextFloat() > 0.5) {
                         if (!level.isClientSide()) {
                             crop.randomTick(state, (ServerLevel) level, blockPos, level.getRandom());
+                        }
+                    }
+                }
+                BlockPos soilPos = pos.offset(i, soilOffset, j);
+                BlockState soilState = level.getBlockState(soilPos);
+                if (!soilState.isAir() && soilState.getBlock() instanceof TilledSoilBlock) {
+                    if (level.getRandom().nextFloat() > 0.5) {
+                        if (!level.isClientSide()) {
+                            int moisture = soilState.getValue(TilledSoilBlock.SOIL_MOISTURE);
+                            level.setBlock(soilPos, soilState.setValue(TilledSoilBlock.SOIL_MOISTURE, Math.min(TilledSoilBlock.MAX_MOISTURE, moisture+2)),19);
+//                            soilState.setValue(TilledSoilBlock.SOIL_MOISTURE, Math.min(TilledSoilBlock.MAX_MOISTURE, moisture+1));
                         }
                     }
                 }

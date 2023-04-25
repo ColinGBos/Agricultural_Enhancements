@@ -17,6 +17,7 @@ import vapourdrive.agricultural_enhancements.modules.irrigation.IrrigationPipeBl
 import vapourdrive.agricultural_enhancements.modules.irrigation.SprayerPipeBlock;
 import vapourdrive.agricultural_enhancements.modules.irrigation.WateringCan;
 import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller.*;
+import vapourdrive.agricultural_enhancements.modules.soil.TilledSoilBlock;
 
 import static vapourdrive.agricultural_enhancements.AgriculturalEnhancements.MODID;
 
@@ -34,10 +35,12 @@ public class Registration {
     }
 
     public static final RegistryObject<HarvesterBlock> HARVESTER_BLOCK = BLOCKS.register("harvester", HarvesterBlock::new);
+    public static final RegistryObject<TilledSoilBlock> TILLED_SOIL_BLOCK = BLOCKS.register("tilled_soil", TilledSoilBlock::new);
     public static final RegistryObject<IrrigationPipeBlock> IRRIGATION_PIPE_BLOCK = BLOCKS.register("irrigation_pipe", IrrigationPipeBlock::new);
     public static final RegistryObject<SprayerPipeBlock> SPRAYER_PIPE_BLOCK = BLOCKS.register("sprayer_pipe", SprayerPipeBlock::new);
     public static final RegistryObject<IrrigationControllerBlock> IRRIGATION_CONTROLLER_BLOCK = BLOCKS.register("irrigation_controller", IrrigationControllerBlock::new);
     public static final RegistryObject<Item> HARVESTER_ITEM = ITEMS.register("harvester", () -> new HarvesterItem(HARVESTER_BLOCK.get(), new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<Item> TILLED_SOIL_ITEM = ITEMS.register("tilled_soil", () -> new BlockItem(TILLED_SOIL_BLOCK.get(), new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     @SuppressWarnings("unused")
     public static final RegistryObject<WateringCan> WATERING_CAN = ITEMS.register("watering_can", () -> new WateringCan(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     @SuppressWarnings("unused")
