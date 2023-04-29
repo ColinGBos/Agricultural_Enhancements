@@ -6,6 +6,7 @@
   "block.agriculturalenhancements.soil": "Soil",
   "block.agriculturalenhancements.tilled_soil": "Tilled Soil",
   "item.agriculturalenhancements.watering_can": "Watering Can",
+  "item.agriculturalenhancements.fertiliser": "Fertiliser",
   "screen.agriculturalenhancements.harvester": "Harvester",
   "screen.agriculturalenhancements.irrigation_controller": "Irrigation Controller",
   "itemGroup.agriculturalenhancements": "Agricultural Enhancements",
@@ -16,5 +17,6 @@
   "agriculturalenhancements.config.furnaceUpgradedEfficiency": "Augmented Furnace Efficiency",
   "agriculturalenhancements.config.title": "Agricultural Enhancements Config Settings",
   "agriculturalenhancements.harvester.info": "Fuel-powered machine that harvests crops up to nine blocks away from itself - harvests non-destructively.\nWill consume fuel that would exceed the fuel storage only when unable to work otherwise (potentially wasteful with high-value modded fuels).",
-  "agriculturalenhancements.irrigation_controller.info": "Fuel-powered machine that pressurizes irrigation pipes up to fifteen blocks away from itself.\nConnects through the back or top.\nRequires a water source block underneath but won't consume it.\nWill consume fuel that would exceed the fuel storage only when unable to work otherwise (potentially wasteful with high-value modded fuels)."
+  "agriculturalenhancements.irrigation_controller.info": "Fuel-powered machine that pressurizes irrigation pipes up to fifteen blocks away from itself.\nConnects through the back or top.\nRequires a water source block underneath but won't consume it.\nWill consume fuel that would exceed the fuel storage only when unable to work otherwise (potentially wasteful with high-value modded fuels).",
+  "agriculturalenhancements.fertiliser.info": "Used for fertilising soil"
 }

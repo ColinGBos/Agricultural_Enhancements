@@ -12,8 +12,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineContainer;
-import vapourdrive.agricultural_enhancements.modules.slots.SlotFuel;
-import vapourdrive.agricultural_enhancements.modules.slots.SlotOutput;
+import vapourdrive.agricultural_enhancements.modules.base.slots.SlotFuel;
+import vapourdrive.agricultural_enhancements.modules.base.slots.SlotOutput;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import java.util.Objects;

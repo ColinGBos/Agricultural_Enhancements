@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.modules.slots;
+package vapourdrive.agricultural_enhancements.modules.base.slots;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;

@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "vapourdrive.agricultural_enhancements.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "agriculturalenhancements.refmap.json",
+  "mixins": [
+    "MixinCropBlock",
+    "MixinCarrotBlock",
+    "MixinPotatoBlock",
+    "MixinBeetrootBlock"
+  ],
+  "client": [
+  ],
+  "minVersion": "0.8"
+}

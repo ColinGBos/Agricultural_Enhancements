@@ -19,8 +19,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.modules.itemhandlers.FuelHandler;
-import vapourdrive.agricultural_enhancements.modules.itemhandlers.OutputHandler;
+import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.FuelHandler;
+import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.OutputHandler;
 import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 
 import javax.annotation.Nonnull;

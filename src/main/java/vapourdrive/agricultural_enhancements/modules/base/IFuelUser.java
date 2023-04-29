@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.modules;
+package vapourdrive.agricultural_enhancements.modules.base;
 
 import net.minecraft.world.item.ItemStack;
 import vapourdrive.agricultural_enhancements.utils.MachineUtils;

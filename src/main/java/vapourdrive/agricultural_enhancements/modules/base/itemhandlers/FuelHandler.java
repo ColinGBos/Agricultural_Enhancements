@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.modules.itemhandlers;
+package vapourdrive.agricultural_enhancements.modules.base.itemhandlers;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;

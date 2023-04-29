@@ -1,9 +1,11 @@
-package vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller;
+package vapourdrive.agricultural_enhancements.modules.fertilizer;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -13,25 +15,21 @@ import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineContainer;
 import vapourdrive.agricultural_enhancements.modules.base.slots.SlotFuel;
+import vapourdrive.agricultural_enhancements.modules.base.slots.BaseSlotIngredient;
 import vapourdrive.agricultural_enhancements.modules.base.slots.SlotOutput;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import java.util.Objects;
 
-public class IrrigationControllerContainer extends AbstractBaseMachineContainer {
+public class FertilizerProducerContainer extends AbstractBaseMachineContainer {
     // gui position of the player inventory grid
-    public static final int PLAYER_INVENTORY_XPOS = 8;
-    public static final int PLAYER_INVENTORY_YPOS = 84;
 
-    public static final int OUTPUT_INVENTORY_XPOS = 62;
-    public static final int OUTPUT_INVENTORY_YPOS = 58;
+    public static final int OUTPUT_INVENTORY_XPOS = 44;
+    public static final int OUTPUT_INVENTORY_YPOS = 17;
 
-//    public FurnaceMk2Container(int windowId, Level world, BlockPos pos, Inventory inv, Player player) {
-//        this(windowId, world, pos, inv, player, new FurnaceData());
-//    }
 
-    public IrrigationControllerContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, IrrigationControllerData machineData) {
-        super(windowId, world, pos, inv, player, Registration.IRRIGATION_CONTROLLER_CONTAINER.get(),machineData);
+    public FertilizerProducerContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, FertilizerProducerData machineData) {
+        super(windowId, world, pos, inv, player, Registration.FERTILIZER_PRODUCER_CONTAINER.get(),machineData);
 
         //We use this vs the builtin method because we split all the shorts
         addSplitDataSlots(machineData);
@@ -40,18 +38,19 @@ public class IrrigationControllerContainer extends AbstractBaseMachineContainer 
 
         if (tileEntity != null) {
             tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(h -> {
-                addSlot(new SlotFuel(h, 0, 39, 58));
-                addSlot(new SlotOutput(h, 1, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 2, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 3, OUTPUT_INVENTORY_XPOS + (18 * 2), OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 4, OUTPUT_INVENTORY_XPOS + (18 * 3), OUTPUT_INVENTORY_YPOS));
+                addSlot(new SlotFuel(h, 0, 8, 59));
+                addSlot(new FertilizerSlotIngredient(h, 0, 8, 59, this.world));
+                addSlot(new SlotOutput(h, 2, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
+                addSlot(new SlotOutput(h, 3, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
+                addSlot(new SlotOutput(h, 4, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS+18));
+                addSlot(new SlotOutput(h, 5, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS+18));
             });
         }
     }
 
     @Override
     public boolean stillValid(@NotNull Player playerIn) {
-        return stillValid(ContainerLevelAccess.create(Objects.requireNonNull(tileEntity.getLevel()), tileEntity.getBlockPos()), playerEntity, Registration.IRRIGATION_CONTROLLER_BLOCK.get());
+        return stillValid(ContainerLevelAccess.create(Objects.requireNonNull(tileEntity.getLevel()), tileEntity.getBlockPos()), playerEntity, Registration.FERTILIZER_PRODUCER_BLOCK.get());
     }
 
     @Override
@@ -65,8 +64,16 @@ public class IrrigationControllerContainer extends AbstractBaseMachineContainer 
             ItemStack stack = slot.getItem();
             itemstack = stack.copy();
 
+            //Non-output slots to Inventory
+            if (index == 36 || index == 37) {
+                AgriculturalEnhancements.debugLog("From furnace non-output");
+                if (!this.moveItemStackTo(stack, 0, 36, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+
             //Furnace outputs to Inventory
-            if (index >= 37 && index <= 40) {
+            if (index >= 38 && index <= 41) {
                 AgriculturalEnhancements.debugLog("From furnace output");
                 if (!this.moveItemStackTo(stack, 0, 36, false)) {
                     return ItemStack.EMPTY;
@@ -74,19 +81,17 @@ public class IrrigationControllerContainer extends AbstractBaseMachineContainer 
                 slot.onQuickCraft(stack, itemstack);
             }
 
-            //Non-output slots to Inventory
-            if (index == 36) {
-                AgriculturalEnhancements.debugLog("From furnace non-output");
-                if (!this.moveItemStackTo(stack, 0, 36, false)) {
-                    return ItemStack.EMPTY;
-                }
-            }
-
             //Player Inventory
             else if (index <= 35) {
                 //Inventory to fuel
                 if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0.0) {
                     if (!this.moveItemStackTo(stack, 36, 37, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }
+                //Inventory to infgredient
+                if (this.world.getRecipeManager().getRecipeFor(Registration.FERTILIZER_TYPE.get(), new SimpleContainer(stack), this.world).isPresent()) {
+                    if (!this.moveItemStackTo(stack, 37, 38, false)) {
                         return ItemStack.EMPTY;
                     }
                 }

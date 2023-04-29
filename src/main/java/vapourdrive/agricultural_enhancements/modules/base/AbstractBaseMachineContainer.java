@@ -16,6 +16,8 @@ import javax.annotation.Nullable;
 
 public abstract class AbstractBaseMachineContainer extends AbstractContainerMenu {
 
+    public static final int PLAYER_INVENTORY_XPOS = 8;
+    public static final int PLAYER_INVENTORY_YPOS = 84;
     protected final AbstractBaseFuelUserTile tileEntity;
     protected final Player playerEntity;
     private final IItemHandler playerInventory;

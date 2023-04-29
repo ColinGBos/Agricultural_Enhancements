@@ -1,7 +1,10 @@
-package vapourdrive.agricultural_enhancements.modules.slots;
+package vapourdrive.agricultural_enhancements.modules.base.slots;
 
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+
+import javax.annotation.Nonnull;
 
 public class AbstractMachineSlot extends SlotItemHandler {
     public final String slotTitle;

@@ -36,7 +36,7 @@ public class TilledSoilBlock extends Block {
 
     public TilledSoilBlock() {
         super(BlockBehaviour.Properties.of(Material.DIRT));
-        this.registerDefaultState(this.stateDefinition.any().setValue(SOIL_MOISTURE, 2).setValue(SOIL_NUTRIENTS, 3));
+        this.registerDefaultState(this.stateDefinition.any().setValue(SOIL_MOISTURE, 0).setValue(SOIL_NUTRIENTS, 3));
     }
 
     @Override
@@ -47,8 +47,8 @@ public class TilledSoilBlock extends Block {
     @Override
     @SuppressWarnings("deprecation")
     public @NotNull BlockState updateShape(@NotNull BlockState pState, @NotNull Direction pFacing, @NotNull BlockState pFacingState, @NotNull LevelAccessor pLevel, @NotNull BlockPos pCurrentPos, @NotNull BlockPos pFacingPos) {
-        AgriculturalEnhancements.debugLog("Facing: "+pFacing+", state: "+pFacingState);
-        pLevel.scheduleTick(pCurrentPos, this, pLevel.getRandom().nextInt(400)+800);
+//        AgriculturalEnhancements.debugLog("Facing: "+pFacing+", state: "+pFacingState);
+        pLevel.scheduleTick(pCurrentPos, this, pLevel.getRandom().nextInt(200)+400);
 
         return super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
     }
@@ -75,7 +75,8 @@ public class TilledSoilBlock extends Block {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return !this.defaultBlockState().canSurvive(pContext.getLevel(), pContext.getClickedPos()) ? Blocks.DIRT.defaultBlockState() : super.getStateForPlacement(pContext);
+        int baseMoisture = Math.max((int)((pContext.getLevel().getBiome(pContext.getClickedPos()).get().getDownfall()-0.3f)/0.2f),0);
+        return !this.defaultBlockState().canSurvive(pContext.getLevel(), pContext.getClickedPos()) ? Blocks.DIRT.defaultBlockState() : this.defaultBlockState().setValue(SOIL_MOISTURE, baseMoisture);
     }
 
     @Override
@@ -104,7 +105,7 @@ public class TilledSoilBlock extends Block {
         moistureOut = Math.max(moistureOut,0);
 
         if(moistureIn != moistureOut){
-            pLevel.scheduleTick(pPos, this, pRandom.nextInt(400)+800);
+            pLevel.scheduleTick(pPos, this, pRandom.nextInt(200)+400);
             pLevel.setBlockAndUpdate(pPos, pState.setValue(SOIL_MOISTURE, Math.min(moistureOut, MAX_MOISTURE)));
         }
     }
@@ -180,7 +181,8 @@ public class TilledSoilBlock extends Block {
                 greatestNeighbor = Math.max(greatestNeighbor, targetMoisture);
             }
         }
-        return greatestNeighbor;
+        int baseMoisture = Math.max((int)((level.getBiome(pPos).get().getDownfall()-0.3f)/0.2f),1);
+        return Math.max(greatestNeighbor, baseMoisture);
     }
 
     @Override

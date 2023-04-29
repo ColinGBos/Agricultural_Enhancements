@@ -1,30 +1,27 @@
 package vapourdrive.agricultural_enhancements.modules.irrigation;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -43,7 +40,7 @@ public class WateringCan extends Item {
     }
 
     @Override
-    public @NotNull InteractionResult useOn(UseOnContext ctx) {
+    public @NotNull InteractionResult useOn(@NotNull UseOnContext ctx) {
 //        if(getWater(ctx.getItemInHand()) >= getMaxWater()) {
 //            return InteractionResult.PASS;
 //        }
@@ -189,19 +186,24 @@ public class WateringCan extends Item {
     }
 
     @Override
-    public ItemStack getDefaultInstance() {
+    public @NotNull ItemStack getDefaultInstance() {
         ItemStack stack = new ItemStack(this);
         stack.getOrCreateTag().putInt("Water", 0);
         return stack;
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+    public void appendHoverText(@NotNull ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(Component.literal("Water: ").append(df.format(getWater(pStack)) + "/" + df.format(getMaxWater())+" mB").withStyle(ChatFormatting.BLUE));
     }
 
     public int getWater(ItemStack stack){
-        return !stack.hasTag() ? 0 : stack.getTag().getInt("Water");
+        if (!stack.hasTag()) {
+            return 0;
+        } else {
+            assert stack.getTag() != null;
+            return stack.getTag().getInt("Water");
+        }
     }
 
     public void setWater(ItemStack stack, int water){

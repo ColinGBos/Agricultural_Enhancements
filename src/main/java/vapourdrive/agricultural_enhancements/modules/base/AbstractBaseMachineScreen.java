@@ -7,10 +7,9 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.slots.AbstractMachineSlot;
+import vapourdrive.agricultural_enhancements.modules.base.slots.AbstractMachineSlot;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
