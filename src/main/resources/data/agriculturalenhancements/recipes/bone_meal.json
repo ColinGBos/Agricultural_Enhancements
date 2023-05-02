@@ -1,0 +1,9 @@
+{
+  "type": "agriculturalenhancements:fertilizer",
+  "ingredient": {
+    "item": "minecraft:bone_meal"
+  },
+  "n": 20,
+  "p": 5,
+  "k": 5
+}

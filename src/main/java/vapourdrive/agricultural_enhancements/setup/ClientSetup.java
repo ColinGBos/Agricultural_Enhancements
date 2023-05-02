@@ -5,6 +5,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerProducerScreen;
 import vapourdrive.agricultural_enhancements.modules.harvester.HarvesterScreen;
 import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller.IrrigationControllerScreen;
 
@@ -15,6 +16,7 @@ public class ClientSetup {
         event.enqueueWork(() -> {
             MenuScreens.register(Registration.HARVESTER_CONTAINER.get(), HarvesterScreen::new);
             MenuScreens.register(Registration.IRRIGATION_CONTROLLER_CONTAINER.get(), IrrigationControllerScreen::new);
+            MenuScreens.register(Registration.FERTILIZER_PRODUCER_CONTAINER.get(), FertilizerProducerScreen::new);
         });
     }
 

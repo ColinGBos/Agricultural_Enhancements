@@ -9,10 +9,13 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineContainer;
 import vapourdrive.agricultural_enhancements.modules.base.slots.SlotFuel;
 import vapourdrive.agricultural_enhancements.modules.base.slots.BaseSlotIngredient;
@@ -24,12 +27,15 @@ import java.util.Objects;
 public class FertilizerProducerContainer extends AbstractBaseMachineContainer {
     // gui position of the player inventory grid
 
-    public static final int OUTPUT_INVENTORY_XPOS = 44;
-    public static final int OUTPUT_INVENTORY_YPOS = 17;
+    public static final int OUTPUT_INVENTORY_XPOS = 125;
+    public static final int OUTPUT_INVENTORY_YPOS = 26;
+
+    protected final FertilizerProducerTile tileEntity;
 
 
     public FertilizerProducerContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, FertilizerProducerData machineData) {
         super(windowId, world, pos, inv, player, Registration.FERTILIZER_PRODUCER_CONTAINER.get(),machineData);
+        tileEntity = (FertilizerProducerTile) world.getBlockEntity(pos);
 
         //We use this vs the builtin method because we split all the shorts
         addSplitDataSlots(machineData);
@@ -39,7 +45,7 @@ public class FertilizerProducerContainer extends AbstractBaseMachineContainer {
         if (tileEntity != null) {
             tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(h -> {
                 addSlot(new SlotFuel(h, 0, 8, 59));
-                addSlot(new FertilizerSlotIngredient(h, 0, 8, 59, this.world));
+                addSlot(new FertilizerSlotIngredient(h, 1, 44, 49, this.world));
                 addSlot(new SlotOutput(h, 2, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
                 addSlot(new SlotOutput(h, 3, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
                 addSlot(new SlotOutput(h, 4, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS+18));
@@ -126,5 +132,23 @@ public class FertilizerProducerContainer extends AbstractBaseMachineContainer {
         }
 
         return itemstack;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public float getElementPercentage(FertilizerProducerData.Data element) {
+        int i = this.machineData.get(element.ordinal());
+        if (i == 0) {
+            return 0;
+        }
+        return (float) i / (float) tileEntity.getMaxElement();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public int getElementStored(FertilizerProducerData.Data element) {
+        return this.machineData.get(element.ordinal());
+    }
+
+    public int getMaxElement() {
+        return this.tileEntity.getMaxElement();
     }
 }

@@ -13,18 +13,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 
+import java.util.Arrays;
+
 public class FertilizerRecipe implements Recipe<SimpleContainer> {
     protected final ResourceLocation id;
     protected final Ingredient ingredient;
-    protected final int time;
     protected final int n;
     protected final int p;
     protected final int k;
 
-    public FertilizerRecipe(ResourceLocation id, Ingredient ingredient, int time, int n, int p, int k){
+    public FertilizerRecipe(ResourceLocation id, Ingredient ingredient, int n, int p, int k){
         this.id=id;
         this.ingredient=ingredient;
-        this.time=time;
         this.n=n;
         this.p=p;
         this.k=k;
@@ -32,7 +32,12 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public boolean matches(@NotNull SimpleContainer pContainer, @NotNull Level pLevel) {
-        return false;
+        AgriculturalEnhancements.debugLog("Checking container " + (pContainer.getItem(0)).toString());
+        AgriculturalEnhancements.debugLog("Checking ingredient " + Arrays.toString(ingredient.getItems()));
+
+        boolean ret = this.ingredient.test(pContainer.getItem(0));
+        AgriculturalEnhancements.debugLog("Matches " + ret);
+        return ret;
     }
 
     @Override
@@ -87,28 +92,26 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
             } else {
                 ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient"));
             }
-            int time = GsonHelper.getAsInt(json, "time");
-            int n = GsonHelper.getAsInt(json, "n");
-            int p = GsonHelper.getAsInt(json, "p");
-            int k = GsonHelper.getAsInt(json, "k");
-            return new FertilizerRecipe(id, ingredient, time, n, p, k);
+            int n = GsonHelper.getAsInt(json, "n")*80;
+            int p = GsonHelper.getAsInt(json, "p")*80;
+            int k = GsonHelper.getAsInt(json, "k")*80;
+            return new FertilizerRecipe(id, ingredient, n, p, k);
         }
 
         @Override
         public @Nullable FertilizerRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf pBuffer) {
             Ingredient ingredient = Ingredient.fromNetwork(pBuffer);
             int[] results = pBuffer.readVarIntArray();
-            int time = results[0];
-            int n = results[1];
-            int p = results[2];
-            int k = results[3];
-            return new FertilizerRecipe(id, ingredient, time, n, p, k);
+            int n = results[0]*80;
+            int p = results[1]*80;
+            int k = results[2]*80;
+            return new FertilizerRecipe(id, ingredient, n, p, k);
         }
 
         @Override
         public void toNetwork(@NotNull FriendlyByteBuf pBuffer, FertilizerRecipe pRecipe) {
             pRecipe.ingredient.toNetwork(pBuffer);
-            pBuffer.writeVarIntArray(new int[]{pRecipe.time, pRecipe.n, pRecipe.p, pRecipe.k});
+            pBuffer.writeVarIntArray(new int[]{pRecipe.n, pRecipe.p, pRecipe.k});
         }
     }
 }

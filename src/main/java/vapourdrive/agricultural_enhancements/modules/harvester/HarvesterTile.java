@@ -193,6 +193,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.getStackInSlot(FUEL_SLOT[index]);
             case OUTPUT -> outputHandler.getStackInSlot(OUTPUT_SLOTS[index]);
+            case INGREDIENT -> ItemStack.EMPTY;
         };
     }
 
@@ -209,6 +210,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.insertItem(FUEL_SLOT[index], stack, simulate);
             case OUTPUT -> outputHandler.insertItem(OUTPUT_SLOTS[index], stack, simulate, true);
+            case INGREDIENT -> ItemStack.EMPTY;
         };
     }
 }

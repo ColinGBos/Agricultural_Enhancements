@@ -5,11 +5,12 @@ import net.minecraft.world.inventory.ContainerData;
 public class FertilizerProducerData implements ContainerData {
     public enum Data {
         FUEL,
-        COOK_PROGRESS,
-        COOK_MAX
+        N,
+        P,
+        K
     }
 
-    private final int[] data = {2};
+    private final int[] data = {0,0,0,0};
 
     public int get(Data data) {
         return this.get(data.ordinal());

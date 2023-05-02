@@ -3,42 +3,35 @@ package vapourdrive.agricultural_enhancements.modules.fertilizer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.FuelHandler;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.IngredientHandler;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.OutputHandler;
-import vapourdrive.agricultural_enhancements.setup.Registration;
 import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
+import java.util.Collections;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.FERTILIZER_PRODUCER_TILE;
-import static vapourdrive.agricultural_enhancements.utils.MachineUtils.getMatchingRecipeForInput;
-//import static vapourdrive.agricultural_enhancements.utils.MachineUtils.pushOutput;
+import static vapourdrive.agricultural_enhancements.utils.MachineUtils.canPushAllOutputs;
 
 public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
+    
+    public enum Element{
+        N,
+        P,
+        K
+    }
 
     public final int[] INGREDIENT_SLOT = {0};
     private final FuelHandler fuelHandler = new FuelHandler(this, FUEL_SLOT.length);
@@ -49,11 +42,10 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
 
     public final FertilizerProducerData fertilizerProducerData = new FertilizerProducerData();
-    private ItemStack lastSmelting = ItemStack.EMPTY;
-    private ItemStack currentIngredient = ItemStack.EMPTY;
-    public int n = 0;
-    public int p = 0;
-    public int k = 0;
+    public int[] elementToAdd = {0,0,0};
+    public int[] incrementalElementToAdd = {0,0,0};
+    public int maxElement = 20480;
+    public int wait2 = 0;
 
     public FertilizerProducerTile(BlockPos pos, BlockState state) {
         super(FERTILIZER_PRODUCER_TILE.get(), pos, state, 12800000, 100, new int[]{0, 1, 2, 3});
@@ -63,81 +55,141 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         ItemStack fuel = getStackInSlot(MachineUtils.Area.FUEL, 0);
         ItemStack ingredient = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
         MachineUtils.doFuelProcess(fuel, wait, this);
+        doWorkProcesses(ingredient, state);
 
-        if (!lastSmelting.isEmpty() && !ItemStack.isSame(ingredient, lastSmelting)) {
-            fertilizerProducerData.set(FertilizerProducerData.Data.COOK_PROGRESS, 0);
-        }
-        if (!ingredient.isEmpty()) {
-            doWorkProcesses(ingredient, state);
-        }
         wait += 1;
         if (wait >= 160) {
             wait = 0;
         }
+        if (wait2>=80){
+            wait2 = 0;
+        }
     }
 
     private void doWorkProcesses(ItemStack ingredient, BlockState state) {
-        if (canWork()) {
-            changeStateIfNecessary(state, true);
+        doConsumeProcess(ingredient);
+        changeStateIfNecessary(state, canWork());
+    }
 
-            if (fertilizerProducerData.get(FertilizerProducerData.Data.COOK_PROGRESS) == 0){
-                if(currentIngredient.isEmpty()) {
-                    currentIngredient = ingredient;
-                    fertilizerProducerData.set(FertilizerProducerData.Data.COOK_MAX, MachineUtils.getCookTime(level, ingredient));
-                }
-
-                if(pushOutput(currentIngredient, true) >= 1 && getCurrentFuel() >= fertilizerProducerData.get(FertilizerProducerData.Data.COOK_MAX)){
-                    assert level != null;
-                    level.setBlock(worldPosition, state.setValue(BlockStateProperties.LIT, true), Block.UPDATE_ALL);
-                    this.setChanged();
-                    progressCook();
-                }
-            } else if (fertilizerProducerData.get(FertilizerProducerData.Data.COOK_PROGRESS) >= 0) {
-                progressCook();
-                if (fertilizerProducerData.get(FertilizerProducerData.Data.COOK_PROGRESS) >= fertilizerProducerData.get(FertilizerProducerData.Data.COOK_MAX)) {
-                    if (pushOutput(currentIngredient, false) == -1) {
-                        //ingredientHandler.extractItem(INPUT_SLOT[0], 1, false);
-                        removeFromSlot(MachineUtils.Area.INGREDIENT, 0, 1, false);
-                        ItemStack remainingIngredient = getStackInSlot(MachineUtils.Area.INGREDIENT,0);
-                        if(remainingIngredient.isEmpty()){
-                            currentIngredient = ItemStack.EMPTY;
-
-                        } else if (!ItemStack.isSame(remainingIngredient, currentIngredient)) {
-                            fertilizerProducerData.set(FertilizerProducerData.Data.COOK_MAX, 0);
+    public void doConsumeProcess(ItemStack stack) {
+        if (wait2 == 0 && consumeFuel(minWorkFuel*80, true)) {
+            AgriculturalEnhancements.debugLog("N: " + fertilizerProducerData.get(FertilizerProducerData.Data.N));
+            AgriculturalEnhancements.debugLog("P: " + fertilizerProducerData.get(FertilizerProducerData.Data.P));
+            AgriculturalEnhancements.debugLog("K: " + fertilizerProducerData.get(FertilizerProducerData.Data.K));
+            int[] toAdds = tryConsumeStack(stack);
+            if (toAdds != null) {
+                AgriculturalEnhancements.debugLog("resulting lookup: " + toAdds[0]);
+                for (Element element : Element.values()) {
+                    int emnt = toAdds[element.ordinal()];
+                    if (emnt > 0) {
+//            AgriculturalEnhancements.debugLog("Doing fuel process");
+                        setElementToAdd(element, toAdds[element.ordinal()]);
+                        if (!addElement(element, getElementToAdd(element), true)) {
+                            setElementToAdd(element, getMaxElement() - getCurrentElement(element));
                         }
-                        if(remainingIngredient.isEmpty() || fertilizerProducerData.get(FertilizerProducerData.Data.COOK_MAX) < fertilizerProducerData.get(FertilizerProducerData.Data.COOK_MAX)) {
-                            assert level != null;
-                            level.setBlock(worldPosition, state.setValue(BlockStateProperties.LIT, false), Block.UPDATE_ALL);
-                            this.setChanged();
-                        }
+                        setIncrementalElementToAdd(element, getElementToAdd(element) / 80);
                     }
-                    fertilizerProducerData.set(FertilizerProducerData.Data.COOK_PROGRESS, 0);
+                }
+            }
+        }
+        boolean increment = false;
+        for(Element element : Element.values()) {
+            if (getElementToAdd(element) > 0) {
+                increment = true;
+                addElement(element, getIncrementalElementToAdd(element), false);
+                setElementToAdd(element, getElementToAdd(element) - getIncrementalElementToAdd(element));
+            }
+        }
+        if(increment){
+            wait2++;
+            consumeFuel(minWorkFuel, false);
+        }
+
+    }
+
+    public int[] tryConsumeStack(ItemStack stack) {
+        if (!stack.isEmpty()) {
+            if (stack.hasCraftingRemainingItem()) {
+//                    AgriculturalEnhancements.debugLog("Fuel has a container item to try to push.");
+                ItemStack remainder = stack.getCraftingRemainingItem();
+                if (!canPushAllOutputs(Collections.singletonList(remainder), this)) {
+//                    AgriculturalEnhancements.debugLog("Either the ingredient or the bucket say there's room for two");
+                    return null;
                 }
             }
 
-        } else {
-            changeStateIfNecessary(state, false);
+            int[] emnts = FertilizerUtils.getFertilizerResultForItem(level, stack);
+            if(emnts != null) {
+                boolean hasSpace = true;
+                for (Element element : Element.values()) {
+                    if (getCurrentElement(element) + emnts[element.ordinal()] > getMaxElement()) {
+                        hasSpace = false;
+                    }
+                }
+                if (hasSpace) {
+                    removeFromSlot(MachineUtils.Area.INGREDIENT, 0, 1, false);
+                    return emnts;
+                }
+            }
         }
+        return null;
     }
 
-    public int pushOutput(ItemStack stack, boolean simulate){
-        assert this.level != null;
-        Optional<FertilizerRecipe> recipe = this.level.getRecipeManager().getRecipeFor(Registration.FERTILIZER_TYPE.get(), new SimpleContainer(stack), this.level);
-        if(recipe.isPresent()) {
-            int[] outputs = recipe.get().getOutputs();
+    public void setElementToAdd(Element element, int toSet){
+        this.elementToAdd[element.ordinal()]=toSet;
+    }
+    public int getElementToAdd(Element element) {
+        return this.elementToAdd[element.ordinal()];
+    }
+    public void setIncrementalElementToAdd(Element element,int increment) {
+        this.incrementalElementToAdd[element.ordinal()] = increment;
+    }
+    public int getIncrementalElementToAdd(Element element) {
+        return this.incrementalElementToAdd[element.ordinal()];
+    }
+    public int getCurrentElement(Element element) {
+        return switch (element) {
+            case N -> fertilizerProducerData.get(FertilizerProducerData.Data.N);
+            case P -> fertilizerProducerData.get(FertilizerProducerData.Data.P);
+            case K -> fertilizerProducerData.get(FertilizerProducerData.Data.K);
+        };
+    }
+    public int getMaxElement(){
+        return this.maxElement;
+    }
+    public boolean addElement(Element element, int toAdd, boolean simulate) {
+        if (toAdd + getCurrentElement(element) > getMaxElement()) {
+            AgriculturalEnhancements.debugLog("Can't add element: "+getCurrentElement(element));
+            return false;
+        }
+        if (!simulate) {
+            AgriculturalEnhancements.debugLog("Adding element + : "+toAdd+" "+getCurrentElement(element));
+            switch (element) {
+                case N -> fertilizerProducerData.set(FertilizerProducerData.Data.N, getCurrentElement(element) + toAdd);
+                case K -> fertilizerProducerData.set(FertilizerProducerData.Data.K, getCurrentElement(element) + toAdd);
+                case P -> fertilizerProducerData.set(FertilizerProducerData.Data.P, getCurrentElement(element) + toAdd);
+            }
         }
 
-        return 0;
+        return true;
     }
 
-    public void progressCook() {
-        fertilizerProducerData.set(FertilizerProducerData.Data.COOK_PROGRESS, fertilizerProducerData.get(FertilizerProducerData.Data.COOK_PROGRESS)+100);
-        consumeFuel(100, false);
+    public boolean consumeElement(Element element, int toConsume, boolean simulate) {
+        if (getCurrentElement(element) < toConsume) {
+            return false;
+        }
+        if (!simulate) {
+            switch (element) {
+                case N -> fertilizerProducerData.set(FertilizerProducerData.Data.N, getCurrentElement(element) - toConsume);
+                case K -> fertilizerProducerData.set(FertilizerProducerData.Data.K, getCurrentElement(element) - toConsume);
+                case P -> fertilizerProducerData.set(FertilizerProducerData.Data.P, getCurrentElement(element) - toConsume);
+            }
+        }
+        return true;
     }
 
-    public static ItemStack getSmeltingResultForItem(Level world, ItemStack itemStack) {
-        Optional<SmeltingRecipe> matchingRecipe = getMatchingRecipeForInput(world, itemStack);
-        return matchingRecipe.map(furnaceRecipe -> furnaceRecipe.getResultItem().copy()).orElse(ItemStack.EMPTY);
+    public int getMinElementToCraftFertilizer() {
+        return 400;
     }
 
     @Override
@@ -155,13 +207,14 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         fuelHandler.deserializeNBT(tag.getCompound("invFuel"));
 
         fertilizerProducerData.set(FertilizerProducerData.Data.FUEL, tag.getInt("fuel"));
+        fertilizerProducerData.set(FertilizerProducerData.Data.N, tag.getInt("n"));
+        fertilizerProducerData.set(FertilizerProducerData.Data.P, tag.getInt("p"));
+        fertilizerProducerData.set(FertilizerProducerData.Data.K, tag.getInt("k"));
 
         increment = tag.getInt("increment");
         toAdd = tag.getInt("toAdd");
         wait = tag.getInt("wait");
-        n = tag.getInt("n");
-        p = tag.getInt("p");
-        k = tag.getInt("k");
+        wait2 = tag.getInt("wait2");
 
         super.load(tag);
     }
@@ -176,10 +229,10 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         tag.putInt("increment", increment);
         tag.putInt("toAdd", toAdd);
         tag.putInt("wait", wait);
-        tag.putInt("n", n);
-        tag.putInt("p", p);
-        tag.putInt("k", k);
-
+        tag.putInt("wait2", wait2);
+        tag.putInt("n", getCurrentElement(Element.N));
+        tag.putInt("p", getCurrentElement(Element.P));
+        tag.putInt("k", getCurrentElement(Element.K));
     }
 
     @Nonnull

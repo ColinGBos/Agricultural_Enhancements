@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> extends AbstractContainerScreen<T> {
-    private final AbstractBaseMachineContainer container;
+    protected final AbstractBaseMachineContainer container;
 
     private final ResourceLocation GUI;
 
@@ -24,7 +24,7 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
     final int FUEL_YPOS;
     final int FUEL_ICONX = 176;   // texture position of flame icon [u,v]
     final int FUEL_ICONY = 0;
-    final int FUEL_HEIGHT = 47;
+    final int FUEL_HEIGHT = 46;
     final int FUEL_WIDTH = 8;
 
     final int INFO_XPOS;
@@ -33,9 +33,10 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
     final int INFO_ICONY = 0;
     final int INFO_HEIGHT = 12;
     final int INFO_WIDTH = 12;
+    final boolean STACK_INFO_SIDEWAYS;
     final String ID;
 
-    DecimalFormat df = new DecimalFormat("#,###");
+    protected DecimalFormat df = new DecimalFormat("#,###");
 
     public AbstractBaseMachineScreen(T container, Inventory inv, Component name, String id, int fuelX, int fuelY, int helpX, int helpY, int titleX) {
         super(container, inv, name);
@@ -47,6 +48,21 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
         this.INFO_XPOS = helpX;
         this.INFO_YPOS = helpY;
         this.ID=id;
+        this.STACK_INFO_SIDEWAYS = false;
+        this.GUI = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/"+id+"_gui.png");
+    }
+
+    public AbstractBaseMachineScreen(T container, Inventory inv, Component name, String id, int fuelX, int fuelY, int helpX, int helpY, int titleX, boolean stackInfoSideways) {
+        super(container, inv, name);
+        this.container = container;
+        this.titleLabelX = titleX;
+        this.titleLabelY = -10;
+        this.FUEL_XPOS = fuelX;
+        this.FUEL_YPOS = fuelY;
+        this.INFO_XPOS = helpX;
+        this.INFO_YPOS = helpY;
+        this.ID=id;
+        this.STACK_INFO_SIDEWAYS = stackInfoSideways;
         this.GUI = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/"+id+"_gui.png");
     }
 
@@ -74,10 +90,14 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
         this.blit(matrixStack, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
 
         int m = (int) (container.getFuelPercentage() * (FUEL_HEIGHT));
+
         this.blit(matrixStack, guiLeft + FUEL_XPOS, guiTop + FUEL_YPOS + FUEL_HEIGHT - m, FUEL_ICONX, FUEL_ICONY + FUEL_HEIGHT - m, FUEL_WIDTH, m);
         this.blit(matrixStack, guiLeft+INFO_XPOS, guiTop+INFO_YPOS, INFO_ICONX, INFO_ICONY+INFO_HEIGHT, INFO_WIDTH, INFO_HEIGHT);
-        blitAlt(matrixStack, INFO_XPOS, INFO_YPOS+15, INFO_ICONX+INFO_WIDTH, INFO_ICONY, INFO_WIDTH, INFO_HEIGHT, mouseX, mouseY);
-
+        if(STACK_INFO_SIDEWAYS) {
+            blitAlt(matrixStack, INFO_XPOS-15, INFO_YPOS, INFO_ICONX + INFO_WIDTH, INFO_ICONY, INFO_WIDTH, INFO_HEIGHT, mouseX, mouseY);
+        }else{
+            blitAlt(matrixStack, INFO_XPOS, INFO_YPOS + 15, INFO_ICONX + INFO_WIDTH, INFO_ICONY, INFO_WIDTH, INFO_HEIGHT, mouseX, mouseY);
+        }
     }
 
     @Override
