@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "agriculturalenhancements:block/fertilizer_producer_bottom",
+    "up": "agriculturalenhancements:block/fertilizer_producer_top",
+    "north": "agriculturalenhancements:block/fertilizer_producer_front_lit",
+    "south": "agriculturalenhancements:block/fertilizer_producer_side",
+    "east": "agriculturalenhancements:block/fertilizer_producer_side",
+    "west": "agriculturalenhancements:block/fertilizer_producer_side",
+    "particle": "agriculturalenhancements:block/fertilizer_producer_side"
+  }
+}

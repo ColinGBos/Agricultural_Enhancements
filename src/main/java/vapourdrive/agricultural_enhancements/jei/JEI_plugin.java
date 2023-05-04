@@ -4,20 +4,32 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.Fertilizer;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerRecipe;
 import vapourdrive.agricultural_enhancements.modules.harvester.HarvesterScreen;
 import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller.IrrigationControllerScreen;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
+import java.util.List;
+import java.util.Objects;
+
 @JeiPlugin
 public class JEI_plugin implements IModPlugin {
+
+    public static RecipeType<FertilizerRecipe> FERTILIZER_TYPE =
+            new RecipeType<>(FertilizerRecipeCategory.UID, FertilizerRecipe.class);
 
     @Override
     public @NotNull ResourceLocation getPluginUid() {
@@ -41,5 +53,15 @@ public class JEI_plugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addIngredientInfo(new ItemStack(Registration.HARVESTER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.harvester.info"));
         registration.addIngredientInfo(new ItemStack(Registration.IRRIGATION_CONTROLLER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.irrigation_controller.info"));
+
+        RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
+
+            List<FertilizerRecipe> recipeList = recipeManager.getAllRecipesFor(FertilizerRecipe.Type.INSTANCE);
+            registration.addRecipes(FERTILIZER_TYPE, recipeList);
+    }
+
+    @Override
+    public void registerCategories(IRecipeCategoryRegistration registration) {
+        registration.addRecipeCategories(new FertilizerRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 }

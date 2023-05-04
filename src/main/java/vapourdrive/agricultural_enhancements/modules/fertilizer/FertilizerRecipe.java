@@ -49,6 +49,10 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
         return new int[]{this.n, this.p, this.k};
     }
 
+    public Ingredient getIngredient() {
+        return ingredient;
+    }
+
     @Override
     public boolean canCraftInDimensions(int pWidth, int pHeight) {
         return false;

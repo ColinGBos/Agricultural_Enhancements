@@ -11,6 +11,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.level.Level;
+import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.modules.base.IFuelUser;
 
 import java.util.ArrayList;
@@ -117,11 +118,10 @@ public class MachineUtils {
                 user.setFuelToAdd(user.getMaxFuel() - user.getCurrentFuel());
             }
             user.setIncrementalFuelToAdd(user.getFuelToAdd() / 10);
-        } else {
-            if (user.getFuelToAdd() > 0) {
-                user.addFuel(user.getIncrementalFuelToAdd(), false);
-                user.setFuelToAdd(user.getFuelToAdd() - user.getIncrementalFuelToAdd());
-            }
+        }
+        if (user.getFuelToAdd() > 0) {
+            user.addFuel(user.getIncrementalFuelToAdd(), false);
+            user.setFuelToAdd(user.getFuelToAdd() - user.getIncrementalFuelToAdd());
         }
     }
 
@@ -132,9 +132,10 @@ public class MachineUtils {
                 user.setCurrentFuelStack(fuel.copy());
                 user.setCurrentBurn((int) (getBurnDuration(fuel) * user.getEfficiencyMultiplier()));
             }
-            if (user.getCurrentFuel() + user.getCurrentBurn() * user.getEfficiencyMultiplier() <= user.getMaxFuel() || user.getCurrentFuel() < user.getMinFuelToWork()) {
+            if (user.getCurrentFuel() + user.getCurrentBurn() <= user.getMaxFuel() || user.getCurrentFuel() < user.getMinFuelToWork()) {
+                AgriculturalEnhancements.debugLog("Fuel: "+user.getCurrentFuel()+" current burn: "+user.getCurrentBurn());
                 if (user.getCurrentFuelStack().hasCraftingRemainingItem()) {
-//                    AgriculturalEnhancements.debugLog("Fuel has a container item to try to push.");
+
                     ItemStack fuelRemainder = user.getCurrentFuelStack().getCraftingRemainingItem();
                     if (canPushAllOutputs(Collections.singletonList(fuelRemainder), user)) {
 //                    AgriculturalEnhancements.debugLog("Either the ingredient or the bucket say there's room for two");
@@ -148,7 +149,7 @@ public class MachineUtils {
                     user.setCurrentFuelStack(ItemStack.EMPTY);
                     user.setCurrentBurn((int) (getBurnDuration(fuel) * user.getEfficiencyMultiplier()));
                 }
-//                AgriculturalEnhancements.debugLog("CurrentBurn: "+user.getCurrentBurn());
+                AgriculturalEnhancements.debugLog("CurrentBurn: " + user.getCurrentBurn());
                 return user.getCurrentBurn();
             }
         }

@@ -1,14 +1,16 @@
 {
   "block.agriculturalenhancements.harvester": "Harvester",
   "block.agriculturalenhancements.irrigation_controller": "Irrigation Controller",
+  "block.agriculturalenhancements.fertilizer_producer": "Fertilizer Producer",
   "block.agriculturalenhancements.irrigation_pipe": "Irrigation Pipe",
   "block.agriculturalenhancements.sprayer_pipe": "Irrigation Sprayer",
   "block.agriculturalenhancements.soil": "Soil",
   "block.agriculturalenhancements.tilled_soil": "Tilled Soil",
   "item.agriculturalenhancements.watering_can": "Watering Can",
-  "item.agriculturalenhancements.fertiliser": "Fertiliser",
-  "screen.agriculturalenhancements.harvester": "Harvester",
-  "screen.agriculturalenhancements.irrigation_controller": "Irrigation Controller",
+  "item.agriculturalenhancements.fertilizer": "Fertiliser",
+  "agriculturalenhancements.harvester": "Harvester",
+  "agriculturalenhancements.irrigation_controller": "Irrigation Controller",
+  "agriculturalenhancements.fertilizer_producer": "Fertilizer Producer",
   "itemGroup.agriculturalenhancements": "Agricultural Enhancements",
   "message.agriculturalenhancements.fuelslot": "Fuel Slot",
   "message.agriculturalenhancements.harvester_1": "Harvests crops up tp 9 blocks away",
@@ -17,6 +19,7 @@
   "agriculturalenhancements.config.furnaceUpgradedEfficiency": "Augmented Furnace Efficiency",
   "agriculturalenhancements.config.title": "Agricultural Enhancements Config Settings",
   "agriculturalenhancements.harvester.info": "Fuel-powered machine that harvests crops up to nine blocks away from itself - harvests non-destructively.\nWill consume fuel that would exceed the fuel storage only when unable to work otherwise (potentially wasteful with high-value modded fuels).",
+  "agriculturalenhancements.fertilizer_producer.info": "Fuel-powered machine that breaks down ingredients into macro-nutrients.\nProduces fertilizer whenever enough macro-nutrients are present (5 of each).",
   "agriculturalenhancements.irrigation_controller.info": "Fuel-powered machine that pressurizes irrigation pipes up to fifteen blocks away from itself.\nConnects through the back or top.\nRequires a water source block underneath but won't consume it.\nWill consume fuel that would exceed the fuel storage only when unable to work otherwise (potentially wasteful with high-value modded fuels).",
   "agriculturalenhancements.fertiliser.info": "Used for fertilising soil"
 }

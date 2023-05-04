@@ -20,7 +20,7 @@ public class FertilizerProducerScreen extends AbstractBaseMachineScreen<Fertiliz
     protected final FertilizerProducerContainer machineContainer;
 
     public FertilizerProducerScreen(FertilizerProducerContainer container, Inventory inv, Component name) {
-        super(container, inv, name, "fertilizer_processor", 12, 8, 158, 6, 1, true);
+        super(container, inv, name, "fertilizer_producer", 12, 8, 158, 6, 1, true);
         machineContainer = container;
     }
 

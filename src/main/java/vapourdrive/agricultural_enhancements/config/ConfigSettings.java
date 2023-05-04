@@ -37,8 +37,8 @@ public class ConfigSettings {
     private static void setupFirstBlockConfig(ForgeConfigSpec.Builder SERVER_BUILDER) {
         SERVER_BUILDER.comment("Furnace settings").push(SUBCATEGORY_FURNACEMK2);
 
-        FURNACE_BASE_EFFICIENCY = SERVER_BUILDER.comment("Base efficiency multiplier for the FurnaceMk2").defineInRange("furnaceBaseEfficiency", 1.25, 0.5, 10.0);
-        FURNACE_BASE_EXPERIENCE = SERVER_BUILDER.comment("Base experience multiplier for the FurnaceMk2").defineInRange("furnaceBaseExperience", 1.25, 0.5, 10.0);
+        FURNACE_BASE_EFFICIENCY = SERVER_BUILDER.comment("Base efficiency multiplier for the FurnaceMk2").defineInRange("furnaceBaseEfficiency", 1, 0.5, 10.0);
+        FURNACE_BASE_EXPERIENCE = SERVER_BUILDER.comment("Base experience multiplier for the FurnaceMk2").defineInRange("furnaceBaseExperience", 1, 0.5, 10.0);
         FURNACE_BASE_SPEED = SERVER_BUILDER.comment("Base speed multiplier for the FurnaceMk2").defineInRange("furnaceBaseSpeed", 2.0, 0.0, 10.0);
         FURNACE_UPGRADED_EFFICIENCY = SERVER_BUILDER.comment("Upgraded efficiency multiplier for the FurnaceMk2").defineInRange("furnaceUpgradedEfficiency", 1.5, 0.5, 10.0);
         FURNACE_UPGRADED_EXPERIENCE = SERVER_BUILDER.comment("Upgraded experience multiplier for the FurnaceMk2").defineInRange("furnaceUpgradedExperience", 2.0, 0.5, 10.0);

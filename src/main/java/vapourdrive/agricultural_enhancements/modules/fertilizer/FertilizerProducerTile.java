@@ -16,6 +16,7 @@ import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTi
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.FuelHandler;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.IngredientHandler;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.OutputHandler;
+import vapourdrive.agricultural_enhancements.setup.Registration;
 import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 
 import javax.annotation.Nonnull;
@@ -24,6 +25,7 @@ import java.util.Collections;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.FERTILIZER_PRODUCER_TILE;
 import static vapourdrive.agricultural_enhancements.utils.MachineUtils.canPushAllOutputs;
+import static vapourdrive.agricultural_enhancements.utils.MachineUtils.pushOutput;
 
 public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     
@@ -68,14 +70,32 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
 
     private void doWorkProcesses(ItemStack ingredient, BlockState state) {
         doConsumeProcess(ingredient);
+        doCreateProcess();
         changeStateIfNecessary(state, canWork());
+    }
+
+    public void doCreateProcess(){
+        if(wait%40==0) {
+            if (!consumeElement(Element.N, 5, true) || !consumeElement(Element.P, 5, true) || !consumeElement(Element.K, 5, true)) {
+                AgriculturalEnhancements.debugLog("Not enough room for the output");
+                return;
+            }
+            if (canPushAllOutputs(Collections.singletonList(new ItemStack(Registration.FERTILISER.get())), this)) {
+                pushOutput(new ItemStack(Registration.FERTILISER.get()), false, this);
+                AgriculturalEnhancements.debugLog("Pushed the output");
+                consumeElement(Element.N, 5, false);
+                consumeElement(Element.P, 5, false);
+                consumeElement(Element.K, 5, false);
+            }
+        }
+//        AgriculturalEnhancements.debugLog("Wait modulo 40: "+ wait%40);
     }
 
     public void doConsumeProcess(ItemStack stack) {
         if (wait2 == 0 && consumeFuel(minWorkFuel*80, true)) {
-            AgriculturalEnhancements.debugLog("N: " + fertilizerProducerData.get(FertilizerProducerData.Data.N));
-            AgriculturalEnhancements.debugLog("P: " + fertilizerProducerData.get(FertilizerProducerData.Data.P));
-            AgriculturalEnhancements.debugLog("K: " + fertilizerProducerData.get(FertilizerProducerData.Data.K));
+//            AgriculturalEnhancements.debugLog("N: " + fertilizerProducerData.get(FertilizerProducerData.Data.N));
+//            AgriculturalEnhancements.debugLog("P: " + fertilizerProducerData.get(FertilizerProducerData.Data.P));
+//            AgriculturalEnhancements.debugLog("K: " + fertilizerProducerData.get(FertilizerProducerData.Data.K));
             int[] toAdds = tryConsumeStack(stack);
             if (toAdds != null) {
                 AgriculturalEnhancements.debugLog("resulting lookup: " + toAdds[0]);
@@ -159,11 +179,11 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     }
     public boolean addElement(Element element, int toAdd, boolean simulate) {
         if (toAdd + getCurrentElement(element) > getMaxElement()) {
-            AgriculturalEnhancements.debugLog("Can't add element: "+getCurrentElement(element));
+//            AgriculturalEnhancements.debugLog("Can't add element: "+getCurrentElement(element));
             return false;
         }
         if (!simulate) {
-            AgriculturalEnhancements.debugLog("Adding element + : "+toAdd+" "+getCurrentElement(element));
+//            AgriculturalEnhancements.debugLog("Adding element + : "+toAdd+" "+getCurrentElement(element));
             switch (element) {
                 case N -> fertilizerProducerData.set(FertilizerProducerData.Data.N, getCurrentElement(element) + toAdd);
                 case K -> fertilizerProducerData.set(FertilizerProducerData.Data.K, getCurrentElement(element) + toAdd);
@@ -175,14 +195,14 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     }
 
     public boolean consumeElement(Element element, int toConsume, boolean simulate) {
-        if (getCurrentElement(element) < toConsume) {
+        if (getCurrentElement(element) < toConsume*80) {
             return false;
         }
         if (!simulate) {
             switch (element) {
-                case N -> fertilizerProducerData.set(FertilizerProducerData.Data.N, getCurrentElement(element) - toConsume);
-                case K -> fertilizerProducerData.set(FertilizerProducerData.Data.K, getCurrentElement(element) - toConsume);
-                case P -> fertilizerProducerData.set(FertilizerProducerData.Data.P, getCurrentElement(element) - toConsume);
+                case N -> fertilizerProducerData.set(FertilizerProducerData.Data.N, getCurrentElement(element) - toConsume*80);
+                case K -> fertilizerProducerData.set(FertilizerProducerData.Data.K, getCurrentElement(element) - toConsume*80);
+                case P -> fertilizerProducerData.set(FertilizerProducerData.Data.P, getCurrentElement(element) - toConsume*80);
             }
         }
         return true;
