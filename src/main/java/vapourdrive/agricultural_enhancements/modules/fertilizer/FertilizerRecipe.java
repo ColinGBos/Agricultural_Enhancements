@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
@@ -89,7 +90,7 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
         public static final ResourceLocation ID = new ResourceLocation(AgriculturalEnhancements.MODID, "fertilizer");
 
         @Override
-        public @NotNull FertilizerRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
+        public FertilizerRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
             Ingredient ingredient;
             if (GsonHelper.isArrayNode(json, "ingredient")) {
                 ingredient = Ingredient.fromJson(GsonHelper.getAsJsonArray(json, "ingredient"));
@@ -99,7 +100,13 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
             int n = GsonHelper.getAsInt(json, "n")*80;
             int p = GsonHelper.getAsInt(json, "p")*80;
             int k = GsonHelper.getAsInt(json, "k")*80;
-            return new FertilizerRecipe(id, ingredient, n, p, k);
+
+            if(!ForgeHooks.hasNoElements(ingredient)) {
+                return new FertilizerRecipe(id, ingredient, n, p, k);
+            }
+            return null;
+
+//            return new FertilizerRecipe(id, ingredient, n, p, k);
         }
 
         @Override
@@ -109,7 +116,10 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
             int n = results[0]*80;
             int p = results[1]*80;
             int k = results[2]*80;
-            return new FertilizerRecipe(id, ingredient, n, p, k);
+            if(!ForgeHooks.hasNoElements(ingredient)) {
+                return new FertilizerRecipe(id, ingredient, n, p, k);
+            }
+            return null;
         }
 
         @Override

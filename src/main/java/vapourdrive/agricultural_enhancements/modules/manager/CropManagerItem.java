@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller;
+package vapourdrive.agricultural_enhancements.modules.manager;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class IrrigationControllerItem extends BlockItem {
-    public IrrigationControllerItem(Block block, Properties properties) {
+public class CropManagerItem extends BlockItem {
+    public CropManagerItem(Block block, Properties properties) {
         super(block, properties);
     }
 
@@ -21,7 +21,7 @@ public class IrrigationControllerItem extends BlockItem {
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
 //        DecimalFormat df = new DecimalFormat("#,###");
 //        list.add(Component.literal(df.format(ConfigSettings.FURNACE_BASE_SPEED.get()*100 )+"% speed").withStyle(ChatFormatting.BLUE));
-        list.add(Component.translatable("agriculturalenhancements.irrigation_controller.info_1").withStyle(ChatFormatting.BLUE));
+        list.add(Component.translatable("agriculturalenhancements.crop_manager.info_1").withStyle(ChatFormatting.BLUE));
         list.add(Component.translatable("agriculturalenhancements.fuel.info").withStyle(ChatFormatting.BLUE));
     }
 }

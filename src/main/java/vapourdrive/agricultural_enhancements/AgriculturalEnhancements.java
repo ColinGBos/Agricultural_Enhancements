@@ -1,6 +1,8 @@
 package vapourdrive.agricultural_enhancements;
 
 
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -13,6 +15,9 @@ import vapourdrive.agricultural_enhancements.setup.ClientSetup;
 import vapourdrive.agricultural_enhancements.setup.ModSetup;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(AgriculturalEnhancements.MODID)
 public class AgriculturalEnhancements {
@@ -20,6 +25,7 @@ public class AgriculturalEnhancements {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "agriculturalenhancements";
     public static boolean debugMode = true;
+    public static ArrayList<ItemLike> seeds = new ArrayList<>();
 
     public AgriculturalEnhancements() {
 //        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigSettings.CLIENT_CONFIG);

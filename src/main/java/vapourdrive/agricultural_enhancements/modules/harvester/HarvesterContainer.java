@@ -79,7 +79,6 @@ public class HarvesterContainer extends AbstractBaseMachineContainer {
                 if (!this.moveItemStackTo(stack, 0, 36, false)) {
                     return ItemStack.EMPTY;
                 }
-                slot.onQuickCraft(stack, itemstack);
             }
 
             //Non-output slots to Inventory

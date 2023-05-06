@@ -21,7 +21,7 @@ public class HarvesterItem extends BlockItem {
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
 //        DecimalFormat df = new DecimalFormat("#,###");
 //        list.add(Component.literal(df.format(ConfigSettings.FURNACE_BASE_SPEED.get()*100 )+"% speed").withStyle(ChatFormatting.BLUE));
-        list.add(Component.translatable("message.agriculturalenhancements.harvester_1").withStyle(ChatFormatting.BLUE));
-        list.add(Component.translatable("message.agriculturalenhancements.harvester_2").withStyle(ChatFormatting.BLUE));
+        list.add(Component.translatable("agriculturalenhancements.harvester.info_1").withStyle(ChatFormatting.BLUE));
+        list.add(Component.translatable("agriculturalenhancements.fuel.info").withStyle(ChatFormatting.BLUE));
     }
 }

@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "agriculturalenhancements:block/crop_manager_bottom",
+    "up": "agriculturalenhancements:block/crop_manager_top",
+    "north": "agriculturalenhancements:block/crop_manager_front_lit",
+    "south": "agriculturalenhancements:block/crop_manager_side",
+    "east": "agriculturalenhancements:block/crop_manager_side",
+    "west": "agriculturalenhancements:block/crop_manager_side",
+    "particle": "agriculturalenhancements:block/crop_manager_side"
+  }
+}

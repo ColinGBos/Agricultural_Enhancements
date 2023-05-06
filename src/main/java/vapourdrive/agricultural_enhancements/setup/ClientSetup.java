@@ -5,9 +5,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerProducerScreen;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.FertilizerProducerScreen;
 import vapourdrive.agricultural_enhancements.modules.harvester.HarvesterScreen;
 import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller.IrrigationControllerScreen;
+import vapourdrive.agricultural_enhancements.modules.manager.CropManagerScreen;
 
 @Mod.EventBusSubscriber(modid = AgriculturalEnhancements.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
@@ -17,6 +18,7 @@ public class ClientSetup {
             MenuScreens.register(Registration.HARVESTER_CONTAINER.get(), HarvesterScreen::new);
             MenuScreens.register(Registration.IRRIGATION_CONTROLLER_CONTAINER.get(), IrrigationControllerScreen::new);
             MenuScreens.register(Registration.FERTILIZER_PRODUCER_CONTAINER.get(), FertilizerProducerScreen::new);
+            MenuScreens.register(Registration.CROP_MANAGER_CONTAINER.get(), CropManagerScreen::new);
         });
     }
 

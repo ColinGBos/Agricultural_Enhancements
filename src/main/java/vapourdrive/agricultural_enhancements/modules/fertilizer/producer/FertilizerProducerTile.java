@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.modules.fertilizer;
+package vapourdrive.agricultural_enhancements.modules.fertilizer.producer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,6 +16,7 @@ import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTi
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.FuelHandler;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.IngredientHandler;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.OutputHandler;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerUtils;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 
@@ -313,6 +314,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
             case FUEL -> fuelHandler.getStackInSlot(FUEL_SLOT[index]);
             case OUTPUT -> outputHandler.getStackInSlot(OUTPUT_SLOTS[index]);
             case INGREDIENT -> ingredientHandler.getStackInSlot(INGREDIENT_SLOT[index]);
+            case INGREDIENT_2 -> ItemStack.EMPTY;
         };
     }
 
@@ -331,6 +333,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
             case FUEL -> fuelHandler.insertItem(FUEL_SLOT[index], stack, simulate);
             case OUTPUT -> outputHandler.insertItem(OUTPUT_SLOTS[index], stack, simulate, true);
             case INGREDIENT -> ingredientHandler.insertItem(INGREDIENT_SLOT[index], stack, simulate);
+            case INGREDIENT_2 -> ItemStack.EMPTY;
         };
     }
 }

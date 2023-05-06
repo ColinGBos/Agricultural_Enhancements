@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.modules.fertilizer;
+package vapourdrive.agricultural_enhancements.modules.fertilizer.producer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.SimpleContainer;
@@ -15,11 +15,10 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineContainer;
 import vapourdrive.agricultural_enhancements.modules.base.slots.SlotFuel;
-import vapourdrive.agricultural_enhancements.modules.base.slots.BaseSlotIngredient;
 import vapourdrive.agricultural_enhancements.modules.base.slots.SlotOutput;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerSlotIngredient;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import java.util.Objects;

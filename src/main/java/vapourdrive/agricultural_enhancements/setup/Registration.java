@@ -15,11 +15,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import vapourdrive.agricultural_enhancements.modules.fertilizer.*;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.*;
 import vapourdrive.agricultural_enhancements.modules.harvester.*;
 import vapourdrive.agricultural_enhancements.modules.irrigation.IrrigationPipeBlock;
 import vapourdrive.agricultural_enhancements.modules.irrigation.SprayerPipeBlock;
 import vapourdrive.agricultural_enhancements.modules.irrigation.WateringCan;
 import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller.*;
+import vapourdrive.agricultural_enhancements.modules.manager.*;
 import vapourdrive.agricultural_enhancements.modules.soil.TilledSoilBlock;
 
 import static vapourdrive.agricultural_enhancements.AgriculturalEnhancements.MODID;
@@ -43,12 +45,14 @@ public class Registration {
 
     public static final RegistryObject<HarvesterBlock> HARVESTER_BLOCK = BLOCKS.register("harvester", HarvesterBlock::new);
     public static final RegistryObject<FertilizerProducerBlock> FERTILIZER_PRODUCER_BLOCK = BLOCKS.register("fertilizer_producer", FertilizerProducerBlock::new);
+    public static final RegistryObject<CropManagerBlock> CROP_MANAGER_BLOCK = BLOCKS.register("crop_manager", CropManagerBlock::new);
     public static final RegistryObject<TilledSoilBlock> TILLED_SOIL_BLOCK = BLOCKS.register("tilled_soil", TilledSoilBlock::new);
     public static final RegistryObject<IrrigationPipeBlock> IRRIGATION_PIPE_BLOCK = BLOCKS.register("irrigation_pipe", IrrigationPipeBlock::new);
     public static final RegistryObject<SprayerPipeBlock> SPRAYER_PIPE_BLOCK = BLOCKS.register("sprayer_pipe", SprayerPipeBlock::new);
     public static final RegistryObject<IrrigationControllerBlock> IRRIGATION_CONTROLLER_BLOCK = BLOCKS.register("irrigation_controller", IrrigationControllerBlock::new);
     public static final RegistryObject<Item> HARVESTER_ITEM = ITEMS.register("harvester", () -> new HarvesterItem(HARVESTER_BLOCK.get(), new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<Item> FERTILIZER_PRODUCER_ITEM = ITEMS.register("fertilizer_producer", () -> new FertilizerProducerItem(FERTILIZER_PRODUCER_BLOCK.get(), new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<Item> CROP_MANAGER_ITEM = ITEMS.register("crop_manager", () -> new CropManagerItem(CROP_MANAGER_BLOCK.get(), new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<Item> TILLED_SOIL_ITEM = ITEMS.register("tilled_soil", () -> new BlockItem(TILLED_SOIL_BLOCK.get(), new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     @SuppressWarnings("unused")
     public static final RegistryObject<WateringCan> WATERING_CAN = ITEMS.register("watering_can", () -> new WateringCan(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
@@ -61,6 +65,7 @@ public class Registration {
     public static final RegistryObject<Item> SPRAYER_PIPE_ITEM = ITEMS.register("sprayer_pipe", () -> new BlockItem(SPRAYER_PIPE_BLOCK.get(), new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<BlockEntityType<HarvesterTile>> HARVESTER_TILE = TILES.register("harvester", () -> BlockEntityType.Builder.of(HarvesterTile::new, HARVESTER_BLOCK.get()).build(null));
     public static final RegistryObject<BlockEntityType<FertilizerProducerTile>> FERTILIZER_PRODUCER_TILE = TILES.register("fertilizer_producer", () -> BlockEntityType.Builder.of(FertilizerProducerTile::new, FERTILIZER_PRODUCER_BLOCK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<CropManagerTile>> CROP_MANAGER_TILE = TILES.register("crop_manager", () -> BlockEntityType.Builder.of(CropManagerTile::new, CROP_MANAGER_BLOCK.get()).build(null));
     public static final RegistryObject<BlockEntityType<IrrigationControllerTile>> IRRIGATION_CONTROLLER_TILE = TILES.register("irrigation_controller", () -> BlockEntityType.Builder.of(IrrigationControllerTile::new, IRRIGATION_CONTROLLER_BLOCK.get()).build(null));
 
     public static final RegistryObject<MenuType<HarvesterContainer>> HARVESTER_CONTAINER = CONTAINERS.register("harvester", () -> IForgeMenuType.create((windowId, inv, data) -> {
@@ -73,6 +78,11 @@ public class Registration {
         BlockPos pos = data.readBlockPos();
         Level world = inv.player.getCommandSenderWorld();
         return new FertilizerProducerContainer(windowId, world, pos, inv, inv.player, new FertilizerProducerData());
+    }));
+    public static final RegistryObject<MenuType<CropManagerContainer>> CROP_MANAGER_CONTAINER = CONTAINERS.register("crop_manager", () -> IForgeMenuType.create((windowId, inv, data) -> {
+        BlockPos pos = data.readBlockPos();
+        Level world = inv.player.getCommandSenderWorld();
+        return new CropManagerContainer(windowId, world, pos, inv, inv.player, new CropManagerData());
     }));
 
     public static final RegistryObject<MenuType<IrrigationControllerContainer>> IRRIGATION_CONTROLLER_CONTAINER = CONTAINERS.register("irrigation_controller", () -> IForgeMenuType.create((windowId, inv, data) -> {

@@ -1,16 +1,14 @@
-package vapourdrive.agricultural_enhancements.modules.fertilizer;
+package vapourdrive.agricultural_enhancements.modules.manager;
 
 import net.minecraft.world.inventory.ContainerData;
 
-public class FertilizerProducerData implements ContainerData {
+public class CropManagerData implements ContainerData {
     public enum Data {
         FUEL,
-        N,
-        P,
-        K
+        FERTILIZER
     }
 
-    private final int[] data = {0,0,0,0};
+    private final int[] data = {0,0};
 
     public int get(Data data) {
         return this.get(data.ordinal());

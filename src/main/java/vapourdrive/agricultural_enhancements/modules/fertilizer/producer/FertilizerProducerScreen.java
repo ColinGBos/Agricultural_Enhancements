@@ -1,16 +1,12 @@
-package vapourdrive.agricultural_enhancements.modules.fertilizer;
+package vapourdrive.agricultural_enhancements.modules.fertilizer.producer;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineContainer;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineScreen;
-import vapourdrive.agricultural_enhancements.modules.base.slots.AbstractMachineSlot;
 
 import java.util.ArrayList;
 import java.util.List;

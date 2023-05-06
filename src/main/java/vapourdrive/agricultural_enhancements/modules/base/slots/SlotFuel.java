@@ -12,7 +12,7 @@ public class SlotFuel extends AbstractMachineSlot {
     private final int index;
 
     public SlotFuel(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-        super(itemHandler, index, xPosition, yPosition, "message.agriculturalenhancements.fuelslot");
+        super(itemHandler, index, xPosition, yPosition, "agriculturalenhancements.fuelslot");
         this.itemHandler = itemHandler;
         this.index = index;
     }

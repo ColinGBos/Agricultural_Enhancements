@@ -55,7 +55,7 @@ public class HarvesterBlock extends AbstractBaseMachineBlock {
             MenuProvider containerProvider = new MenuProvider() {
                 @Override
                 public @NotNull Component getDisplayName() {
-                    return Component.translatable("screen." + AgriculturalEnhancements.MODID + ".harvester");
+                    return Component.translatable(AgriculturalEnhancements.MODID + ".harvester");
                 }
 
                 @Override

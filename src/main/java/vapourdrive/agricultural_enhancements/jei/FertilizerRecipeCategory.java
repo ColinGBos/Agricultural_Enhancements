@@ -19,10 +19,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.FertilizerProducerData;
 import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerRecipe;
 import vapourdrive.agricultural_enhancements.setup.Registration;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import static vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineScreen.isInRect;
 
 public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecipe> {
 
@@ -37,6 +43,8 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
     private final IDrawableStatic n;
     private final IDrawableStatic p;
     private final IDrawableStatic k;
+    protected DecimalFormat df = new DecimalFormat("#,###");
+
 
     public FertilizerRecipeCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createDrawable(TEXTURE, 0, 0, 136, 52);
@@ -114,6 +122,26 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
         n.draw(stack, 41,4,Math.max(0, 45-outputs[0]/80),0,0,0);
         p.draw(stack, 51,4,Math.max(0, 45-outputs[1]/80),0,0,0);
         k.draw(stack, 61,4,Math.max(0, 45-outputs[2]/80),0,0,0);
+    }
+
+    @Override
+    public @NotNull List<Component> getTooltipStrings(@NotNull FertilizerRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        List<Component> hoveringText = new ArrayList<>();
+        FertilizerProducerData.Data[] elements = {FertilizerProducerData.Data.N, FertilizerProducerData.Data.P, FertilizerProducerData.Data.K};
+        int i = 0;
+        int[] elementValues = recipe.getOutputs();
+        for(FertilizerProducerData.Data element:elements) {
+            if (isInRect(40+(10*i), 2, 8, 48, (int)mouseX, (int)mouseY)) {
+                hoveringText.add(Component.literal(element.name()+": ").append(df.format(elementValues[i]/80)));
+            }
+            i++;
+        }
+
+        if(isInRect(71,19,23,17,(int)mouseX, (int)mouseY)){
+            hoveringText.add(Component.translatable("agriculturalenhancements.fertilizer_producer.info_2"));
+        }
+
+        return hoveringText;
     }
 
 }

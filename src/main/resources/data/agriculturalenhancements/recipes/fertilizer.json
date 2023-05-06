@@ -1,9 +1,9 @@
 {
   "type": "agriculturalenhancements:fertilizer",
   "ingredient": {
-    "item": "minecraft:bone_meal"
+    "tag": "forge:fertilizer"
   },
-  "n": 5,
-  "p": 20,
-  "k": 0
+  "n": 8,
+  "p": 8,
+  "k": 8
 }

@@ -23,7 +23,8 @@ public class MachineUtils {
     public enum Area {
         FUEL,
         OUTPUT,
-        INGREDIENT
+        INGREDIENT,
+        INGREDIENT_2
     }
 
 //    public static boolean canSmelt(ItemStack stack, Level world) {

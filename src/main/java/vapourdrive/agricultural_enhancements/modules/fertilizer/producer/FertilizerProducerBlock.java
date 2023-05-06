@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.modules.fertilizer;
+package vapourdrive.agricultural_enhancements.modules.fertilizer.producer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -54,7 +54,7 @@ public class FertilizerProducerBlock extends AbstractBaseMachineBlock {
             MenuProvider containerProvider = new MenuProvider() {
                 @Override
                 public @NotNull Component getDisplayName() {
-                    return Component.translatable("screen." + AgriculturalEnhancements.MODID + ".fertilizer");
+                    return Component.translatable(AgriculturalEnhancements.MODID + ".fertilizer_producer");
                 }
 
                 @Override

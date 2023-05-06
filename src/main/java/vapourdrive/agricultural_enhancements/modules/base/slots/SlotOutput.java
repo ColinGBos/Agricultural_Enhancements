@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 public class SlotOutput extends AbstractMachineSlot {
 
     public SlotOutput(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-        super(itemHandler, index, xPosition, yPosition, null);
+        super(itemHandler, index, xPosition, yPosition, "agriculturalenhancements.outputslot");
     }
 
     @Override

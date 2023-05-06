@@ -13,7 +13,14 @@ public class BaseSlotIngredient extends AbstractMachineSlot{
     protected final Level world;
 
     public BaseSlotIngredient(IItemHandler itemHandler, int index, int xPosition, int yPosition, Level world) {
-        super(itemHandler, index, xPosition, yPosition, "message.furnacemk2.ingredientslot");
+        super(itemHandler, index, xPosition, yPosition, "agriculturalenhancements.ingredientslot");
+        this.itemHandler = itemHandler;
+        this.index = index;
+        this.world = world;
+    }
+
+    public BaseSlotIngredient(IItemHandler itemHandler, int index, int xPosition, int yPosition, Level world, String title) {
+        super(itemHandler, index, xPosition, yPosition, title);
         this.itemHandler = itemHandler;
         this.index = index;
         this.world = world;

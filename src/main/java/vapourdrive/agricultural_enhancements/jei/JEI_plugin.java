@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.Fertilizer;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.FertilizerProducerScreen;
 import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerRecipe;
 import vapourdrive.agricultural_enhancements.modules.harvester.HarvesterScreen;
 import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller.IrrigationControllerScreen;
@@ -40,6 +40,7 @@ public class JEI_plugin implements IModPlugin {
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(HarvesterScreen.class, 157, 20, 15, 15,RecipeTypes.FUELING);
         registration.addRecipeClickArea(IrrigationControllerScreen.class, 125, 20, 15, 15,RecipeTypes.FUELING);
+        registration.addRecipeClickArea(FertilizerProducerScreen.class, 142, 5, 15, 15,RecipeTypes.FUELING,FERTILIZER_TYPE);
     }
 
     @Override
@@ -47,6 +48,7 @@ public class JEI_plugin implements IModPlugin {
 //        AgriculturalEnhancements.debugLog("Register recipe catalyst");
         registration.addRecipeCatalyst(new ItemStack(Registration.HARVESTER_BLOCK.get()), RecipeTypes.FUELING);
         registration.addRecipeCatalyst(new ItemStack(Registration.IRRIGATION_CONTROLLER_BLOCK.get()), RecipeTypes.FUELING);
+        registration.addRecipeCatalyst(new ItemStack(Registration.FERTILIZER_PRODUCER_BLOCK.get()), RecipeTypes.FUELING,FERTILIZER_TYPE);
     }
 
     @Override
