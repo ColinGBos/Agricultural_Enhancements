@@ -16,7 +16,7 @@ import java.util.List;
 public class CropManagerScreen extends AbstractBaseMachineScreen<CropManagerContainer> {
     protected final CropManagerContainer machineContainer;
     public CropManagerScreen(CropManagerContainer container, Inventory inv, Component name) {
-        super(container, inv, name, "crop_manager", 12, 8, 158, 6, 1);
+        super(container, inv, name, "crop_manager", 12, 8, 158, 6, 1, true);
         machineContainer = container;
     }
 
@@ -47,8 +47,8 @@ public class CropManagerScreen extends AbstractBaseMachineScreen<CropManagerCont
         List<Component> hoveringText = new ArrayList<>();
 
         if (notCarrying && isInRect(this.leftPos + 32, this.topPos + 19, 16, 46, mouseX, mouseY)) {
-            int m = this.machineContainer.getFertilizerStored(CropManagerData.Data.FERTILIZER);
-            hoveringText.add(Component.translatable("item.agriculturalenhancements.fertilizer").append(": ").append(df.format(m) + "/" + df.format(this.machineContainer.getMaxFertilizer())));
+            int m = this.machineContainer.getFertilizerStored(CropManagerData.Data.FERTILIZER)/20;
+            hoveringText.add(Component.translatable("item.agriculturalenhancements.fertilizer").append(": ").append(df.format(m) + "/" + df.format(this.machineContainer.getMaxFertilizer()/20)));
         }
 
 

@@ -3,7 +3,9 @@ package vapourdrive.agricultural_enhancements.modules.manager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.capabilities.Capability;
@@ -41,7 +43,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
 
     public int fertilizerToAdd = 0;
     public int incrementalFertilizerToAdd = 0;
-    private final int maxFertilizer = 1280;
+    private final int maxFertilizer = 25600;
 
     public CropManagerTile(BlockPos pos, BlockState state) {
         super(CROP_MANAGER_TILE.get(), pos, state, 6400000, 2500, new int[]{0, 1, 2});
@@ -54,6 +56,9 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         doConsumeProcess(ingredient);
         if (wait % 20 == 0) {
             doWorkProcesses(state);
+        }
+        if (wait % 5 == 0) {
+            doSpreadWorkProcesses(state);
         }
         wait += 1;
         if (wait >= 160) {
@@ -73,9 +78,9 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                     int currentFert = targetState.getValue(TilledSoilBlock.SOIL_NUTRIENTS);
                     if (currentFert<TilledSoilBlock.MAX_NUTRIENTS) {
                         BlockPos pos = this.worldPosition.relative(direction, i).relative(Direction.DOWN,1);
-                        if(consumeFertilizer(TilledSoilBlock.MAX_NUTRIENTS-currentFert, true)) {
+                        if(consumeFertilizer((TilledSoilBlock.MAX_NUTRIENTS-currentFert)*20, true)) {
                             level.setBlockAndUpdate(pos, targetState.setValue(TilledSoilBlock.SOIL_NUTRIENTS, TilledSoilBlock.MAX_NUTRIENTS));
-                            consumeFertilizer(TilledSoilBlock.MAX_NUTRIENTS-currentFert, false);
+                            consumeFertilizer((TilledSoilBlock.MAX_NUTRIENTS-currentFert)*20, false);
                             consumeFuel(getMinFuelToWork()*TilledSoilBlock.MAX_NUTRIENTS-currentFert, false);
                         }
                     }
@@ -87,9 +92,39 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         }
     }
 
+    private void doSpreadWorkProcesses(BlockState state) {
+        if (canWork()) {
+            changeStateIfNecessary(state, true);
+            Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
+//            AgriculturalEnhancements.debugLog(""+direction);
+            assert this.level != null;
+            int i =  level.getRandom().nextInt(10);
+            BlockPos cropPos = this.worldPosition.relative(direction, i);
+            BlockState targetState = this.level.getBlockState(cropPos);
+            if (!targetState.isAir()) {
+                return;
+            }
+            ItemStack stack = getFirstValidIngredient();
+            if(stack.isEmpty()){
+                return;
+            }
+            if(stack.getItem() instanceof BlockItem blockItem) {
+                BlockState cropState = blockItem.getBlock().defaultBlockState();
+                if(cropState.canSurvive(level, cropPos)) {
+                    level.setBlockAndUpdate(cropPos, blockItem.getBlock().defaultBlockState());
+                    stack.shrink(1);
+                }
+            }
+
+//                AgriculturalEnhancements.debugLog(""+targetState);
+        } else {
+            changeStateIfNecessary(state, false);
+        }
+    }
+
     public void doConsumeProcess(ItemStack stack) {
         if (wait %20==0 && consumeFuel(minWorkFuel, true)) {
-            AgriculturalEnhancements.debugLog("Doing consume process "+stack);
+//            AgriculturalEnhancements.debugLog("Doing consume process "+stack);
 //            AgriculturalEnhancements.debugLog("N: " + fertilizerProducerData.get(FertilizerProducerData.Data.N));
 //            AgriculturalEnhancements.debugLog("P: " + fertilizerProducerData.get(FertilizerProducerData.Data.P));
 //            AgriculturalEnhancements.debugLog("K: " + fertilizerProducerData.get(FertilizerProducerData.Data.K));
@@ -100,7 +135,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                 if (!addFertilizer(getFertilizerToAdd(), true)) {
                     setFertilizerToAdd(getMaxFertilizer() - getCurrentFertilizer());
                 }
-                setIncrementalFertilizerToAdd(getFertilizerToAdd());
+                setIncrementalFertilizerToAdd(getFertilizerToAdd()/20);
             }
         }
         if (getFertilizerToAdd() > 0) {
@@ -112,7 +147,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     public int tryConsumeStack(ItemStack stack) {
         if (!stack.isEmpty()) {
             removeFromSlot(MachineUtils.Area.INGREDIENT, 0, 1, false);
-            return 5;
+            return 100;
         }
         return 0;
     }
@@ -217,6 +252,16 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
             case INGREDIENT -> fertilizerHandler.getStackInSlot(FERTILIZER_SLOT[index]);
             case INGREDIENT_2 -> seedHandler.getStackInSlot(SEED_SLOTS[index]);
         };
+    }
+
+    public ItemStack getFirstValidIngredient() {
+        for(int i = 0; i < SEED_SLOTS.length; i++){
+            ItemStack stack = seedHandler.getStackInSlot(SEED_SLOTS[i]);
+            if(!stack.isEmpty()){
+                return stack;
+            }
+        }
+        return ItemStack.EMPTY;
     }
 
     @Override

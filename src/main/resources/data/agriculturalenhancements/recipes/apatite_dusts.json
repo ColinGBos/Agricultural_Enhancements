@@ -1,9 +1,0 @@
-{
-  "type": "agriculturalenhancements:fertilizer",
-  "ingredient": {
-    "tag": "forge:dusts/apatite"
-  },
-  "n": 4,
-  "p": 16,
-  "k": 4
-}

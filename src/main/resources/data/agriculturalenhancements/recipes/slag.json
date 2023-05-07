@@ -1,9 +1,0 @@
-{
-  "type": "agriculturalenhancements:fertilizer",
-  "ingredient": {
-    "tag": "forge:dusts/niter"
-  },
-  "n": 0,
-  "p": 12,
-  "k": 6
-}

@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:fertilizer"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "agriculturalenhancements:fertilizer",
+        "ingredient": {
+          "tag": "forge:fertilizer"
+        },
+        "n": 8,
+        "p": 8,
+        "k": 8
+      }
+    }
+  ]
+}
+

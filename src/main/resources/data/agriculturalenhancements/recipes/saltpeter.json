@@ -1,9 +1,0 @@
-{
-  "type": "agriculturalenhancements:fertilizer",
-  "ingredient": {
-    "tag": "forge:dusts/saltpeter"
-  },
-  "n": 12,
-  "p": 0,
-  "k": 8
-}

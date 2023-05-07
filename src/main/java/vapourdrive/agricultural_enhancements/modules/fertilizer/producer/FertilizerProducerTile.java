@@ -78,7 +78,6 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     public void doCreateProcess(){
         if(wait%40==0) {
             if (!consumeElement(Element.N, 5, true) || !consumeElement(Element.P, 5, true) || !consumeElement(Element.K, 5, true)) {
-                AgriculturalEnhancements.debugLog("Not enough room for the output");
                 return;
             }
             if (canPushAllOutputs(Collections.singletonList(new ItemStack(Registration.FERTILISER.get())), this)) {
@@ -93,7 +92,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     }
 
     public void doConsumeProcess(ItemStack stack) {
-        if (wait2 == 0 && consumeFuel(minWorkFuel*80, true)) {
+        if (wait2 == 0 && consumeFuel(minWorkFuel*80, true) && !stack.isEmpty()) {
 //            AgriculturalEnhancements.debugLog("N: " + fertilizerProducerData.get(FertilizerProducerData.Data.N));
 //            AgriculturalEnhancements.debugLog("P: " + fertilizerProducerData.get(FertilizerProducerData.Data.P));
 //            AgriculturalEnhancements.debugLog("K: " + fertilizerProducerData.get(FertilizerProducerData.Data.K));

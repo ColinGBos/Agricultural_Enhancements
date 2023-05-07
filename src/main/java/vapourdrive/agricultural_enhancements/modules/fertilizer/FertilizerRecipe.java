@@ -101,12 +101,14 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
             int p = GsonHelper.getAsInt(json, "p")*80;
             int k = GsonHelper.getAsInt(json, "k")*80;
 
-            if(!ForgeHooks.hasNoElements(ingredient)) {
-                return new FertilizerRecipe(id, ingredient, n, p, k);
-            }
-            return null;
+            AgriculturalEnhancements.debugLog(Arrays.toString(ingredient.getItems()));
 
-//            return new FertilizerRecipe(id, ingredient, n, p, k);
+//            if(!ForgeHooks.hasNoElements(ingredient)) {
+//                return new FertilizerRecipe(id, ingredient, n, p, k);
+//            }
+//            return null;
+
+            return new FertilizerRecipe(id, ingredient, n, p, k);
         }
 
         @Override

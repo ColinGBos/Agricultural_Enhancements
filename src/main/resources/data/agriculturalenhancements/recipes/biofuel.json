@@ -1,9 +1,0 @@
-{
-  "type": "agriculturalenhancements:fertilizer",
-  "ingredient": {
-    "tag": "forge:fuels/bio"
-  },
-  "n": 8,
-  "p": 8,
-  "k": 0
-}
