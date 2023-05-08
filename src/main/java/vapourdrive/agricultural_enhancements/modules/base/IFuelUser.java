@@ -1,6 +1,7 @@
 package vapourdrive.agricultural_enhancements.modules.base;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 
 public interface IFuelUser {
@@ -26,7 +27,7 @@ public interface IFuelUser {
 
     boolean consumeFuel(int toConsume, boolean simulate);
 
-    boolean canWork();
+    boolean canWork(BlockState state);
 
     ItemStack getCurrentFuelStack();
 

@@ -56,8 +56,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
     }
 
     private void doWorkProcesses(BlockState state) {
-        if (canWork()) {
-            changeStateIfNecessary(state, true);
+        if (canWork(state)) {
             Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
 //            AgriculturalEnhancements.debugLog(""+direction);
             assert this.level != null;
@@ -97,17 +96,23 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
                 }
 //                AgriculturalEnhancements.debugLog(""+targetState);
             }
-        } else {
-            changeStateIfNecessary(state, false);
         }
     }
 
     @Override
-    public boolean canWork() {
+    public boolean canWork(BlockState state) {
         if (getCurrentFuel() < getMinFuelToWork()) {
+            changeStateIfNecessary(state, false);
             return false;
         }
-        return !outputHandler.isFull();
+        if(outputHandler.isFull()){
+            changeStateIfNecessary(state, false);
+            return false;
+        }
+        else{
+            changeStateIfNecessary(state, true);
+            return true;
+        }
     }
 
     @Override

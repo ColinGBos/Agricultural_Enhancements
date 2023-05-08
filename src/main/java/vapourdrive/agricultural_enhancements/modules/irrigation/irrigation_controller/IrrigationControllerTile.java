@@ -53,7 +53,7 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
 
     private void doWorkProcesses(BlockState state) {
         int target = 0;
-        if (canWork()) {
+        if (canWork(state)) {
             target = 15;
             consumeFuel(getMinFuelToWork(), false);
         }
@@ -84,7 +84,7 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
     }
 
     @Override
-    public boolean canWork() {
+    public boolean canWork(BlockState state) {
         assert this.level != null;
 //        AgriculturalEnhancements.debugLog("brightness: " + this.level.getRawBrightness(this.worldPosition.above(), 0));
         if (this.level.getRawBrightness(this.worldPosition.above(), 0) < 9) {

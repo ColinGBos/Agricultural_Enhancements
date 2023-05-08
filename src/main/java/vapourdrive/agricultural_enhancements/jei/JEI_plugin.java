@@ -20,6 +20,7 @@ import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.Fertili
 import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerRecipe;
 import vapourdrive.agricultural_enhancements.modules.harvester.HarvesterScreen;
 import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller.IrrigationControllerScreen;
+import vapourdrive.agricultural_enhancements.modules.manager.CropManagerScreen;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import java.util.List;
@@ -41,6 +42,7 @@ public class JEI_plugin implements IModPlugin {
         registration.addRecipeClickArea(HarvesterScreen.class, 157, 20, 15, 15,RecipeTypes.FUELING);
         registration.addRecipeClickArea(IrrigationControllerScreen.class, 125, 20, 15, 15,RecipeTypes.FUELING);
         registration.addRecipeClickArea(FertilizerProducerScreen.class, 142, 5, 15, 15,RecipeTypes.FUELING,FERTILIZER_TYPE);
+        registration.addRecipeClickArea(CropManagerScreen.class, 142, 5, 15, 15,RecipeTypes.FUELING);
     }
 
     @Override
@@ -55,11 +57,13 @@ public class JEI_plugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addIngredientInfo(new ItemStack(Registration.HARVESTER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.harvester.info"));
         registration.addIngredientInfo(new ItemStack(Registration.IRRIGATION_CONTROLLER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.irrigation_controller.info"));
+        registration.addIngredientInfo(new ItemStack(Registration.FERTILIZER_PRODUCER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.fertilizer_producer.info"));
+        registration.addIngredientInfo(new ItemStack(Registration.CROP_MANAGER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.crop_manager.info"));
 
         RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
 
-            List<FertilizerRecipe> recipeList = recipeManager.getAllRecipesFor(FertilizerRecipe.Type.INSTANCE);
-            registration.addRecipes(FERTILIZER_TYPE, recipeList);
+        List<FertilizerRecipe> recipeList = recipeManager.getAllRecipesFor(FertilizerRecipe.Type.INSTANCE);
+        registration.addRecipes(FERTILIZER_TYPE, recipeList);
     }
 
     @Override

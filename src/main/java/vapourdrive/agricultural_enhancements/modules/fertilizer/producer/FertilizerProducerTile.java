@@ -72,7 +72,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     private void doWorkProcesses(ItemStack ingredient, BlockState state) {
         doConsumeProcess(ingredient);
         doCreateProcess();
-        changeStateIfNecessary(state, canWork());
+        canWork(state);
     }
 
     public void doCreateProcess(){
@@ -208,16 +208,14 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         return true;
     }
 
-    public int getMinElementToCraftFertilizer() {
-        return 400;
-    }
-
     @Override
-    public boolean canWork() {
+    public boolean canWork(BlockState state) {
         if (getCurrentFuel() < getMinFuelToWork()) {
+            changeStateIfNecessary(state, false);
             return false;
         }
-        return !outputHandler.isFull();
+        changeStateIfNecessary(state, false);
+        return true;
     }
 
     @Override

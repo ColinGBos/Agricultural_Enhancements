@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.capabilities.Capability;
@@ -13,7 +12,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.FuelHandler;
@@ -24,6 +22,9 @@ import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.CROP_MANAGER_TILE;
 
@@ -45,6 +46,8 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     public int incrementalFertilizerToAdd = 0;
     private final int maxFertilizer = 25600;
 
+    private ArrayList<Integer> blocks = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+
     public CropManagerTile(BlockPos pos, BlockState state) {
         super(CROP_MANAGER_TILE.get(), pos, state, 6400000, 2500, new int[]{0, 1, 2});
     }
@@ -58,7 +61,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
             doWorkProcesses(state);
         }
         if (wait % 5 == 0) {
-            doSpreadWorkProcesses(state);
+            doPlantWorkProcesses(state);
         }
         wait += 1;
         if (wait >= 160) {
@@ -67,8 +70,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     }
 
     private void doWorkProcesses(BlockState state) {
-        if (canWork()) {
-            changeStateIfNecessary(state, true);
+        if (canWork(state)) {
             Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
 //            AgriculturalEnhancements.debugLog(""+direction);
             assert this.level != null;
@@ -87,18 +89,20 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                 }
 //                AgriculturalEnhancements.debugLog(""+targetState);
             }
-        } else {
-            changeStateIfNecessary(state, false);
         }
     }
 
-    private void doSpreadWorkProcesses(BlockState state) {
-        if (canWork()) {
-            changeStateIfNecessary(state, true);
+    private void doPlantWorkProcesses(BlockState state) {
+        if (canWork(state)) {
             Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
 //            AgriculturalEnhancements.debugLog(""+direction);
             assert this.level != null;
-            int i =  level.getRandom().nextInt(10);
+            int i = blocks.get(level.getRandom().nextInt(blocks.size()));
+            blocks.remove(Integer.valueOf(i));
+            if(blocks.isEmpty()){
+                blocks.addAll(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+            }
+//            AgriculturalEnhancements.debugLog("Integer: "+i);
             BlockPos cropPos = this.worldPosition.relative(direction, i);
             BlockState targetState = this.level.getBlockState(cropPos);
             if (!targetState.isAir()) {
@@ -115,10 +119,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                     stack.shrink(1);
                 }
             }
-
 //                AgriculturalEnhancements.debugLog(""+targetState);
-        } else {
-            changeStateIfNecessary(state, false);
         }
     }
 
@@ -153,11 +154,13 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     }
 
     @Override
-    public boolean canWork() {
+    public boolean canWork(BlockState state) {
         if (getCurrentFuel() < getMinFuelToWork()) {
+            changeStateIfNecessary(state, false);
             return false;
         }
-        return !outputHandler.isFull();
+        changeStateIfNecessary(state, true);
+        return true;
     }
 
     @Override
