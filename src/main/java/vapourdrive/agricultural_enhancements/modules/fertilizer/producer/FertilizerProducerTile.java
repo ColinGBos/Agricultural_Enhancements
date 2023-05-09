@@ -10,6 +10,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
@@ -47,25 +48,27 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     public final FertilizerProducerData fertilizerProducerData = new FertilizerProducerData();
     public int[] elementToAdd = {0,0,0};
     public int[] incrementalElementToAdd = {0,0,0};
-    public int maxElement = 20480;
-    public int wait2 = 0;
+    public int createFertTimer = 0;
+    public int consumerTimer = 0;
+
+    private final int createFertMaxTime = ConfigSettings.FERTILIZER_PRODUCER_PRODUCE_TIME.get();
+    private final int consumeMaxTime = ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get();
 
     public FertilizerProducerTile(BlockPos pos, BlockState state) {
-        super(FERTILIZER_PRODUCER_TILE.get(), pos, state, 12800000, 100, new int[]{0, 1, 2, 3});
+        super(FERTILIZER_PRODUCER_TILE.get(), pos, state, ConfigSettings.FERTILIZER_PRODUCER_FUEL_STORAGE.get()*100, ConfigSettings.FERTILIZER_PRODUCER_FUEL_TO_WORK.get(), new int[]{0, 1, 2, 3});
     }
 
     public void tickServer(BlockState state) {
-        ItemStack fuel = getStackInSlot(MachineUtils.Area.FUEL, 0);
+        super.tickServer(state);
         ItemStack ingredient = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
-        MachineUtils.doFuelProcess(fuel, wait, this);
         doWorkProcesses(ingredient, state);
 
-        wait += 1;
-        if (wait >= 160) {
-            wait = 0;
+        createFertTimer++;
+        if (createFertTimer >= createFertMaxTime){
+            createFertTimer = 0;
         }
-        if (wait2>=80){
-            wait2 = 0;
+        if (consumerTimer >= consumeMaxTime){
+            consumerTimer = 0;
         }
     }
 
@@ -76,38 +79,39 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     }
 
     public void doCreateProcess(){
-        if(wait%40==0) {
-            if (!consumeElement(Element.N, 5, true) || !consumeElement(Element.P, 5, true) || !consumeElement(Element.K, 5, true)) {
+        if(createFertTimer == 0) {
+            int i = ConfigSettings.FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER.get();
+            if (!consumeElement(Element.N, i, true) || !consumeElement(Element.P, i, true) || !consumeElement(Element.K, i, true)) {
                 return;
             }
             if (canPushAllOutputs(Collections.singletonList(new ItemStack(Registration.FERTILISER.get())), this)) {
                 pushOutput(new ItemStack(Registration.FERTILISER.get()), false, this);
                 AgriculturalEnhancements.debugLog("Pushed the output");
-                consumeElement(Element.N, 5, false);
-                consumeElement(Element.P, 5, false);
-                consumeElement(Element.K, 5, false);
+                consumeElement(Element.N, i, false);
+                consumeElement(Element.P, i, false);
+                consumeElement(Element.K, i, false);
             }
         }
-//        AgriculturalEnhancements.debugLog("Wait modulo 40: "+ wait%40);
+//        AgriculturalEnhancements.debugLog("Wait modulo maxWait: "+ wait%maxWait);
     }
 
     public void doConsumeProcess(ItemStack stack) {
-        if (wait2 == 0 && consumeFuel(minWorkFuel*80, true) && !stack.isEmpty()) {
+        if (consumerTimer == 0 && consumeFuel(minWorkFuel, true) && !stack.isEmpty()) {
 //            AgriculturalEnhancements.debugLog("N: " + fertilizerProducerData.get(FertilizerProducerData.Data.N));
 //            AgriculturalEnhancements.debugLog("P: " + fertilizerProducerData.get(FertilizerProducerData.Data.P));
 //            AgriculturalEnhancements.debugLog("K: " + fertilizerProducerData.get(FertilizerProducerData.Data.K));
             int[] toAdds = tryConsumeStack(stack);
             if (toAdds != null) {
-                AgriculturalEnhancements.debugLog("resulting lookup: " + toAdds[0]);
+//                AgriculturalEnhancements.debugLog("resulting lookup: " + toAdds[0]);
                 for (Element element : Element.values()) {
-                    int emnt = toAdds[element.ordinal()];
+                    int emnt = toAdds[element.ordinal()]* consumeMaxTime;
                     if (emnt > 0) {
 //            AgriculturalEnhancements.debugLog("Doing fuel process");
-                        setElementToAdd(element, toAdds[element.ordinal()]);
+                        setElementToAdd(element, emnt);
                         if (!addElement(element, getElementToAdd(element), true)) {
                             setElementToAdd(element, getMaxElement() - getCurrentElement(element));
                         }
-                        setIncrementalElementToAdd(element, getElementToAdd(element) / 80);
+                        setIncrementalElementToAdd(element, getElementToAdd(element) / consumeMaxTime);
                     }
                 }
             }
@@ -121,8 +125,8 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
             }
         }
         if(increment){
-            wait2++;
-            consumeFuel(minWorkFuel, false);
+            consumerTimer++;
+            consumeFuel(minWorkFuel/ consumeMaxTime, false);
         }
 
     }
@@ -175,7 +179,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         };
     }
     public int getMaxElement(){
-        return this.maxElement;
+        return ConfigSettings.FERTILIZER_PRODUCER_MAX_NUTRIENTS.get()* consumeMaxTime;
     }
     public boolean addElement(Element element, int toAdd, boolean simulate) {
         if (toAdd + getCurrentElement(element) > getMaxElement()) {
@@ -195,14 +199,14 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     }
 
     public boolean consumeElement(Element element, int toConsume, boolean simulate) {
-        if (getCurrentElement(element) < toConsume*80) {
+        if (getCurrentElement(element) < toConsume* consumeMaxTime) {
             return false;
         }
         if (!simulate) {
             switch (element) {
-                case N -> fertilizerProducerData.set(FertilizerProducerData.Data.N, getCurrentElement(element) - toConsume*80);
-                case K -> fertilizerProducerData.set(FertilizerProducerData.Data.K, getCurrentElement(element) - toConsume*80);
-                case P -> fertilizerProducerData.set(FertilizerProducerData.Data.P, getCurrentElement(element) - toConsume*80);
+                case N -> fertilizerProducerData.set(FertilizerProducerData.Data.N, getCurrentElement(element) - toConsume* consumeMaxTime);
+                case K -> fertilizerProducerData.set(FertilizerProducerData.Data.K, getCurrentElement(element) - toConsume* consumeMaxTime);
+                case P -> fertilizerProducerData.set(FertilizerProducerData.Data.P, getCurrentElement(element) - toConsume* consumeMaxTime);
             }
         }
         return true;
@@ -219,7 +223,8 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
+        super.load(tag);
         outputHandler.deserializeNBT(tag.getCompound("invOut"));
         ingredientHandler.deserializeNBT(tag.getCompound("invIngr"));
         fuelHandler.deserializeNBT(tag.getCompound("invFuel"));
@@ -229,25 +234,22 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         fertilizerProducerData.set(FertilizerProducerData.Data.P, tag.getInt("p"));
         fertilizerProducerData.set(FertilizerProducerData.Data.K, tag.getInt("k"));
 
-        increment = tag.getInt("increment");
-        toAdd = tag.getInt("toAdd");
-        wait = tag.getInt("wait");
-        wait2 = tag.getInt("wait2");
+        createFertTimer = tag.getInt("fertTimer");
+        consumerTimer = tag.getInt("ingredientTimer");
 
         super.load(tag);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
+    public void saveAdditional(@NotNull CompoundTag tag) {
+        super.saveAdditional(tag);
         tag.put("invOut", outputHandler.serializeNBT());
         tag.put("invIngr", ingredientHandler.serializeNBT());
         tag.put("invFuel", fuelHandler.serializeNBT());
 
         tag.putInt("fuel", getCurrentFuel());
-        tag.putInt("increment", increment);
-        tag.putInt("toAdd", toAdd);
-        tag.putInt("wait", wait);
-        tag.putInt("wait2", wait2);
+        tag.putInt("fertTimer", createFertTimer);
+        tag.putInt("ingredientTimer", consumerTimer);
         tag.putInt("n", getCurrentElement(Element.N));
         tag.putInt("p", getCurrentElement(Element.P));
         tag.putInt("k", getCurrentElement(Element.K));
@@ -267,10 +269,6 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
 
     public IItemHandler getItemHandler() {
         return combined;
-    }
-
-    public double getEfficiencyMultiplier() {
-        return ConfigSettings.FURNACE_BASE_EFFICIENCY.get();
     }
 
     @Override

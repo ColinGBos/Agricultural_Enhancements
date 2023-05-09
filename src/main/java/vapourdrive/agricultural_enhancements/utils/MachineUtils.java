@@ -9,7 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.level.Level;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.modules.base.IFuelUser;
@@ -27,19 +26,6 @@ public class MachineUtils {
         INGREDIENT_2
     }
 
-//    public static boolean canSmelt(ItemStack stack, Level world) {
-//        return world.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(stack), world).isPresent();
-//    }
-//
-//    public static float getExperience(Level world, ItemStack itemStack) {
-//        Optional<SmeltingRecipe> matchingRecipe = getMatchingRecipeForInput(world, itemStack);
-//        return matchingRecipe.map(AbstractCookingRecipe::getExperience).orElse(0f);
-//    }
-//
-    public static int getCookTime(Level world, ItemStack itemStack) {
-        Optional<SmeltingRecipe> matchingRecipe = getMatchingRecipeForInput(world, itemStack);
-        return matchingRecipe.map(AbstractCookingRecipe::getCookingTime).orElse(200) * 100;
-    }
 
     public static int getBurnDuration(ItemStack stack) {
         if (stack.isEmpty()) {
@@ -50,11 +36,6 @@ public class MachineUtils {
             return net.minecraftforge.common.ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) * 100;
         }
     }
-
-//    public static ItemStack getSmeltingResultForItem(Level world, ItemStack itemStack) {
-//        Optional<SmeltingRecipe> matchingRecipe = getMatchingRecipeForInput(world, itemStack);
-//        return matchingRecipe.map(furnaceRecipe -> furnaceRecipe.getResultItem().copy()).orElse(ItemStack.EMPTY);
-//    }
 
     public static Optional<SmeltingRecipe> getMatchingRecipeForInput(Level world, ItemStack itemStack) {
         RecipeManager recipeManager = world.getRecipeManager();
@@ -131,7 +112,7 @@ public class MachineUtils {
 //            AgriculturalEnhancements.debugLog("Has Fuel Stack");
             if (user.getCurrentFuelStack().isEmpty() || !ItemStack.isSame(user.getCurrentFuelStack(), fuel)) {
                 user.setCurrentFuelStack(fuel.copy());
-                user.setCurrentBurn((int) (getBurnDuration(fuel) * user.getEfficiencyMultiplier()));
+                user.setCurrentBurn((int) (getBurnDuration(fuel)));
             }
             if (user.getCurrentFuel() + user.getCurrentBurn() <= user.getMaxFuel() || user.getCurrentFuel() < user.getMinFuelToWork()) {
                 AgriculturalEnhancements.debugLog("Fuel: "+user.getCurrentFuel()+" current burn: "+user.getCurrentBurn());
@@ -148,7 +129,7 @@ public class MachineUtils {
                 user.removeFromSlot(Area.FUEL, 0, 1, false);
                 if (!ItemStack.isSame(user.getCurrentFuelStack(), fuel)) {
                     user.setCurrentFuelStack(ItemStack.EMPTY);
-                    user.setCurrentBurn((int) (getBurnDuration(fuel) * user.getEfficiencyMultiplier()));
+                    user.setCurrentBurn((int) (getBurnDuration(fuel)));
                 }
                 AgriculturalEnhancements.debugLog("CurrentBurn: " + user.getCurrentBurn());
                 return user.getCurrentBurn();

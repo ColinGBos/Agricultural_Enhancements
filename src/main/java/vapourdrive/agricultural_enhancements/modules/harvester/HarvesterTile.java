@@ -17,6 +17,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.FuelHandler;
@@ -38,20 +39,21 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
     private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
 
     public final HarvesterData harvesterData = new HarvesterData();
+    private int harvestTimer = 0;
 
     public HarvesterTile(BlockPos pos, BlockState state) {
-        super(HARVESTER_TILE.get(), pos, state, 6400000, 2500, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14});
+        super(HARVESTER_TILE.get(), pos, state, ConfigSettings.HARVESTER_FUEL_STORAGE.get()*100, ConfigSettings.HARVESTER_FUEL_TO_WORK.get(), new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14});
     }
 
+    @Override
     public void tickServer(BlockState state) {
-        ItemStack fuel = getStackInSlot(MachineUtils.Area.FUEL, 0);
-        MachineUtils.doFuelProcess(fuel, wait, this);
-        if (wait % 20 == 0) {
+        super.tickServer(state);
+        if (harvestTimer % ConfigSettings.HARVESTER_PROCESS_TIME.get() == 0) {
             doWorkProcesses(state);
         }
-        wait += 1;
-        if (wait >= 160) {
-            wait = 0;
+        harvestTimer ++;
+        if (harvestTimer >= ConfigSettings.HARVESTER_PROCESS_TIME.get()) {
+            harvestTimer = 0;
         }
     }
 
@@ -116,29 +118,21 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
+        super.load(tag);
         outputHandler.deserializeNBT(tag.getCompound("invOut"));
         fuelHandler.deserializeNBT(tag.getCompound("invFuel"));
-
         harvesterData.set(HarvesterData.Data.FUEL, tag.getInt("fuel"));
-
-        increment = tag.getInt("increment");
-        toAdd = tag.getInt("toAdd");
-        wait = tag.getInt("wait");
-
-        super.load(tag);
+        harvestTimer = tag.getInt("harvestTimer");
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
+    public void saveAdditional(@NotNull CompoundTag tag) {
+        super.saveAdditional(tag);
         tag.put("invOut", outputHandler.serializeNBT());
         tag.put("invFuel", fuelHandler.serializeNBT());
-
         tag.putInt("fuel", getCurrentFuel());
-        tag.putInt("increment", increment);
-        tag.putInt("toAdd", toAdd);
-        tag.putInt("wait", wait);
-
+        tag.putInt("harvestTimer", harvestTimer);
     }
 
     @Nonnull
@@ -157,9 +151,6 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         return combined;
     }
 
-    public double getEfficiencyMultiplier() {
-        return ConfigSettings.FURNACE_BASE_EFFICIENCY.get();
-    }
 
     @Override
     public int getCurrentFuel() {

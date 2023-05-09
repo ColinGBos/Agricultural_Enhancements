@@ -5,6 +5,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 
 public interface IFuelUser {
+    void tickServer(BlockState state);
+
     int getMaxFuel();
 
     int getMinFuelToWork();
@@ -32,8 +34,6 @@ public interface IFuelUser {
     ItemStack getCurrentFuelStack();
 
     void setCurrentFuelStack(ItemStack stack);
-
-    double getEfficiencyMultiplier();
 
     void removeFromSlot(MachineUtils.Area area, int index, int amount, boolean simulate);
 

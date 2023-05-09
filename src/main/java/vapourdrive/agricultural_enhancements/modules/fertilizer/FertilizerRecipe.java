@@ -13,6 +13,7 @@ import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 
 import java.util.Arrays;
 
@@ -97,9 +98,9 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
             } else {
                 ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient"));
             }
-            int n = GsonHelper.getAsInt(json, "n")*80;
-            int p = GsonHelper.getAsInt(json, "p")*80;
-            int k = GsonHelper.getAsInt(json, "k")*80;
+            int n = GsonHelper.getAsInt(json, "n");
+            int p = GsonHelper.getAsInt(json, "p");
+            int k = GsonHelper.getAsInt(json, "k");
 
             AgriculturalEnhancements.debugLog(Arrays.toString(ingredient.getItems()));
 
@@ -115,9 +116,9 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
         public @Nullable FertilizerRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf pBuffer) {
             Ingredient ingredient = Ingredient.fromNetwork(pBuffer);
             int[] results = pBuffer.readVarIntArray();
-            int n = results[0]*80;
-            int p = results[1]*80;
-            int k = results[2]*80;
+            int n = results[0];
+            int p = results[1];
+            int k = results[2];
             if(!ForgeHooks.hasNoElements(ingredient)) {
                 return new FertilizerRecipe(id, ingredient, n, p, k);
             }

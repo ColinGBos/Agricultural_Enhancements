@@ -119,9 +119,9 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
 
         int[] outputs = recipe.getOutputs();
 
-        n.draw(stack, 41,4,Math.max(0, 45-outputs[0]/80),0,0,0);
-        p.draw(stack, 51,4,Math.max(0, 45-outputs[1]/80),0,0,0);
-        k.draw(stack, 61,4,Math.max(0, 45-outputs[2]/80),0,0,0);
+        n.draw(stack, 41,4,Math.max(0, 45-outputs[0]),0,0,0);
+        p.draw(stack, 51,4,Math.max(0, 45-outputs[1]),0,0,0);
+        k.draw(stack, 61,4,Math.max(0, 45-outputs[2]),0,0,0);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
         int[] elementValues = recipe.getOutputs();
         for(FertilizerProducerData.Data element:elements) {
             if (isInRect(40+(10*i), 2, 8, 48, (int)mouseX, (int)mouseY)) {
-                hoveringText.add(Component.literal(element.name()+": ").append(df.format(elementValues[i]/80)));
+                hoveringText.add(Component.literal(element.name()+": ").append(df.format(elementValues[i])));
             }
             i++;
         }

@@ -3,54 +3,80 @@ package vapourdrive.agricultural_enhancements.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class ConfigSettings {
-    public static final String CATEGORY_FURNACE = "furnacemk2";
-    public static final String SUBCATEGORY_FURNACEMK2 = "furnace";
-    public static final String SUBCATEGORY_CRYSTAL = "crystal";
+    public static final String CATEGORY_MOD = "agricultural_enhancements";
 
     public static ForgeConfigSpec SERVER_CONFIG;
-    public static ForgeConfigSpec CLIENT_CONFIG;
+//    public static ForgeConfigSpec CLIENT_CONFIG;
+    public static final String SUBCATEGORY_FERTILIZER_PRODUCER = "fertilizer_producer";
+    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_FUEL_STORAGE;
+    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER;
+    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_MAX_NUTRIENTS;
+    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_FUEL_TO_WORK;
+    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_INGREDIENT_TIME;
+    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_PRODUCE_TIME;
 
-    public static ForgeConfigSpec.DoubleValue FURNACE_BASE_EFFICIENCY;
-    public static ForgeConfigSpec.DoubleValue FURNACE_BASE_EXPERIENCE;
-    public static ForgeConfigSpec.DoubleValue FURNACE_BASE_SPEED;
-    public static ForgeConfigSpec.DoubleValue FURNACE_UPGRADED_EFFICIENCY;
-    public static ForgeConfigSpec.DoubleValue FURNACE_UPGRADED_EXPERIENCE;
-    public static ForgeConfigSpec.DoubleValue FURNACE_UPGRADED_SPEED;
-    public static ForgeConfigSpec.IntValue CRYSTAL_EXPERIENCE_STORAGE;
+    public static final String SUBCATEGORY_HARVESTER = "harvester";
+    public static ForgeConfigSpec.IntValue HARVESTER_FUEL_STORAGE;
+    public static ForgeConfigSpec.IntValue HARVESTER_FUEL_TO_WORK;
+    public static ForgeConfigSpec.IntValue HARVESTER_PROCESS_TIME;
+
+    public static final String SUBCATEGORY_IRRIGATION_CONTROLLER = "irrigation_controller";
+    public static ForgeConfigSpec.IntValue IRRIGATION_CONTROLLER_FUEL_STORAGE;
+    public static ForgeConfigSpec.IntValue IRRIGATION_CONTROLLER_FUEL_TO_WORK;
+    public static ForgeConfigSpec.IntValue IRRIGATION_CONTROLLER_PROCESS_TIME;
+
+    public static final String SUBCATEGORY_CROP_MANAGER = "crop_manager";
+    public static ForgeConfigSpec.IntValue CROP_MANAGER_FUEL_STORAGE;
+    public static ForgeConfigSpec.IntValue CROP_MANAGER_FERTILIZER_STORAGE;
+    public static ForgeConfigSpec.IntValue CROP_MANAGER_FUEL_TO_WORK;
+    public static ForgeConfigSpec.IntValue CROP_MANAGER_SOIL_PROCESS_TIME;
+    public static ForgeConfigSpec.IntValue CROP_MANAGER_CROP_PROCESS_TIME;
 
     static {
         ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
 //        ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 
-        SERVER_BUILDER.comment("FurnaceMk2 settings").push(CATEGORY_FURNACE);
+        SERVER_BUILDER.comment("Agricultural Enhancements Settings").push(CATEGORY_MOD);
 
         setupFirstBlockConfig(SERVER_BUILDER);
 //        setupFirstBlockConfig(SERVER_BUILDER, CLIENT_BUILDER);
 
         SERVER_BUILDER.pop();
 
-
         SERVER_CONFIG = SERVER_BUILDER.build();
 //        CLIENT_CONFIG = CLIENT_BUILDER.build();
     }
 
     private static void setupFirstBlockConfig(ForgeConfigSpec.Builder SERVER_BUILDER) {
-        SERVER_BUILDER.comment("Furnace settings").push(SUBCATEGORY_FURNACEMK2);
-
-        FURNACE_BASE_EFFICIENCY = SERVER_BUILDER.comment("Base efficiency multiplier for the FurnaceMk2").defineInRange("furnaceBaseEfficiency", 1, 0.5, 10.0);
-        FURNACE_BASE_EXPERIENCE = SERVER_BUILDER.comment("Base experience multiplier for the FurnaceMk2").defineInRange("furnaceBaseExperience", 1, 0.5, 10.0);
-        FURNACE_BASE_SPEED = SERVER_BUILDER.comment("Base speed multiplier for the FurnaceMk2").defineInRange("furnaceBaseSpeed", 2.0, 0.0, 10.0);
-        FURNACE_UPGRADED_EFFICIENCY = SERVER_BUILDER.comment("Upgraded efficiency multiplier for the FurnaceMk2").defineInRange("furnaceUpgradedEfficiency", 1.5, 0.5, 10.0);
-        FURNACE_UPGRADED_EXPERIENCE = SERVER_BUILDER.comment("Upgraded experience multiplier for the FurnaceMk2").defineInRange("furnaceUpgradedExperience", 2.0, 0.5, 10.0);
-        FURNACE_UPGRADED_SPEED = SERVER_BUILDER.comment("Upgraded speed multiplier for the FurnaceMk2").defineInRange("furnaceUpgradedSpeed", 2.0, 0.5, 10.0);
-
+        SERVER_BUILDER.comment("Fertilizer Producer Settings").push(SUBCATEGORY_FERTILIZER_PRODUCER);
+        FERTILIZER_PRODUCER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Fertilizer Producer").defineInRange("fertilizerProducerFuelStorage", 128000, 5, 1000000);
+        FERTILIZER_PRODUCER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed to break down one ingredient").defineInRange("fertilizerProducerFuelConsumption", 1000, 100, 10000);
+        FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER = SERVER_BUILDER.comment("Amount of each nutrient for making one fertilizer").defineInRange("nutrientPerFertilizer", 5, 1, 25);
+        FERTILIZER_PRODUCER_MAX_NUTRIENTS = SERVER_BUILDER.comment("Amount of each nutrient for making one fertilizer").defineInRange("fertilizerProducerNutrientStorage", 256, 10, 10000);
+        FERTILIZER_PRODUCER_INGREDIENT_TIME = SERVER_BUILDER.comment("Ticks to break down one ingredient").defineInRange("fertilizerProducerTimeToConsumeIngredient", 40, 20, 320);
+        FERTILIZER_PRODUCER_PRODUCE_TIME = SERVER_BUILDER.comment("Ticks to make one fertilizer").defineInRange("fertilizerProducerTimeToProduceFertilizer", 40, 20, 320);
         SERVER_BUILDER.pop();
 
-        SERVER_BUILDER.comment("Attuned Crystal settings").push(SUBCATEGORY_CRYSTAL);
-
-        CRYSTAL_EXPERIENCE_STORAGE = SERVER_BUILDER.comment("Storage capacity for the Attuned Crystal").defineInRange("crystalXPStorage", 10000, 100, 1000000);
-
+        SERVER_BUILDER.comment("Harvester Settings").push(SUBCATEGORY_HARVESTER);
+        HARVESTER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Harvester").defineInRange("harvesterFuelStorage", 64000, 5, 1000000);
+        HARVESTER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed to harvest one crop").defineInRange("harvesterFuelConsumption", 2400, 100, 10000);
+        HARVESTER_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between harvests").defineInRange("harvesterTicksBetweenHarvests", 20, 20, 320);
         SERVER_BUILDER.pop();
+
+        SERVER_BUILDER.comment("Irrigation Controller Settings").push(SUBCATEGORY_IRRIGATION_CONTROLLER);
+        IRRIGATION_CONTROLLER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Irrigation Controller").defineInRange("irrigationControllerFuelStorage", 32000, 5, 1000000);
+        IRRIGATION_CONTROLLER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed while working, consumed once per second").defineInRange("irrigationControllerFuelConsumption", 50, 10, 10000);
+        IRRIGATION_CONTROLLER_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between pipe pressurizing events").defineInRange("irrigationControllerTicksBetweenWork", 20, 20, 320);
+        SERVER_BUILDER.pop();
+
+        SERVER_BUILDER.comment("Crop Manager Settings").push(SUBCATEGORY_CROP_MANAGER);
+        CROP_MANAGER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Crop Manager").defineInRange("cropManagerFuelStorage", 128000, 5, 1000000);
+        CROP_MANAGER_FERTILIZER_STORAGE = SERVER_BUILDER.comment("Fertilizer Storage for the Crop Manager").defineInRange("cropManagerFertilizerStorage", 25600, 800, 1000000);
+        CROP_MANAGER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel to do one unit of work, planting or managing soil").defineInRange("cropManagerFuelConsumption", 2400, 10, 10000);
+        CROP_MANAGER_SOIL_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between fertilizing soil, works all 9 blocks").defineInRange("cropManagerTicksBetweenFertilizingSoil", 40, 20, 320);
+        CROP_MANAGER_CROP_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between planting crops, works one block at a time").defineInRange("cropManagerTicksBetweenPlanting", 5, 5, 160);
+        SERVER_BUILDER.pop();
+
     }
 
 }

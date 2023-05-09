@@ -12,6 +12,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
 import vapourdrive.agricultural_enhancements.modules.irrigation.IIrrigationBlock;
@@ -29,33 +30,35 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
 
     private final FuelHandler fuelHandler = new FuelHandler(this, FUEL_SLOT.length);
     private final OutputHandler outputHandler = new OutputHandler(this, OUTPUT_SLOTS.length);
-    private final LazyOptional<OutputHandler> lazyOutputHandler = LazyOptional.of(() -> outputHandler);
     private final CombinedInvWrapper combined = new CombinedInvWrapper(fuelHandler, outputHandler);
     private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
 
     public final IrrigationControllerData machineData = new IrrigationControllerData();
+    private int irrigateTimer = 0;
+    private int consumeFuelTimer = 0;
 
     public IrrigationControllerTile(BlockPos pos, BlockState state) {
-        super(IRRIGATION_CONTROLLER_TILE.get(), pos, state, 3200000, 1000, new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14});
+        super(IRRIGATION_CONTROLLER_TILE.get(), pos, state, ConfigSettings.IRRIGATION_CONTROLLER_FUEL_STORAGE.get()*100, ConfigSettings.IRRIGATION_CONTROLLER_FUEL_TO_WORK.get(), new int[]{0, 1, 2, 3, 4});
     }
 
     public void tickServer(BlockState state) {
-        ItemStack fuel = getStackInSlot(MachineUtils.Area.FUEL, 0);
-        MachineUtils.doFuelProcess(fuel, wait, this);
-        if (wait % 80 == 0) {
+        super.tickServer(state);
+        if (irrigateTimer == ConfigSettings.IRRIGATION_CONTROLLER_PROCESS_TIME.get()) {
             doWorkProcesses(state);
+            irrigateTimer = 0;
         }
-        wait += 1;
-        if (wait >= 160) {
-            wait = 0;
+        irrigateTimer++;
+        if(consumeFuelTimer == 20 && canWork(state)){
+            consumeFuel(getMinFuelToWork(), false);
+            consumeFuelTimer = 0;
         }
+        consumeFuelTimer++;
     }
 
     private void doWorkProcesses(BlockState state) {
         int target = 0;
         if (canWork(state)) {
             target = 15;
-            consumeFuel(getMinFuelToWork(), false);
         }
         changeSurroundingBlocks(state, target);
         changeStateIfNecessary(state, target > 0);
@@ -98,25 +101,24 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
+        super.load(tag);
         fuelHandler.deserializeNBT(tag.getCompound("invFuel"));
         outputHandler.deserializeNBT(tag.getCompound("invOut"));
         machineData.set(IrrigationControllerData.Data.FUEL, tag.getInt("fuel"));
-        increment = tag.getInt("increment");
-        toAdd = tag.getInt("toAdd");
-        wait = tag.getInt("wait");
+        irrigateTimer = tag.getInt("irrigateTimer");
+        consumeFuelTimer = tag.getInt("consumeFuelTimer");
 
-        super.load(tag);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag) {
+    public void saveAdditional(@NotNull CompoundTag tag) {
+        super.saveAdditional(tag);
         tag.put("invFuel", fuelHandler.serializeNBT());
         tag.put("invOut", outputHandler.serializeNBT());
         tag.putInt("fuel", getCurrentFuel());
-        tag.putInt("increment", increment);
-        tag.putInt("toAdd", toAdd);
-        tag.putInt("wait", wait);
+        tag.putInt("irrigateTimer", irrigateTimer);
+        tag.putInt("consumeFuelTimer", consumeFuelTimer);
 
     }
 
@@ -131,10 +133,6 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
 
     public IItemHandler getItemHandler() {
         return combined;
-    }
-
-    public double getEfficiencyMultiplier() {
-        return ConfigSettings.FURNACE_BASE_EFFICIENCY.get();
     }
 
     @Override
