@@ -1,11 +1,9 @@
 package vapourdrive.agricultural_enhancements.setup;
 
-import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -29,9 +27,9 @@ public class ModSetup {
     };
 
     public static void init(final FMLCommonSetupEvent event) {
-        for(Item item: ForgeRegistries.ITEMS){
-            if(item instanceof BlockItem blockItem){
-                if(blockItem.getBlock() instanceof CropBlock || blockItem.getBlock() instanceof BushBlock){
+        for (Item item : ForgeRegistries.ITEMS) {
+            if (item instanceof BlockItem blockItem) {
+                if (blockItem.getBlock() instanceof CropBlock || blockItem.getBlock() instanceof BushBlock) {
                     seeds.add(item);
                 }
             }

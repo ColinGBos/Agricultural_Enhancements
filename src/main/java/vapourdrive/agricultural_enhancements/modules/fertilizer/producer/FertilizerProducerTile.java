@@ -30,8 +30,8 @@ import static vapourdrive.agricultural_enhancements.utils.MachineUtils.canPushAl
 import static vapourdrive.agricultural_enhancements.utils.MachineUtils.pushOutput;
 
 public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
-    
-    public enum Element{
+
+    public enum Element {
         N,
         P,
         K
@@ -46,8 +46,8 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
 
     public final FertilizerProducerData fertilizerProducerData = new FertilizerProducerData();
-    public int[] elementToAdd = {0,0,0};
-    public int[] incrementalElementToAdd = {0,0,0};
+    public int[] elementToAdd = {0, 0, 0};
+    public int[] incrementalElementToAdd = {0, 0, 0};
     public int createFertTimer = 0;
     public int consumerTimer = 0;
 
@@ -55,7 +55,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     private final int consumeMaxTime = ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get();
 
     public FertilizerProducerTile(BlockPos pos, BlockState state) {
-        super(FERTILIZER_PRODUCER_TILE.get(), pos, state, ConfigSettings.FERTILIZER_PRODUCER_FUEL_STORAGE.get()*100, ConfigSettings.FERTILIZER_PRODUCER_FUEL_TO_WORK.get(), new int[]{0, 1, 2, 3});
+        super(FERTILIZER_PRODUCER_TILE.get(), pos, state, ConfigSettings.FERTILIZER_PRODUCER_FUEL_STORAGE.get() * 100, ConfigSettings.FERTILIZER_PRODUCER_FUEL_TO_WORK.get(), new int[]{0, 1, 2, 3});
     }
 
     public void tickServer(BlockState state) {
@@ -64,10 +64,10 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         doWorkProcesses(ingredient, state);
 
         createFertTimer++;
-        if (createFertTimer >= createFertMaxTime){
+        if (createFertTimer >= createFertMaxTime) {
             createFertTimer = 0;
         }
-        if (consumerTimer >= consumeMaxTime){
+        if (consumerTimer >= consumeMaxTime) {
             consumerTimer = 0;
         }
     }
@@ -78,8 +78,8 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         canWork(state);
     }
 
-    public void doCreateProcess(){
-        if(createFertTimer == 0) {
+    public void doCreateProcess() {
+        if (createFertTimer == 0) {
             int i = ConfigSettings.FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER.get();
             if (!consumeElement(Element.N, i, true) || !consumeElement(Element.P, i, true) || !consumeElement(Element.K, i, true)) {
                 return;
@@ -104,7 +104,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
             if (toAdds != null) {
 //                AgriculturalEnhancements.debugLog("resulting lookup: " + toAdds[0]);
                 for (Element element : Element.values()) {
-                    int emnt = toAdds[element.ordinal()]* consumeMaxTime;
+                    int emnt = toAdds[element.ordinal()] * consumeMaxTime;
                     if (emnt > 0) {
 //            AgriculturalEnhancements.debugLog("Doing fuel process");
                         setElementToAdd(element, emnt);
@@ -117,16 +117,16 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
             }
         }
         boolean increment = false;
-        for(Element element : Element.values()) {
+        for (Element element : Element.values()) {
             if (getElementToAdd(element) > 0) {
                 increment = true;
                 addElement(element, getIncrementalElementToAdd(element), false);
                 setElementToAdd(element, getElementToAdd(element) - getIncrementalElementToAdd(element));
             }
         }
-        if(increment){
+        if (increment) {
             consumerTimer++;
-            consumeFuel(minWorkFuel/ consumeMaxTime, false);
+            consumeFuel(minWorkFuel / consumeMaxTime, false);
         }
 
     }
@@ -143,7 +143,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
             }
 
             int[] emnts = FertilizerUtils.getFertilizerResultForItem(level, stack);
-            if(emnts != null) {
+            if (emnts != null) {
                 boolean hasSpace = true;
                 for (Element element : Element.values()) {
                     if (getCurrentElement(element) + emnts[element.ordinal()] > getMaxElement()) {
@@ -159,18 +159,22 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         return null;
     }
 
-    public void setElementToAdd(Element element, int toSet){
-        this.elementToAdd[element.ordinal()]=toSet;
+    public void setElementToAdd(Element element, int toSet) {
+        this.elementToAdd[element.ordinal()] = toSet;
     }
+
     public int getElementToAdd(Element element) {
         return this.elementToAdd[element.ordinal()];
     }
-    public void setIncrementalElementToAdd(Element element,int increment) {
+
+    public void setIncrementalElementToAdd(Element element, int increment) {
         this.incrementalElementToAdd[element.ordinal()] = increment;
     }
+
     public int getIncrementalElementToAdd(Element element) {
         return this.incrementalElementToAdd[element.ordinal()];
     }
+
     public int getCurrentElement(Element element) {
         return switch (element) {
             case N -> fertilizerProducerData.get(FertilizerProducerData.Data.N);
@@ -178,9 +182,11 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
             case K -> fertilizerProducerData.get(FertilizerProducerData.Data.K);
         };
     }
-    public int getMaxElement(){
-        return ConfigSettings.FERTILIZER_PRODUCER_MAX_NUTRIENTS.get()* consumeMaxTime;
+
+    public int getMaxElement() {
+        return ConfigSettings.FERTILIZER_PRODUCER_MAX_NUTRIENTS.get() * consumeMaxTime;
     }
+
     public boolean addElement(Element element, int toAdd, boolean simulate) {
         if (toAdd + getCurrentElement(element) > getMaxElement()) {
 //            AgriculturalEnhancements.debugLog("Can't add element: "+getCurrentElement(element));
@@ -199,14 +205,17 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     }
 
     public boolean consumeElement(Element element, int toConsume, boolean simulate) {
-        if (getCurrentElement(element) < toConsume* consumeMaxTime) {
+        if (getCurrentElement(element) < toConsume * consumeMaxTime) {
             return false;
         }
         if (!simulate) {
             switch (element) {
-                case N -> fertilizerProducerData.set(FertilizerProducerData.Data.N, getCurrentElement(element) - toConsume* consumeMaxTime);
-                case K -> fertilizerProducerData.set(FertilizerProducerData.Data.K, getCurrentElement(element) - toConsume* consumeMaxTime);
-                case P -> fertilizerProducerData.set(FertilizerProducerData.Data.P, getCurrentElement(element) - toConsume* consumeMaxTime);
+                case N ->
+                        fertilizerProducerData.set(FertilizerProducerData.Data.N, getCurrentElement(element) - toConsume * consumeMaxTime);
+                case K ->
+                        fertilizerProducerData.set(FertilizerProducerData.Data.K, getCurrentElement(element) - toConsume * consumeMaxTime);
+                case P ->
+                        fertilizerProducerData.set(FertilizerProducerData.Data.P, getCurrentElement(element) - toConsume * consumeMaxTime);
             }
         }
         return true;
@@ -318,7 +327,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         switch (area) {
             case FUEL -> fuelHandler.extractItem(FUEL_SLOT[index], amount, simulate);
             case OUTPUT -> outputHandler.extractItem(OUTPUT_SLOTS[index], amount, simulate);
-            case INGREDIENT -> ingredientHandler.extractItem(INGREDIENT_SLOT[index], amount, simulate );
+            case INGREDIENT -> ingredientHandler.extractItem(INGREDIENT_SLOT[index], amount, simulate);
         }
     }
 

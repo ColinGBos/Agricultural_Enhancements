@@ -47,9 +47,9 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
         this.FUEL_YPOS = fuelY;
         this.INFO_XPOS = helpX;
         this.INFO_YPOS = helpY;
-        this.ID=id;
+        this.ID = id;
         this.STACK_INFO_SIDEWAYS = false;
-        this.GUI = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/"+id+"_gui.png");
+        this.GUI = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/" + id + "_gui.png");
     }
 
     public AbstractBaseMachineScreen(T container, Inventory inv, Component name, String id, int fuelX, int fuelY, int helpX, int helpY, int titleX, boolean stackInfoSideways) {
@@ -61,9 +61,9 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
         this.FUEL_YPOS = fuelY;
         this.INFO_XPOS = helpX;
         this.INFO_YPOS = helpY;
-        this.ID=id;
+        this.ID = id;
         this.STACK_INFO_SIDEWAYS = stackInfoSideways;
-        this.GUI = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/"+id+"_gui.png");
+        this.GUI = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/" + id + "_gui.png");
     }
 
     @Override
@@ -92,10 +92,10 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
         int m = (int) (container.getFuelPercentage() * (FUEL_HEIGHT));
 
         this.blit(matrixStack, guiLeft + FUEL_XPOS, guiTop + FUEL_YPOS + FUEL_HEIGHT - m, FUEL_ICONX, FUEL_ICONY + FUEL_HEIGHT - m, FUEL_WIDTH, m);
-        this.blit(matrixStack, guiLeft+INFO_XPOS, guiTop+INFO_YPOS, INFO_ICONX, INFO_ICONY+INFO_HEIGHT, INFO_WIDTH, INFO_HEIGHT);
-        if(STACK_INFO_SIDEWAYS) {
-            blitAlt(matrixStack, INFO_XPOS-15, INFO_YPOS, INFO_ICONX + INFO_WIDTH, INFO_ICONY, INFO_WIDTH, INFO_HEIGHT, mouseX, mouseY);
-        }else{
+        this.blit(matrixStack, guiLeft + INFO_XPOS, guiTop + INFO_YPOS, INFO_ICONX, INFO_ICONY + INFO_HEIGHT, INFO_WIDTH, INFO_HEIGHT);
+        if (STACK_INFO_SIDEWAYS) {
+            blitAlt(matrixStack, INFO_XPOS - 15, INFO_YPOS, INFO_ICONX + INFO_WIDTH, INFO_ICONY, INFO_WIDTH, INFO_HEIGHT, mouseX, mouseY);
+        } else {
             blitAlt(matrixStack, INFO_XPOS, INFO_YPOS + 15, INFO_ICONX + INFO_WIDTH, INFO_ICONY, INFO_WIDTH, INFO_HEIGHT, mouseX, mouseY);
         }
     }
@@ -119,8 +119,8 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
             hoveringText.add(Component.literal("Fuel: ").append(df.format(fuel) + "/" + df.format(container.getMaxFuel() / 100)));
         }
 
-        if (notCarrying && isInRect(this.leftPos + INFO_XPOS-1, this.topPos + INFO_YPOS-1, INFO_WIDTH+2, INFO_HEIGHT+2, mouseX, mouseY)) {
-            hoveringText.add(Component.translatable("agriculturalenhancements."+ID+".info"));
+        if (notCarrying && isInRect(this.leftPos + INFO_XPOS - 1, this.topPos + INFO_YPOS - 1, INFO_WIDTH + 2, INFO_HEIGHT + 2, mouseX, mouseY)) {
+            hoveringText.add(Component.translatable("agriculturalenhancements." + ID + ".info"));
         }
 
         // If hoveringText is not empty draw the hovering text.  Otherwise, use vanilla to render tooltip for the slots
@@ -136,12 +136,12 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
         return ((mouseX >= x && mouseX <= x + xSize) && (mouseY >= y && mouseY <= y + ySize));
     }
 
-    public void blitAlt(@NotNull PoseStack matrixStack, int offsetX, int offsetY, int iconX, int iconY, int width, int height, int mouseX, int mouseY){
+    public void blitAlt(@NotNull PoseStack matrixStack, int offsetX, int offsetY, int iconX, int iconY, int width, int height, int mouseX, int mouseY) {
         int guiLeft = this.leftPos;
         int guiTop = this.topPos;
-        if(isInRect(guiLeft+offsetX-1, guiTop+offsetY-1, width+2, height+2, mouseX, mouseY)) {
-            this.blit(matrixStack, guiLeft + offsetX, guiTop + offsetY, iconX, iconY+height, width, height);
-        } else{
+        if (isInRect(guiLeft + offsetX - 1, guiTop + offsetY - 1, width + 2, height + 2, mouseX, mouseY)) {
+            this.blit(matrixStack, guiLeft + offsetX, guiTop + offsetY, iconX, iconY + height, width, height);
+        } else {
             this.blit(matrixStack, guiLeft + offsetX, guiTop + offsetY, iconX, iconY, width, height);
         }
     }

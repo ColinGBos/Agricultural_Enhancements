@@ -7,13 +7,15 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 
 import java.util.Arrays;
 
@@ -24,17 +26,17 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
     protected final int p;
     protected final int k;
 
-    public FertilizerRecipe(ResourceLocation id, Ingredient ingredient, int n, int p, int k){
-        this.id=id;
-        this.ingredient=ingredient;
-        this.n=n;
-        this.p=p;
-        this.k=k;
+    public FertilizerRecipe(ResourceLocation id, Ingredient ingredient, int n, int p, int k) {
+        this.id = id;
+        this.ingredient = ingredient;
+        this.n = n;
+        this.p = p;
+        this.k = k;
     }
 
     @Override
     public boolean matches(@NotNull SimpleContainer pContainer, @NotNull Level pLevel) {
-        AgriculturalEnhancements.debugLog("Checking container " + (pContainer.getItem(0)).toString());
+        AgriculturalEnhancements.debugLog("Checking container " + (pContainer.getItem(0)));
         AgriculturalEnhancements.debugLog("Checking ingredient " + Arrays.toString(ingredient.getItems()));
 
         boolean ret = this.ingredient.test(pContainer.getItem(0));
@@ -62,7 +64,7 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public @NotNull ItemStack getResultItem() {
-        return ingredient.getItems()[0].hasCraftingRemainingItem() ? ingredient.getItems()[0].getCraftingRemainingItem(): new ItemStack(Items.AIR);
+        return ingredient.getItems()[0].hasCraftingRemainingItem() ? ingredient.getItems()[0].getCraftingRemainingItem() : new ItemStack(Items.AIR);
     }
 
     @Override
@@ -81,12 +83,14 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
     }
 
     public static class Type implements RecipeType<FertilizerRecipe> {
-        private Type() {}
+        private Type() {
+        }
+
         public static final Type INSTANCE = new Type();
         public static final String ID = "fertilizer";
     }
 
-    public static class Serializer implements RecipeSerializer<FertilizerRecipe>{
+    public static class Serializer implements RecipeSerializer<FertilizerRecipe> {
         public static final Serializer INSTANCE = new Serializer();
         public static final ResourceLocation ID = new ResourceLocation(AgriculturalEnhancements.MODID, "fertilizer");
 
@@ -119,7 +123,7 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
             int n = results[0];
             int p = results[1];
             int k = results[2];
-            if(!ForgeHooks.hasNoElements(ingredient)) {
+            if (!ForgeHooks.hasNoElements(ingredient)) {
                 return new FertilizerRecipe(id, ingredient, n, p, k);
             }
             return null;

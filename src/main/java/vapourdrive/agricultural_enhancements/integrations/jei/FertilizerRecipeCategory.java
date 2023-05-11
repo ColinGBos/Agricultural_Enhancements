@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.jei;
+package vapourdrive.agricultural_enhancements.integrations.jei;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -20,8 +20,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.FertilizerProducerData;
 import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerRecipe;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.FertilizerProducerData;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import java.text.DecimalFormat;
@@ -51,14 +51,14 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Registration.FERTILIZER_PRODUCER_ITEM.get()));
 
         this.cachedArrows = CacheBuilder.newBuilder()
-            .maximumSize(25)
-            .build(new CacheLoader<>() {
-                @Override
-                public @NotNull IDrawableAnimated load(@NotNull Integer time) {
-                    return guiHelper.drawableBuilder(TEXTURE, 179, 0, 24, 17)
-                            .buildAnimated(time, IDrawableAnimated.StartDirection.LEFT, false);
-                }
-            });
+                .maximumSize(25)
+                .build(new CacheLoader<>() {
+                    @Override
+                    public @NotNull IDrawableAnimated load(@NotNull Integer time) {
+                        return guiHelper.drawableBuilder(TEXTURE, 179, 0, 24, 17)
+                                .buildAnimated(time, IDrawableAnimated.StartDirection.LEFT, false);
+                    }
+                });
 
         this.cachedFuel = CacheBuilder.newBuilder()
                 .maximumSize(45)
@@ -69,9 +69,9 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
                                 .buildAnimated(time, IDrawableAnimated.StartDirection.TOP, true);
                     }
                 });
-        this.n = guiHelper.createDrawable(TEXTURE, 161,0, 6, 45);
-        this.p = guiHelper.createDrawable(TEXTURE, 167,0, 6, 45);
-        this.k = guiHelper.createDrawable(TEXTURE, 173,0, 6, 45);
+        this.n = guiHelper.createDrawable(TEXTURE, 161, 0, 6, 45);
+        this.p = guiHelper.createDrawable(TEXTURE, 167, 0, 6, 45);
+        this.k = guiHelper.createDrawable(TEXTURE, 173, 0, 6, 45);
     }
 
     protected IDrawableAnimated getArrow() {
@@ -86,7 +86,7 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
 
     @Override
     public @NotNull RecipeType<FertilizerRecipe> getRecipeType() {
-        return JEI_plugin.FERTILIZER_TYPE;
+        return JEI_Plugin.FERTILIZER_TYPE;
     }
 
     @Override
@@ -106,8 +106,8 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, FertilizerRecipe recipe, @NotNull IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 18,33).addIngredients(recipe.getIngredient());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 99,10).addItemStack(new ItemStack(Registration.FERTILISER.get()));
+        builder.addSlot(RecipeIngredientRole.INPUT, 18, 33).addIngredients(recipe.getIngredient());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 99, 10).addItemStack(new ItemStack(Registration.FERTILISER.get()));
     }
 
     @Override
@@ -119,9 +119,9 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
 
         int[] outputs = recipe.getOutputs();
 
-        n.draw(stack, 41,4,Math.max(0, 45-outputs[0]),0,0,0);
-        p.draw(stack, 51,4,Math.max(0, 45-outputs[1]),0,0,0);
-        k.draw(stack, 61,4,Math.max(0, 45-outputs[2]),0,0,0);
+        n.draw(stack, 41, 4, Math.max(0, 45 - outputs[0]), 0, 0, 0);
+        p.draw(stack, 51, 4, Math.max(0, 45 - outputs[1]), 0, 0, 0);
+        k.draw(stack, 61, 4, Math.max(0, 45 - outputs[2]), 0, 0, 0);
     }
 
     @Override
@@ -130,14 +130,14 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
         FertilizerProducerData.Data[] elements = {FertilizerProducerData.Data.N, FertilizerProducerData.Data.P, FertilizerProducerData.Data.K};
         int i = 0;
         int[] elementValues = recipe.getOutputs();
-        for(FertilizerProducerData.Data element:elements) {
-            if (isInRect(40+(10*i), 2, 8, 48, (int)mouseX, (int)mouseY)) {
-                hoveringText.add(Component.literal(element.name()+": ").append(df.format(elementValues[i])));
+        for (FertilizerProducerData.Data element : elements) {
+            if (isInRect(40 + (10 * i), 2, 8, 48, (int) mouseX, (int) mouseY)) {
+                hoveringText.add(Component.literal(element.name() + ": ").append(df.format(elementValues[i])));
             }
             i++;
         }
 
-        if(isInRect(71,19,23,17,(int)mouseX, (int)mouseY)){
+        if (isInRect(71, 19, 23, 17, (int) mouseX, (int) mouseY)) {
             hoveringText.add(Component.translatable("agriculturalenhancements.fertilizer_producer.info_2"));
         }
 

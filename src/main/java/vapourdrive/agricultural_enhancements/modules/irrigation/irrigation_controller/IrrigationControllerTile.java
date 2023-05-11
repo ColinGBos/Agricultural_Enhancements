@@ -13,12 +13,13 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
+import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.modules.irrigation.IIrrigationBlock;
-import vapourdrive.agricultural_enhancements.modules.irrigation.IrrigationPipeBlock;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.FuelHandler;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.OutputHandler;
+import vapourdrive.agricultural_enhancements.modules.irrigation.IIrrigationBlock;
+import vapourdrive.agricultural_enhancements.modules.irrigation.IrrigationPipeBlock;
 import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 
 import javax.annotation.Nonnull;
@@ -38,7 +39,7 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
     private int consumeFuelTimer = 0;
 
     public IrrigationControllerTile(BlockPos pos, BlockState state) {
-        super(IRRIGATION_CONTROLLER_TILE.get(), pos, state, ConfigSettings.IRRIGATION_CONTROLLER_FUEL_STORAGE.get()*100, ConfigSettings.IRRIGATION_CONTROLLER_FUEL_TO_WORK.get(), new int[]{0, 1, 2, 3, 4});
+        super(IRRIGATION_CONTROLLER_TILE.get(), pos, state, ConfigSettings.IRRIGATION_CONTROLLER_FUEL_STORAGE.get() * 100, ConfigSettings.IRRIGATION_CONTROLLER_FUEL_TO_WORK.get(), new int[]{0, 1, 2, 3, 4});
     }
 
     public void tickServer(BlockState state) {
@@ -48,8 +49,11 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
             irrigateTimer = 0;
         }
         irrigateTimer++;
-        if(consumeFuelTimer == 20 && canWork(state)){
-            consumeFuel(getMinFuelToWork(), false);
+        if (consumeFuelTimer >= 20) {
+//            AgriculturalEnhancements.debugLog("consume fuel for the irrigation controller");
+            if (canWork(state)) {
+                consumeFuel(getMinFuelToWork(), false);
+            }
             consumeFuelTimer = 0;
         }
         consumeFuelTimer++;

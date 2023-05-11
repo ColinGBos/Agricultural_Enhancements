@@ -2,10 +2,8 @@ package vapourdrive.agricultural_enhancements.modules.manager;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.IItemHandler;
 import vapourdrive.agricultural_enhancements.modules.base.slots.BaseSlotIngredient;
-import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import static vapourdrive.agricultural_enhancements.AgriculturalEnhancements.seeds;
 

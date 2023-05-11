@@ -33,7 +33,7 @@ public class FertilizerProducerContainer extends AbstractBaseMachineContainer {
 
 
     public FertilizerProducerContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, FertilizerProducerData machineData) {
-        super(windowId, world, pos, inv, player, Registration.FERTILIZER_PRODUCER_CONTAINER.get(),machineData);
+        super(windowId, world, pos, inv, player, Registration.FERTILIZER_PRODUCER_CONTAINER.get(), machineData);
         tileEntity = (FertilizerProducerTile) world.getBlockEntity(pos);
 
         //We use this vs the builtin method because we split all the shorts
@@ -47,8 +47,8 @@ public class FertilizerProducerContainer extends AbstractBaseMachineContainer {
                 addSlot(new FertilizerSlotIngredient(h, 1, 44, 49, this.world));
                 addSlot(new SlotOutput(h, 2, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
                 addSlot(new SlotOutput(h, 3, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 4, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS+18));
-                addSlot(new SlotOutput(h, 5, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS+18));
+                addSlot(new SlotOutput(h, 4, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS + 18));
+                addSlot(new SlotOutput(h, 5, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS + 18));
             });
         }
     }

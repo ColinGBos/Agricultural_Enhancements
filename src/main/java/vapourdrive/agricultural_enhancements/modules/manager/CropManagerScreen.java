@@ -6,15 +6,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineScreen;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.FertilizerProducerContainer;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.FertilizerProducerData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CropManagerScreen extends AbstractBaseMachineScreen<CropManagerContainer> {
     protected final CropManagerContainer machineContainer;
+
     public CropManagerScreen(CropManagerContainer container, Inventory inv, Component name) {
         super(container, inv, name, "crop_manager", 12, 8, 158, 6, 1, true);
         machineContainer = container;
@@ -22,7 +22,7 @@ public class CropManagerScreen extends AbstractBaseMachineScreen<CropManagerCont
 
     @Override
     protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
-        if(AgriculturalEnhancements.debugMode) {
+        if (AgriculturalEnhancements.debugMode) {
             int horStart = -100;
             drawString(matrixStack, Minecraft.getInstance().font, "N: " + menu.getFertilizerStored(CropManagerData.Data.FERTILIZER), horStart, 10, 0xffffff);
 
@@ -47,8 +47,8 @@ public class CropManagerScreen extends AbstractBaseMachineScreen<CropManagerCont
         List<Component> hoveringText = new ArrayList<>();
 
         if (notCarrying && isInRect(this.leftPos + 32, this.topPos + 19, 16, 46, mouseX, mouseY)) {
-            int m = this.machineContainer.getFertilizerStored(CropManagerData.Data.FERTILIZER)/20;
-            hoveringText.add(Component.translatable("item.agriculturalenhancements.fertilizer").append(": ").append(df.format(m) + "/" + df.format(this.machineContainer.getMaxFertilizer()/20)));
+            int m = this.machineContainer.getFertilizerStored(CropManagerData.Data.FERTILIZER) / ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get();
+            hoveringText.add(Component.translatable("item.agriculturalenhancements.fertilizer").append(": ").append(df.format(m) + "/" + df.format(this.machineContainer.getMaxFertilizer() / ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get())));
         }
 
 

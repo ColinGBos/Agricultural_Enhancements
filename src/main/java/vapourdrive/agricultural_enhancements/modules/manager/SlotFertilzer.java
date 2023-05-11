@@ -1,10 +1,8 @@
 package vapourdrive.agricultural_enhancements.modules.manager;
 
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.modules.base.slots.BaseSlotIngredient;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 

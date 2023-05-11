@@ -13,17 +13,18 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
+import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.FuelHandler;
 import vapourdrive.agricultural_enhancements.modules.base.itemhandlers.OutputHandler;
+import vapourdrive.agricultural_enhancements.modules.soil.HoeTilledToSoilHandler;
 import vapourdrive.agricultural_enhancements.modules.soil.TilledSoilBlock;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,7 +33,7 @@ import static vapourdrive.agricultural_enhancements.setup.Registration.CROP_MANA
 public class CropManagerTile extends AbstractBaseFuelUserTile {
 
     public final int[] FERTILIZER_SLOT = {0};
-    public final int[] SEED_SLOTS = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14};
+    public final int[] SEED_SLOTS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
     private final FuelHandler fuelHandler = new FuelHandler(this, FUEL_SLOT.length);
     private final OutputHandler outputHandler = new OutputHandler(this, OUTPUT_SLOTS.length);
     private final FertilizerIngredientHandler fertilizerHandler = new FertilizerIngredientHandler(this, FERTILIZER_SLOT.length);
@@ -47,20 +48,24 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     public int incrementalFertilizerToAdd = 0;
     private int soilTimer = 0;
     private int plantTimer = 0;
+    private boolean hasTilled = false;
 
     private final ArrayList<Integer> blocks = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
 
     public CropManagerTile(BlockPos pos, BlockState state) {
-        super(CROP_MANAGER_TILE.get(), pos, state, ConfigSettings.CROP_MANAGER_FUEL_STORAGE.get()*100, ConfigSettings.CROP_MANAGER_FUEL_TO_WORK.get(), new int[]{0, 1, 2});
+        super(CROP_MANAGER_TILE.get(), pos, state, ConfigSettings.CROP_MANAGER_FUEL_STORAGE.get() * 100, ConfigSettings.CROP_MANAGER_FUEL_TO_WORK.get(), new int[]{0, 1, 2});
     }
 
     @Override
     public void tickServer(BlockState state) {
         super.tickServer(state);
+        if (!hasTilled && canWork(state)) {
+            hasTilled = doTillProcesses(state);
+        }
         ItemStack ingredient = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
         doConsumeProcess(ingredient);
         if (soilTimer == ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get()) {
-            doWorkProcesses(state);
+            doNutrientWorkProcesses(state);
             soilTimer = 0;
         }
         soilTimer++;
@@ -71,30 +76,57 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         plantTimer++;
     }
 
-    private void doWorkProcesses(BlockState state) {
+    private boolean doTillProcesses(BlockState state) {
         if (canWork(state)) {
+            AgriculturalEnhancements.debugLog("Can work, tilling soil");
             Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
 //            AgriculturalEnhancements.debugLog(""+direction);
             assert this.level != null;
             for (int i = 1; i <= 9; i++) {
-                BlockState targetState = this.level.getBlockState(this.worldPosition.relative(direction, i).relative(Direction.DOWN,1));
-                if(!targetState.is(Registration.TILLED_SOIL_BLOCK.get())){
-                    return;
+                BlockState soilState = this.level.getBlockState(this.worldPosition.relative(direction, i).below());
+                BlockState cropState = this.level.getBlockState(this.worldPosition.relative(direction, i));
+                BlockPos soilPos = this.worldPosition.relative(direction, i).below();
+                if (!cropState.isAir()) {
+                    continue;
+                }
+                if (!HoeTilledToSoilHandler.canTill(soilState.getBlock(), soilPos, level)) {
+                    continue;
+                }
+                level.setBlockAndUpdate(soilPos, Registration.TILLED_SOIL_BLOCK.get().getStateForPlacement(level, soilPos));
+
+//                AgriculturalEnhancements.debugLog(""+soilState);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void doNutrientWorkProcesses(BlockState state) {
+        if (canWork(state)) {
+//            AgriculturalEnhancements.debugLog("Can work, check soil");
+            Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
+//            AgriculturalEnhancements.debugLog(""+direction);
+            assert this.level != null;
+            for (int i = 1; i <= 9; i++) {
+                BlockState targetState = this.level.getBlockState(this.worldPosition.relative(direction, i).below());
+                if (!targetState.is(Registration.TILLED_SOIL_BLOCK.get())) {
+                    continue;
                 }
                 int currentFert = targetState.getValue(TilledSoilBlock.SOIL_NUTRIENTS);
-                if(currentFert>=TilledSoilBlock.MAX_NUTRIENTS){
-                    return;
+                if (currentFert >= TilledSoilBlock.MAX_NUTRIENTS) {
+                    continue;
                 }
-                BlockPos pos = this.worldPosition.relative(direction, i).relative(Direction.DOWN,1);
-                if(!consumeFertilizer((TilledSoilBlock.MAX_NUTRIENTS-currentFert)*20, true)){
-                    return;
+                BlockPos pos = this.worldPosition.relative(direction, i).below();
+                if (!consumeFertilizer((TilledSoilBlock.MAX_NUTRIENTS - currentFert) * ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get(), true)) {
+                    continue;
                 }
-                if(!consumeFuel(getMinFuelToWork()*TilledSoilBlock.MAX_NUTRIENTS-currentFert, true)){
-                    return;
+                if (!consumeFuel(getMinFuelToWork() * TilledSoilBlock.MAX_NUTRIENTS - currentFert, true)) {
+                    continue;
                 }
                 level.setBlockAndUpdate(pos, targetState.setValue(TilledSoilBlock.SOIL_NUTRIENTS, TilledSoilBlock.MAX_NUTRIENTS));
-                consumeFertilizer((TilledSoilBlock.MAX_NUTRIENTS-currentFert)*20, false);
-                consumeFuel(getMinFuelToWork()*TilledSoilBlock.MAX_NUTRIENTS-currentFert, false);
+                consumeFertilizer((TilledSoilBlock.MAX_NUTRIENTS - currentFert) * ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get(), false);
+                consumeFuel(getMinFuelToWork() * TilledSoilBlock.MAX_NUTRIENTS - currentFert, false);
 //                AgriculturalEnhancements.debugLog(""+targetState);
             }
         }
@@ -103,11 +135,10 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     private void doPlantWorkProcesses(BlockState state) {
         if (canWork(state)) {
             Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
-//            AgriculturalEnhancements.debugLog(""+direction);
             assert this.level != null;
             int i = blocks.get(level.getRandom().nextInt(blocks.size()));
             blocks.remove(Integer.valueOf(i));
-            if(blocks.isEmpty()){
+            if (blocks.isEmpty()) {
                 blocks.addAll(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
             }
 //            AgriculturalEnhancements.debugLog("Integer: "+i);
@@ -117,12 +148,12 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                 return;
             }
             ItemStack stack = getFirstValidIngredient();
-            if(stack.isEmpty()){
+            if (stack.isEmpty()) {
                 return;
             }
-            if(stack.getItem() instanceof BlockItem blockItem) {
+            if (stack.getItem() instanceof BlockItem blockItem) {
                 BlockState cropState = blockItem.getBlock().defaultBlockState();
-                if(cropState.canSurvive(level, cropPos)) {
+                if (cropState.canSurvive(level, cropPos)) {
                     level.setBlockAndUpdate(cropPos, blockItem.getBlock().defaultBlockState());
                     stack.shrink(1);
                     consumeFuel(getMinFuelToWork(), false);
@@ -133,7 +164,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     }
 
     public void doConsumeProcess(ItemStack stack) {
-        if (fuelTimer %20==0) {
+        if (soilTimer == ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get()) {
             int toAdd = tryConsumeStack(stack);
             if (toAdd > 0) {
 //            AgriculturalEnhancements.debugLog("Doing fuel process");
@@ -141,7 +172,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                 if (!addFertilizer(getFertilizerToAdd(), true)) {
                     setFertilizerToAdd(getMaxFertilizer() - getCurrentFertilizer());
                 }
-                setIncrementalFertilizerToAdd(getFertilizerToAdd()/20);
+                setIncrementalFertilizerToAdd(getFertilizerToAdd() / ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get());
             }
         }
         if (getFertilizerToAdd() > 0) {
@@ -153,7 +184,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     public int tryConsumeStack(ItemStack stack) {
         if (!stack.isEmpty()) {
             removeFromSlot(MachineUtils.Area.INGREDIENT, 0, 1, false);
-            return 100;
+            return 5 * ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get();
         }
         return 0;
     }
@@ -179,6 +210,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         machineData.set(CropManagerData.Data.FERTILIZER, tag.getInt("fertilizer"));
         soilTimer = tag.getInt("soilTimer");
         plantTimer = tag.getInt("plantTimer");
+        hasTilled = tag.getBoolean("hasTilled");
     }
 
     @Override
@@ -192,6 +224,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         tag.putInt("fertilizer", getCurrentFertilizer());
         tag.putInt("soilTimer", soilTimer);
         tag.putInt("plantTimer", plantTimer);
+        tag.putBoolean("hasTilled", hasTilled);
     }
 
     @Nonnull
@@ -286,18 +319,22 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         return ConfigSettings.CROP_MANAGER_FERTILIZER_STORAGE.get();
     }
 
-    public void setFertilizerToAdd(int toSet){
-        this.fertilizerToAdd=toSet;
+    public void setFertilizerToAdd(int toSet) {
+        this.fertilizerToAdd = toSet;
     }
+
     public int getFertilizerToAdd() {
         return this.fertilizerToAdd;
     }
+
     public void setIncrementalFertilizerToAdd(int increment) {
         this.incrementalFertilizerToAdd = increment;
     }
+
     public int getIncrementalFertilizerToAdd() {
         return this.incrementalFertilizerToAdd;
     }
+
     public int getCurrentFertilizer() {
         return machineData.get(CropManagerData.Data.FERTILIZER);
     }

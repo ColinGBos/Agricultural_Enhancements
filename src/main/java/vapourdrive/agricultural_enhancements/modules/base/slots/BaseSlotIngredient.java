@@ -7,7 +7,7 @@ import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 
 import javax.annotation.Nonnull;
 
-public class BaseSlotIngredient extends AbstractMachineSlot{
+public class BaseSlotIngredient extends AbstractMachineSlot {
     protected final IItemHandler itemHandler;
     private final int index;
     protected final Level world;
@@ -28,12 +28,12 @@ public class BaseSlotIngredient extends AbstractMachineSlot{
 
     @Override
     public boolean mayPlace(@Nonnull ItemStack stack) {
-        if (stack.isEmpty() || !this.isValidIngredient(stack)){
+        if (stack.isEmpty() || !this.isValidIngredient(stack)) {
             AgriculturalEnhancements.debugLog("Returning false from parent class");
             return false;
         }
         boolean ret = itemHandler.isItemValid(index, stack);
-        AgriculturalEnhancements.debugLog("Itemhandler says: "+ret);
+        AgriculturalEnhancements.debugLog("Itemhandler says: " + ret);
         return ret;
     }
 

@@ -14,7 +14,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.*;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.Fertilizer;
+import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerRecipe;
 import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.*;
 import vapourdrive.agricultural_enhancements.modules.harvester.*;
 import vapourdrive.agricultural_enhancements.modules.irrigation.IrrigationPipeBlock;
@@ -96,7 +97,7 @@ public class Registration {
 //    public static final RegistryObject<ItemFurnaceCore> THERMAL_CORE_ITEM = ITEMS.register("thermal_core", () -> new ItemFurnaceCore("speed"));
 //    public static final RegistryObject<ItemCrystal> CRYSTAL_GEM_ITEM = ITEMS.register("crystal_gem_item", ItemCrystal::new);
 
-    public static final RegistryObject<RecipeSerializer<FertilizerRecipe>> FERTILIZER_SERIALIZER = RECIPE_SERIALIZERS.register("fertilizer",()->FertilizerRecipe.Serializer.INSTANCE);
-    public static final RegistryObject<RecipeType<FertilizerRecipe>> FERTILIZER_TYPE = RECIPE_TYPES.register("fertilizer",()->FertilizerRecipe.Type.INSTANCE);
+    public static final RegistryObject<RecipeSerializer<FertilizerRecipe>> FERTILIZER_SERIALIZER = RECIPE_SERIALIZERS.register("fertilizer", () -> FertilizerRecipe.Serializer.INSTANCE);
+    public static final RegistryObject<RecipeType<FertilizerRecipe>> FERTILIZER_TYPE = RECIPE_TYPES.register("fertilizer", () -> FertilizerRecipe.Type.INSTANCE);
 
 }

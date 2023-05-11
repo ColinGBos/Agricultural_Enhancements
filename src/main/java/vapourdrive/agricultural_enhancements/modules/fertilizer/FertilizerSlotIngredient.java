@@ -17,7 +17,7 @@ public class FertilizerSlotIngredient extends BaseSlotIngredient {
     protected boolean isValidIngredient(ItemStack stack) {
         AgriculturalEnhancements.debugLog("calling ingredient check");
         boolean ret = this.world.getRecipeManager().getRecipeFor(Registration.FERTILIZER_TYPE.get(), new SimpleContainer(stack), this.world).isPresent();
-        AgriculturalEnhancements.debugLog("Slot Ingredient check: "+ret);
+        AgriculturalEnhancements.debugLog("Slot Ingredient check: " + ret);
         return ret;
     }
 }

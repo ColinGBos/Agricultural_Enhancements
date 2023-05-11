@@ -30,7 +30,7 @@ public class Fertilizer extends Item {
     @Override
     public @NotNull InteractionResult useOn(@NotNull UseOnContext ctx) {
         AgriculturalEnhancements.debugLog("Use item");
-        for (int i = 0; i<=1; i++) {
+        for (int i = 0; i <= 1; i++) {
             BlockState state = ctx.getLevel().getBlockState(ctx.getClickedPos().relative(Direction.DOWN, i));
             if (state.hasProperty(TilledSoilBlock.SOIL_NUTRIENTS)) {
                 if (state.getValue(TilledSoilBlock.SOIL_NUTRIENTS) < TilledSoilBlock.MAX_NUTRIENTS) {

@@ -117,18 +117,18 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
                         for (int l = 0; l < 10; l++) {
                             crop.randomTick(state, pLevel, blockPos, pRandom);
 //                            animateTick(pState, pLevel, pPos, pRandom);
-                            stop=true;
+                            stop = true;
                         }
                     }
-                    BlockPos soilPos = pPos.offset(i, k-soilOffset, j);
+                    BlockPos soilPos = pPos.offset(i, k - soilOffset, j);
                     BlockState soilState = pLevel.getBlockState(soilPos);
                     if (!soilState.isAir() && soilState.getBlock() instanceof TilledSoilBlock) {
                         if (!pLevel.isClientSide()) {
                             int moisture = soilState.getValue(TilledSoilBlock.SOIL_MOISTURE);
-                            pLevel.setBlock(soilPos, soilState.setValue(TilledSoilBlock.SOIL_MOISTURE, Math.min(TilledSoilBlock.MAX_MOISTURE, moisture+2)),19);
+                            pLevel.setBlock(soilPos, soilState.setValue(TilledSoilBlock.SOIL_MOISTURE, Math.min(TilledSoilBlock.MAX_MOISTURE, moisture + 2)), 19);
                         }
                     }
-                    if(stop){
+                    if (stop) {
                         break;
                     }
                 }

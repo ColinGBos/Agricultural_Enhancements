@@ -35,6 +35,7 @@ import java.util.List;
 
 public class WateringCan extends Item {
     DecimalFormat df = new DecimalFormat("#,###");
+
     public WateringCan(Item.Properties properties) {
         super(properties.stacksTo(1));
     }
@@ -62,7 +63,7 @@ public class WateringCan extends Item {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
-        if(getWater(pPlayer.getItemInHand(pUsedHand)) < getMaxWater()) {
+        if (getWater(pPlayer.getItemInHand(pUsedHand)) < getMaxWater()) {
             BlockPos pos;
             BlockHitResult blockhitresult = getPlayerPOVHitResult(pPlayer.getLevel(), pPlayer, ClipContext.Fluid.SOURCE_ONLY);
             if (blockhitresult.getType() == HitResult.Type.BLOCK) {
@@ -107,7 +108,7 @@ public class WateringCan extends Item {
                     if (level.getRandom().nextFloat() > 0.5) {
                         if (!level.isClientSide()) {
                             int moisture = soilState.getValue(TilledSoilBlock.SOIL_MOISTURE);
-                            level.setBlock(soilPos, soilState.setValue(TilledSoilBlock.SOIL_MOISTURE, Math.min(TilledSoilBlock.MAX_MOISTURE, moisture+2)),19);
+                            level.setBlock(soilPos, soilState.setValue(TilledSoilBlock.SOIL_MOISTURE, Math.min(TilledSoilBlock.MAX_MOISTURE, moisture + 2)), 19);
 //                            soilState.setValue(TilledSoilBlock.SOIL_MOISTURE, Math.min(TilledSoilBlock.MAX_MOISTURE, moisture+1));
                         }
                     }
@@ -116,11 +117,11 @@ public class WateringCan extends Item {
         }
     }
 
-    public void splash(Level level, BlockPos pos){
+    public void splash(Level level, BlockPos pos) {
         for (int i = 0; i <= 5; i++) {
             double d3 = (level.getRandom().nextDouble() - 0.5) * 0.2;
             double d4 = (level.getRandom().nextDouble() - 0.5) * 0.2;
-    //                AgriculturalEnhancements.debugLog("X speed: "+d0+" Z speed"+d2);
+            //                AgriculturalEnhancements.debugLog("X speed: "+d0+" Z speed"+d2);
             level.addParticle(ParticleTypes.SPLASH, pos.getX() + 0.5 + d3 * 5, pos.getY() + 1.25, pos.getZ() + 0.5 + d4 * 5, d3, 0.0D, d4);
         }
     }
@@ -137,20 +138,20 @@ public class WateringCan extends Item {
 //    }
 
     public void onUsingTick(ItemStack stack, LivingEntity pLivingEntity, int count) {
-        if(getWater(stack)<=0) {
+        if (getWater(stack) <= 0) {
             return;
         }
 
-        if(count%2==0 && count<995){
+        if (count % 2 == 0 && count < 995) {
             AgriculturalEnhancements.debugLog("Tick");
             if (pLivingEntity instanceof Player player) {
                 BlockPos pos = player.getOnPos().relative(Direction.UP).relative(player.getDirection());
                 BlockHitResult blockhitresult = getPlayerPOVHitResult(player.getLevel(), player, ClipContext.Fluid.NONE);
-                if(blockhitresult.getType() == HitResult.Type.BLOCK){
+                if (blockhitresult.getType() == HitResult.Type.BLOCK) {
                     pos = blockhitresult.getBlockPos();
                 }
-                if (count%10==0){
-                    AgriculturalEnhancements.debugLog("Count: "+count);
+                if (count % 10 == 0) {
+                    AgriculturalEnhancements.debugLog("Count: " + count);
                     water(pos, pLivingEntity.getLevel(), stack);
                     consumeWater(stack, 50);
                 }
@@ -171,13 +172,13 @@ public class WateringCan extends Item {
 
     @Override
     public int getBarWidth(@NotNull ItemStack pStack) {
-        return Math.round((float)getWater(pStack)/(float)getMaxWater() * 13.0F);
+        return Math.round((float) getWater(pStack) / (float) getMaxWater() * 13.0F);
     }
 
     @Override
     public int getBarColor(@NotNull ItemStack pStack) {
-        float f = (float)getWater(pStack)/(float)getMaxWater()*0.5f;
-        return Mth.hsvToRgb(0.6F, 0.5F+f, 0.5F+f);
+        float f = (float) getWater(pStack) / (float) getMaxWater() * 0.5f;
+        return Mth.hsvToRgb(0.6F, 0.5F + f, 0.5F + f);
     }
 
     @Override
@@ -194,10 +195,10 @@ public class WateringCan extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(Component.literal("Water: ").append(df.format(getWater(pStack)) + "/" + df.format(getMaxWater())+" mB").withStyle(ChatFormatting.BLUE));
+        pTooltipComponents.add(Component.literal("Water: ").append(df.format(getWater(pStack)) + "/" + df.format(getMaxWater()) + " mB").withStyle(ChatFormatting.BLUE));
     }
 
-    public int getWater(ItemStack stack){
+    public int getWater(ItemStack stack) {
         if (!stack.hasTag()) {
             return 0;
         } else {
@@ -206,16 +207,16 @@ public class WateringCan extends Item {
         }
     }
 
-    public void setWater(ItemStack stack, int water){
+    public void setWater(ItemStack stack, int water) {
         stack.getOrCreateTag().putInt("Water", Math.min(water, getMaxWater()));
     }
 
-    public void consumeWater(ItemStack stack, int water){
-        AgriculturalEnhancements.debugLog("Consuming: "+water);
-        stack.getOrCreateTag().putInt("Water", Math.max(getWater(stack)-water, 0));
+    public void consumeWater(ItemStack stack, int water) {
+        AgriculturalEnhancements.debugLog("Consuming: " + water);
+        stack.getOrCreateTag().putInt("Water", Math.max(getWater(stack) - water, 0));
     }
 
-    public int getMaxWater(){
+    public int getMaxWater() {
         return 1000;
     }
 

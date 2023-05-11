@@ -112,10 +112,10 @@ public class MachineUtils {
 //            AgriculturalEnhancements.debugLog("Has Fuel Stack");
             if (user.getCurrentFuelStack().isEmpty() || !ItemStack.isSame(user.getCurrentFuelStack(), fuel)) {
                 user.setCurrentFuelStack(fuel.copy());
-                user.setCurrentBurn((int) (getBurnDuration(fuel)));
+                user.setCurrentBurn(getBurnDuration(fuel));
             }
             if (user.getCurrentFuel() + user.getCurrentBurn() <= user.getMaxFuel() || user.getCurrentFuel() < user.getMinFuelToWork()) {
-                AgriculturalEnhancements.debugLog("Fuel: "+user.getCurrentFuel()+" current burn: "+user.getCurrentBurn());
+                AgriculturalEnhancements.debugLog("Fuel: " + user.getCurrentFuel() + " current burn: " + user.getCurrentBurn());
                 if (user.getCurrentFuelStack().hasCraftingRemainingItem()) {
 
                     ItemStack fuelRemainder = user.getCurrentFuelStack().getCraftingRemainingItem();
@@ -129,7 +129,7 @@ public class MachineUtils {
                 user.removeFromSlot(Area.FUEL, 0, 1, false);
                 if (!ItemStack.isSame(user.getCurrentFuelStack(), fuel)) {
                     user.setCurrentFuelStack(ItemStack.EMPTY);
-                    user.setCurrentBurn((int) (getBurnDuration(fuel)));
+                    user.setCurrentBurn(getBurnDuration(fuel));
                 }
                 AgriculturalEnhancements.debugLog("CurrentBurn: " + user.getCurrentBurn());
                 return user.getCurrentBurn();

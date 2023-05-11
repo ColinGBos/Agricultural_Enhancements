@@ -1,7 +1,6 @@
 package vapourdrive.agricultural_enhancements;
 
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -16,7 +15,6 @@ import vapourdrive.agricultural_enhancements.setup.ModSetup;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import java.util.ArrayList;
-import java.util.List;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(AgriculturalEnhancements.MODID)
@@ -44,7 +42,7 @@ public class AgriculturalEnhancements {
         }
     }
 
-    private static boolean isDebugMode(){
+    private static boolean isDebugMode() {
         return java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("jdwp") && debugMode;
     }
 

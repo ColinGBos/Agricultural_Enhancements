@@ -1,7 +1,7 @@
 {
-    "parent": "agriculturalenhancements:block/template_tilled_soil",
-    "textures": {
-        "soil": "agriculturalenhancements:block/soil_moist2_fert3",
-        "top": "agriculturalenhancements:block/tilled_soil_moist2_fert3"
-    }
+  "parent": "agriculturalenhancements:block/template_tilled_soil",
+  "textures": {
+    "soil": "agriculturalenhancements:block/soil_moist2_fert3",
+    "top": "agriculturalenhancements:block/tilled_soil_moist2_fert3"
+  }
 }

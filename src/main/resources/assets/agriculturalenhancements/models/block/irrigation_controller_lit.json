@@ -1,26 +1,82 @@
 {
-	"parent": "block/cube",
-	"credit": "Made with Blockbench",
-	"textures": {
-		"0": "agriculturalenhancements:block/irrigation_controller_back",
-		"1": "agriculturalenhancements:block/irrigation_controller_bottom",
-		"2": "agriculturalenhancements:block/irrigation_controller_front_lit",
-		"3": "agriculturalenhancements:block/irrigation_controller_side",
-		"4": "agriculturalenhancements:block/irrigation_controller_top",
-		"particle": "agriculturalenhancements:block/irrigation_controller_back"
-	},
-	"elements": [
-		{
-			"from": [0, 0, 0],
-			"to": [16, 16, 16],
-			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#2"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#3"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#3"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#4"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
-			}
-		}
-	]
+  "parent": "block/cube",
+  "credit": "Made with Blockbench",
+  "textures": {
+    "0": "agriculturalenhancements:block/irrigation_controller_back",
+    "1": "agriculturalenhancements:block/irrigation_controller_bottom",
+    "2": "agriculturalenhancements:block/irrigation_controller_front_lit",
+    "3": "agriculturalenhancements:block/irrigation_controller_side",
+    "4": "agriculturalenhancements:block/irrigation_controller_top",
+    "particle": "agriculturalenhancements:block/irrigation_controller_back"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#2"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#3"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#3"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#4"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#1"
+        }
+      }
+    }
+  ]
 }

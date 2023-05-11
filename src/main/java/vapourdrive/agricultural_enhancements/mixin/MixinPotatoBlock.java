@@ -1,7 +1,6 @@
 package vapourdrive.agricultural_enhancements.mixin;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CarrotBlock;
 import net.minecraft.world.level.block.PotatoBlock;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Final;

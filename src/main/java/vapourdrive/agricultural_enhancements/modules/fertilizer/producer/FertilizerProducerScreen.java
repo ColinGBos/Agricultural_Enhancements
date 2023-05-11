@@ -23,7 +23,7 @@ public class FertilizerProducerScreen extends AbstractBaseMachineScreen<Fertiliz
 
     @Override
     protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
-        if(AgriculturalEnhancements.debugMode) {
+        if (AgriculturalEnhancements.debugMode) {
             int horStart = -100;
             drawString(matrixStack, Minecraft.getInstance().font, "N: " + menu.getElementStored(FertilizerProducerData.Data.N), horStart, 10, 0xffffff);
             drawString(matrixStack, Minecraft.getInstance().font, "P: " + menu.getElementStored(FertilizerProducerData.Data.P), horStart, 20, 0xffffff);
@@ -39,9 +39,9 @@ public class FertilizerProducerScreen extends AbstractBaseMachineScreen<Fertiliz
 
         FertilizerProducerData.Data[] elements = {FertilizerProducerData.Data.N, FertilizerProducerData.Data.P, FertilizerProducerData.Data.K};
         int i = 0;
-        for(FertilizerProducerData.Data element:elements) {
+        for (FertilizerProducerData.Data element : elements) {
             int m = (int) (this.machineContainer.getElementPercentage(element) * (46));
-            this.blit(matrixStack, this.leftPos + 67+(10*i), this.topPos + 19 + 46 - m, 176+(6*i), 46 + 46 - m, 6, m);
+            this.blit(matrixStack, this.leftPos + 67 + (10 * i), this.topPos + 19 + 46 - m, 176 + (6 * i), 46 + 46 - m, 6, m);
             i++;
         }
     }
@@ -56,10 +56,10 @@ public class FertilizerProducerScreen extends AbstractBaseMachineScreen<Fertiliz
 
         FertilizerProducerData.Data[] elements = {FertilizerProducerData.Data.N, FertilizerProducerData.Data.P, FertilizerProducerData.Data.K};
         int i = 0;
-        for(FertilizerProducerData.Data element:elements) {
-            if (notCarrying && isInRect(this.leftPos + 67+(10*i), this.topPos + 19, 6, 46, mouseX, mouseY)) {
+        for (FertilizerProducerData.Data element : elements) {
+            if (notCarrying && isInRect(this.leftPos + 67 + (10 * i), this.topPos + 19, 6, 46, mouseX, mouseY)) {
                 int elementValue = machineContainer.getElementStored(element) / ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get();
-                hoveringText.add(Component.literal(element.name()+": ").append(df.format(elementValue) + "/" + df.format(this.machineContainer.getMaxElement()/ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get())));
+                hoveringText.add(Component.literal(element.name() + ": ").append(df.format(elementValue) + "/" + df.format(this.machineContainer.getMaxElement() / ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get())));
             }
             i++;
         }
@@ -71,7 +71,6 @@ public class FertilizerProducerScreen extends AbstractBaseMachineScreen<Fertiliz
             renderComponentTooltip(matrixStack, hoveringText, mouseX, mouseY);
         }
     }
-
 
 
 }

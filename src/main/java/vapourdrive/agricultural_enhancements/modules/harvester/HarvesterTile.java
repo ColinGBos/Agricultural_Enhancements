@@ -42,7 +42,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
     private int harvestTimer = 0;
 
     public HarvesterTile(BlockPos pos, BlockState state) {
-        super(HARVESTER_TILE.get(), pos, state, ConfigSettings.HARVESTER_FUEL_STORAGE.get()*100, ConfigSettings.HARVESTER_FUEL_TO_WORK.get(), new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14});
+        super(HARVESTER_TILE.get(), pos, state, ConfigSettings.HARVESTER_FUEL_STORAGE.get() * 100, ConfigSettings.HARVESTER_FUEL_TO_WORK.get(), new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14});
     }
 
     @Override
@@ -51,7 +51,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         if (harvestTimer % ConfigSettings.HARVESTER_PROCESS_TIME.get() == 0) {
             doWorkProcesses(state);
         }
-        harvestTimer ++;
+        harvestTimer++;
         if (harvestTimer >= ConfigSettings.HARVESTER_PROCESS_TIME.get()) {
             harvestTimer = 0;
         }
@@ -107,11 +107,10 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
             changeStateIfNecessary(state, false);
             return false;
         }
-        if(outputHandler.isFull()){
+        if (outputHandler.isFull()) {
             changeStateIfNecessary(state, false);
             return false;
-        }
-        else{
+        } else {
             changeStateIfNecessary(state, true);
             return true;
         }

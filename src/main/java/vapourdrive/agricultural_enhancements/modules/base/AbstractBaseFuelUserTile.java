@@ -37,7 +37,7 @@ public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IF
     public void tickServer(BlockState state) {
         ItemStack fuel = getStackInSlot(MachineUtils.Area.FUEL, 0);
         MachineUtils.doFuelProcess(fuel, fuelTimer, this);
-        fuelTimer ++;
+        fuelTimer++;
         if (fuelTimer >= 10) {
             fuelTimer = 0;
         }

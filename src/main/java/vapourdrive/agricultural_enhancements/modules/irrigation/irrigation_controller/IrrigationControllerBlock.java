@@ -17,6 +17,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineBlock;
+
 import javax.annotation.Nullable;
 
 public class IrrigationControllerBlock extends AbstractBaseMachineBlock {

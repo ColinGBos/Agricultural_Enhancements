@@ -17,7 +17,6 @@ import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineContainer;
 import vapourdrive.agricultural_enhancements.modules.base.slots.SlotFuel;
 import vapourdrive.agricultural_enhancements.modules.base.slots.SlotOutput;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.FertilizerProducerTile;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import java.util.Objects;
@@ -36,7 +35,7 @@ public class CropManagerContainer extends AbstractBaseMachineContainer {
 
 
     public CropManagerContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, CropManagerData machineData) {
-        super(windowId, world, pos, inv, player, Registration.CROP_MANAGER_CONTAINER.get(),machineData);
+        super(windowId, world, pos, inv, player, Registration.CROP_MANAGER_CONTAINER.get(), machineData);
         tileEntity = (CropManagerTile) world.getBlockEntity(pos);
 
         //We use this vs the builtin method because we split all the shorts
@@ -49,8 +48,8 @@ public class CropManagerContainer extends AbstractBaseMachineContainer {
                 addSlot(new SlotFuel(h, 0, 8, 59));
                 addSlot(new SlotFertilzer(h, 1, 32, 59, this.world));
                 addSlot(new SlotOutput(h, 2, 56, 23));
-                addSlot(new SlotOutput(h, 3, 56, 23+18));
-                addSlot(new SlotOutput(h, 4, 56, 23+18*2));
+                addSlot(new SlotOutput(h, 3, 56, 23 + 18));
+                addSlot(new SlotOutput(h, 4, 56, 23 + 18 * 2));
                 addSlot(new SlotSeed(h, 5, SEED_INV_XPOS, SEED_INV_YPOS, this.world));
                 addSlot(new SlotSeed(h, 6, SEED_INV_XPOS + 18, SEED_INV_YPOS, this.world));
                 addSlot(new SlotSeed(h, 7, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS, this.world));
@@ -95,7 +94,7 @@ public class CropManagerContainer extends AbstractBaseMachineContainer {
             }
 
             //Non-output slots to Inventory
-            if (index >= 36 && index <= 40 ) {
+            if (index >= 36 && index <= 40) {
                 AgriculturalEnhancements.debugLog("From furnace non-output");
                 if (!this.moveItemStackTo(stack, 0, 36, false)) {
                     return ItemStack.EMPTY;

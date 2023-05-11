@@ -3,7 +3,8 @@ package vapourdrive.agricultural_enhancements.modules.harvester;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -28,7 +29,7 @@ public class HarvesterContainer extends AbstractBaseMachineContainer {
 
 
     public HarvesterContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, HarvesterData machineData) {
-        super(windowId, world, pos, inv, player, Registration.HARVESTER_CONTAINER.get(),machineData);
+        super(windowId, world, pos, inv, player, Registration.HARVESTER_CONTAINER.get(), machineData);
 
         //We use this vs the builtin method because we split all the shorts
         addSplitDataSlots(machineData);

@@ -6,7 +6,7 @@ public class ConfigSettings {
     public static final String CATEGORY_MOD = "agricultural_enhancements";
 
     public static ForgeConfigSpec SERVER_CONFIG;
-//    public static ForgeConfigSpec CLIENT_CONFIG;
+    //    public static ForgeConfigSpec CLIENT_CONFIG;
     public static final String SUBCATEGORY_FERTILIZER_PRODUCER = "fertilizer_producer";
     public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_FUEL_STORAGE;
     public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER;
@@ -31,6 +31,15 @@ public class ConfigSettings {
     public static ForgeConfigSpec.IntValue CROP_MANAGER_FUEL_TO_WORK;
     public static ForgeConfigSpec.IntValue CROP_MANAGER_SOIL_PROCESS_TIME;
     public static ForgeConfigSpec.IntValue CROP_MANAGER_CROP_PROCESS_TIME;
+
+    public static final String SUBCATEGORY_SOIL = "soil";
+    public static ForgeConfigSpec.BooleanValue SOIL_SOFT_TRAMPLE;
+    public static ForgeConfigSpec.BooleanValue SOIL_REQUIRES_FERTILIZER;
+    public static ForgeConfigSpec.DoubleValue SOIL_CHANCE_TO_BOOST_CROP_GROWTH;
+    public static ForgeConfigSpec.DoubleValue SOIL_CHANCE_TO_LOSE_NUTRIENTS;
+    public static ForgeConfigSpec.BooleanValue SOIL_BOOST_CROP_DROPS;
+    public static ForgeConfigSpec.DoubleValue SOIL_CHANCE_PER_NUTRIENT_LEVEL_TO_BOOST_DROPS;
+    public static ForgeConfigSpec.IntValue SOIL_MAX_ADDITIONAL_DROPS;
 
     static {
         ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
@@ -65,7 +74,7 @@ public class ConfigSettings {
 
         SERVER_BUILDER.comment("Irrigation Controller Settings").push(SUBCATEGORY_IRRIGATION_CONTROLLER);
         IRRIGATION_CONTROLLER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Irrigation Controller").defineInRange("irrigationControllerFuelStorage", 32000, 5, 1000000);
-        IRRIGATION_CONTROLLER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed while working, consumed once per second").defineInRange("irrigationControllerFuelConsumption", 50, 10, 10000);
+        IRRIGATION_CONTROLLER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed while working, consumed once per second").defineInRange("irrigationControllerFuelConsumption", 100, 10, 10000);
         IRRIGATION_CONTROLLER_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between pipe pressurizing events").defineInRange("irrigationControllerTicksBetweenWork", 20, 20, 320);
         SERVER_BUILDER.pop();
 
@@ -75,6 +84,16 @@ public class ConfigSettings {
         CROP_MANAGER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel to do one unit of work, planting or managing soil").defineInRange("cropManagerFuelConsumption", 2400, 10, 10000);
         CROP_MANAGER_SOIL_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between fertilizing soil, works all 9 blocks").defineInRange("cropManagerTicksBetweenFertilizingSoil", 40, 20, 320);
         CROP_MANAGER_CROP_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between planting crops, works one block at a time").defineInRange("cropManagerTicksBetweenPlanting", 5, 5, 160);
+        SERVER_BUILDER.pop();
+
+        SERVER_BUILDER.comment("SOIL Settings").push(SUBCATEGORY_SOIL);
+        SOIL_SOFT_TRAMPLE = SERVER_BUILDER.comment("Enables the soft trample feature (plants drop to minimum age on trample)").define("soilEnableSoftTrample", true);
+        SOIL_REQUIRES_FERTILIZER = SERVER_BUILDER.comment("When tilling dirt with a hoe, will only turn into soil with use of fertilizer in off-hand").define("soilTillsWithFertilizer", true);
+        SOIL_CHANCE_TO_BOOST_CROP_GROWTH = SERVER_BUILDER.comment("Chance per random tick to tick crops planted above; every random tick").defineInRange("soilChanceToBoostCropTicks", 0.15f, 0f, 1f);
+        SOIL_CHANCE_TO_LOSE_NUTRIENTS = SERVER_BUILDER.comment("Chance per crop boost that the soil loses nutrients").defineInRange("soilChanceToLoseNutrients", 0.1f, 0f, 1f);
+        SOIL_BOOST_CROP_DROPS = SERVER_BUILDER.comment("Enables the drop additions for the tilled soil").define("soilEnableAdditionalDrops", true);
+        SOIL_CHANCE_PER_NUTRIENT_LEVEL_TO_BOOST_DROPS = SERVER_BUILDER.comment("Chance per nutrient level to boost crop drops").defineInRange("soilChancePerNutrientLevelToBoostDrops", 0.2f, 0f, 1f);
+        SOIL_MAX_ADDITIONAL_DROPS = SERVER_BUILDER.comment("Max additional drops for each different item that can be added").defineInRange("soilMaxAdditionalDrops", 5, 0, 5);
         SERVER_BUILDER.pop();
 
     }
