@@ -6,13 +6,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.commands.ModCommands;
 
 import static vapourdrive.agricultural_enhancements.AgriculturalEnhancements.seeds;
 
@@ -37,8 +34,4 @@ public class ModSetup {
         AgriculturalEnhancements.debugLog(seeds.toString());
     }
 
-    @SubscribeEvent
-    public static void serverLoad(RegisterCommandsEvent event) {
-        ModCommands.register(event.getDispatcher());
-    }
 }

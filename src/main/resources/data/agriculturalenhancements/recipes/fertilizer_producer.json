@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "###",
-    "HCH",
-    "SFS"
+    "SCS",
+    "HFH"
   ],
   "key": {
     "#": {
@@ -13,17 +13,17 @@
       "tag": "minecraft:stone_tool_materials"
     },
     "C": {
-      "tag": "forge:chests/wooden"
+      "item": "minecraft:cauldron"
     },
     "H": {
-      "item": "minecraft:iron_axe"
+      "item": "minecraft:bucket"
     },
     "F": {
       "item": "minecraft:furnace"
     }
   },
   "result": {
-    "item": "agriculturalenhancements:harvester",
+    "item": "agriculturalenhancements:fertilizer_producer",
     "count": 1
   }
 }

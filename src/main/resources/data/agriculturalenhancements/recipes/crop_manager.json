@@ -1,9 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "###",
-    "HCH",
-    "SFS"
+    "SFS",
+    "HCB",
+    "###"
   ],
   "key": {
     "#": {
@@ -16,14 +16,17 @@
       "tag": "forge:chests/wooden"
     },
     "H": {
-      "item": "minecraft:iron_axe"
+      "item": "minecraft:iron_hoe"
+    },
+    "B": {
+      "item": "minecraft:dispenser"
     },
     "F": {
       "item": "minecraft:furnace"
     }
   },
   "result": {
-    "item": "agriculturalenhancements:harvester",
+    "item": "agriculturalenhancements:crop_manager",
     "count": 1
   }
 }

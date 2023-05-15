@@ -6,7 +6,9 @@ import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
-import vapourdrive.agricultural_enhancements.modules.irrigation.IIrrigationBlock;
+import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
+import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineBlock;
+import vapourdrive.agricultural_enhancements.modules.base.IFuelUser;
 import vapourdrive.agricultural_enhancements.modules.irrigation.IrrigationPipeBlock;
 import vapourdrive.agricultural_enhancements.modules.soil.TilledSoilBlock;
 
@@ -20,7 +22,7 @@ public class JadePlugin implements IWailaPlugin {
 
     @Override
     public void register(IWailaCommonRegistration registration) {
-        //TODO register data providers
+        registration.registerBlockDataProvider(IFuelUserContentProvider.INSTANCE, AbstractBaseFuelUserTile.class);
     }
 
     @Override
@@ -28,6 +30,7 @@ public class JadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(SoilContentProvider.INSTANCE, TilledSoilBlock.class);
         registration.registerBlockComponent(CropContentProvider.INSTANCE, CropBlock.class);
         registration.registerBlockComponent(IrrigationContentProvider.INSTANCE, IrrigationPipeBlock.class);
+        registration.registerBlockComponent(IFuelUserContentProvider.INSTANCE, AbstractBaseMachineBlock.class);
     }
 
 }

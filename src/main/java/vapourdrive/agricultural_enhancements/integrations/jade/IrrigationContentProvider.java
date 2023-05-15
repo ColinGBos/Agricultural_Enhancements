@@ -15,7 +15,7 @@ public enum IrrigationContentProvider implements IBlockComponentProvider {
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig pluginConfig) {
-        boolean irrigation = blockAccessor.getBlockState().getValue(IrrigationPipeBlock.IRRIGATION)>0;
+        int irrigation = blockAccessor.getBlockState().getValue(IrrigationPipeBlock.IRRIGATION);
         tooltip.add(Component.translatable("agriculturalenhancements.jade.irrigation", irrigation));
     }
 

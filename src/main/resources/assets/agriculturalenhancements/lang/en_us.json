@@ -33,7 +33,9 @@
   "config.jade.plugin_minecraft.agriculturalenhancements.soil": "Agricultural Enhancements Soil Jade Plugin",
   "config.jade.plugin_minecraft.agriculturalenhancements.crops": "Agricultural Enhancements Crops->Soil Jade Plugin",
   "config.jade.plugin_minecraft.agriculturalenhancements.irrigation": "Agricultural Enhancements Irrigation Pipe Jade Plugin",
+  "config.jade.plugin_minecraft.agriculturalenhancements.fuel": "Agricultural Enhancements Fuel Jade Plugin",
   "agriculturalenhancements.jade.nutrients": "Nutrients: %d",
   "agriculturalenhancements.jade.moisture": "Moisture: %d",
-  "agriculturalenhancements.jade.irrigation": "Water Pressure: %d"
+  "agriculturalenhancements.jade.irrigation": "Water Pressure: %d",
+  "agriculturalenhancements.jade.fuel": "Fuel: %d"
 }

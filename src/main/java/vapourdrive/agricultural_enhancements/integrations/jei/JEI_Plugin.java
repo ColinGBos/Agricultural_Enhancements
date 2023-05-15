@@ -12,8 +12,10 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerRecipe;
@@ -23,14 +25,15 @@ import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_contr
 import vapourdrive.agricultural_enhancements.modules.manager.CropManagerScreen;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @JeiPlugin
 public class JEI_Plugin implements IModPlugin {
 
-    public static RecipeType<FertilizerRecipe> FERTILIZER_TYPE =
-            new RecipeType<>(FertilizerRecipeCategory.UID, FertilizerRecipe.class);
+    public static final RecipeType<FertilizerRecipe> FERTILIZER_TYPE = new RecipeType<>(FertilizerRecipeCategory.UID, FertilizerRecipe.class);
+    public static final RecipeType<SeedRecipeWrapper> SEEDS = RecipeType.create(AgriculturalEnhancements.MODID, "crop_manager", SeedRecipeWrapper.class);
 
     @Override
     public @NotNull ResourceLocation getPluginUid() {
@@ -42,7 +45,7 @@ public class JEI_Plugin implements IModPlugin {
         registration.addRecipeClickArea(HarvesterScreen.class, 157, 20, 15, 15, RecipeTypes.FUELING);
         registration.addRecipeClickArea(IrrigationControllerScreen.class, 125, 20, 15, 15, RecipeTypes.FUELING);
         registration.addRecipeClickArea(FertilizerProducerScreen.class, 142, 5, 15, 15, RecipeTypes.FUELING, FERTILIZER_TYPE);
-        registration.addRecipeClickArea(CropManagerScreen.class, 142, 5, 15, 15, RecipeTypes.FUELING);
+        registration.addRecipeClickArea(CropManagerScreen.class, 142, 5, 15, 15, RecipeTypes.FUELING, SEEDS);
     }
 
     @Override
@@ -51,6 +54,7 @@ public class JEI_Plugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(Registration.HARVESTER_BLOCK.get()), RecipeTypes.FUELING);
         registration.addRecipeCatalyst(new ItemStack(Registration.IRRIGATION_CONTROLLER_BLOCK.get()), RecipeTypes.FUELING);
         registration.addRecipeCatalyst(new ItemStack(Registration.FERTILIZER_PRODUCER_BLOCK.get()), RecipeTypes.FUELING, FERTILIZER_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(Registration.CROP_MANAGER_BLOCK.get()), RecipeTypes.FUELING, SEEDS);
     }
 
     @Override
@@ -61,13 +65,26 @@ public class JEI_Plugin implements IModPlugin {
         registration.addIngredientInfo(new ItemStack(Registration.CROP_MANAGER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.crop_manager.info"));
 
         RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
-
         List<FertilizerRecipe> recipeList = recipeManager.getAllRecipesFor(FertilizerRecipe.Type.INSTANCE);
         registration.addRecipes(FERTILIZER_TYPE, recipeList);
+        registration.addRecipes(SEEDS, getSeedRecipes());
     }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(new FertilizerRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new SeedRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
     }
+
+    private List<SeedRecipeWrapper> getSeedRecipes(){
+        List<SeedRecipeWrapper> seedList = new ArrayList<>();
+        for (ItemLike seed:AgriculturalEnhancements.seeds){
+            if(seed.asItem() instanceof BlockItem seedBlockItem){
+//                AgriculturalEnhancements.debugLog(""+seed+" "+seedBlockItem.getBlock());
+                seedList.add(new SeedRecipeWrapper(seed,seedBlockItem.getBlock().getName()));
+            }
+        }
+        return seedList;
+    }
+
 }

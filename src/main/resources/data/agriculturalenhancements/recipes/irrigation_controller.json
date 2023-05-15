@@ -1,9 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "###",
-    "HCH",
-    "SFS"
+    "SFS",
+    "C#C",
+    "SBS"
   ],
   "key": {
     "#": {
@@ -13,17 +13,17 @@
       "tag": "minecraft:stone_tool_materials"
     },
     "C": {
-      "tag": "forge:chests/wooden"
+      "item": "agriculturalenhancements:irrigation_pipe"
     },
-    "H": {
-      "item": "minecraft:iron_axe"
+    "B": {
+      "item": "minecraft:bucket"
     },
     "F": {
       "item": "minecraft:furnace"
     }
   },
   "result": {
-    "item": "agriculturalenhancements:harvester",
+    "item": "agriculturalenhancements:irrigation_controller",
     "count": 1
   }
 }

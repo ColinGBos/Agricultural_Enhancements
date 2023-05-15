@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "C",
+    "I"
+  ],
+  "key": {
+    "C": {
+      "item": "agriculturalenhancements:irrigation_pipe"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "agriculturalenhancements:irrigation_sprayer",
+    "count": 1
+  }
+}
