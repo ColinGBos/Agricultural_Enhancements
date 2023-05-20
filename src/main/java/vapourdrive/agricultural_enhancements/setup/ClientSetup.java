@@ -5,10 +5,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.FertilizerProducerScreen;
-import vapourdrive.agricultural_enhancements.modules.harvester.HarvesterScreen;
-import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller.IrrigationControllerScreen;
-import vapourdrive.agricultural_enhancements.modules.manager.CropManagerScreen;
+import vapourdrive.agricultural_enhancements.content.fertilizer.producer.FertilizerProducerScreen;
+import vapourdrive.agricultural_enhancements.content.harvester.HarvesterScreen;
+import vapourdrive.agricultural_enhancements.content.irrigation.irrigation_controller.IrrigationControllerScreen;
+import vapourdrive.agricultural_enhancements.content.manager.CropManagerScreen;
 
 @Mod.EventBusSubscriber(modid = AgriculturalEnhancements.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {

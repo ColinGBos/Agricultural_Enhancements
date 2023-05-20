@@ -3,7 +3,6 @@ package vapourdrive.agricultural_enhancements.integrations.jei;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Block;
 
 public class SeedRecipeWrapper {
 

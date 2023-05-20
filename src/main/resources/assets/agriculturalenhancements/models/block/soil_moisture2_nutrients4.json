@@ -1,0 +1,6 @@
+{
+    "parent": "agriculturalenhancements:block/template_soil",
+    "textures": {
+        "soil": "agriculturalenhancements:block/soil_moist2_fert4"
+    }
+}

@@ -7,7 +7,7 @@ import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
-import vapourdrive.agricultural_enhancements.modules.soil.TilledSoilBlock;
+import vapourdrive.agricultural_enhancements.content.soil.TilledSoilBlock;
 
 public enum CropContentProvider implements IBlockComponentProvider {
     INSTANCE;
@@ -18,8 +18,8 @@ public enum CropContentProvider implements IBlockComponentProvider {
         if (state.hasProperty(TilledSoilBlock.SOIL_NUTRIENTS) && state.hasProperty(TilledSoilBlock.SOIL_NUTRIENTS)) {
             int nutrients = state.getValue(TilledSoilBlock.SOIL_NUTRIENTS);
             int moisture = state.getValue(TilledSoilBlock.SOIL_MOISTURE);
-            tooltip.add(Component.translatable("agriculturalenhancements.jade.nutrients", nutrients));
-            tooltip.add(Component.translatable("agriculturalenhancements.jade.moisture", moisture));
+            tooltip.add(Component.translatable("agriculturalenhancements.nutrients", nutrients));
+            tooltip.add(Component.translatable("agriculturalenhancements.moisture", moisture));
         }
     }
 

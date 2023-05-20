@@ -21,7 +21,7 @@ public class SeedRecipeCategory implements IRecipeCategory<SeedRecipeWrapper> {
     private final IDrawable slot;
     private final IDrawable icon;
 
-//    private final IDrawableStatic block;
+    //    private final IDrawableStatic block;
     public SeedRecipeCategory(IGuiHelper guiHelper) {
         background = guiHelper.createBlankDrawable(120, 18);
         slot = guiHelper.getSlotDrawable();
@@ -47,6 +47,7 @@ public class SeedRecipeCategory implements IRecipeCategory<SeedRecipeWrapper> {
     public @NotNull IDrawable getIcon() {
         return this.icon;
     }
+
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, SeedRecipeWrapper recipe, @NotNull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addIngredients(recipe.getSeedIngredient());
@@ -56,6 +57,6 @@ public class SeedRecipeCategory implements IRecipeCategory<SeedRecipeWrapper> {
     public void draw(@NotNull SeedRecipeWrapper recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull PoseStack stack, double mouseX, double mouseY) {
         slot.draw(stack);
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.font.draw(stack, recipe.getBlockName(), 22,5, 0xFF808080);
+        minecraft.font.draw(stack, recipe.getBlockName(), 22, 5, 0xFF808080);
     }
 }

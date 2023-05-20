@@ -11,22 +11,19 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.base.IFuelUser;
-import vapourdrive.agricultural_enhancements.modules.soil.TilledSoilBlock;
+import vapourdrive.agricultural_enhancements.content.base.IFuelUser;
 
 import java.text.DecimalFormat;
-import java.util.Objects;
 
 public enum IFuelUserContentProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
     INSTANCE;
-    private DecimalFormat df = new DecimalFormat("#,###");
+    private final DecimalFormat df = new DecimalFormat("#,###");
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig pluginConfig) {
         if (blockAccessor.getServerData().contains("Fuel")) {
             int i = blockAccessor.getServerData().getInt("Fuel");
-            tooltip.add(Component.translatable("agriculturalenhancements.jade.fuel", df.format(i)));
+            tooltip.add(Component.translatable("agriculturalenhancements.fuel", df.format(i)));
         }
     }
 
@@ -37,8 +34,8 @@ public enum IFuelUserContentProvider implements IBlockComponentProvider, IServer
 
     @Override
     public void appendServerData(CompoundTag data, ServerPlayer player, Level world, BlockEntity t, boolean showDetails) {
-        if(t instanceof IFuelUser user) {
-            data.putInt("Fuel", user.getCurrentFuel()/100);
+        if (t instanceof IFuelUser user) {
+            data.putInt("Fuel", user.getCurrentFuel() / 100);
         }
     }
 }

@@ -41,6 +41,12 @@ public class ConfigSettings {
     public static ForgeConfigSpec.DoubleValue SOIL_CHANCE_PER_NUTRIENT_LEVEL_TO_BOOST_DROPS;
     public static ForgeConfigSpec.IntValue SOIL_MAX_ADDITIONAL_DROPS;
 
+    public static final String SUBCATEGORY_SPRAYER = "sprayer";
+    public static ForgeConfigSpec.DoubleValue SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH;
+    public static ForgeConfigSpec.DoubleValue SPRAYER_CHANCE_TO_ANIMATE;
+    public static ForgeConfigSpec.IntValue SPRAYER_CROP_TICK_COUNT;
+    public static ForgeConfigSpec.IntValue SPRAYER_VERTICAL_RANGE;
+
     static {
         ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
 //        ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
@@ -86,7 +92,7 @@ public class ConfigSettings {
         CROP_MANAGER_CROP_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between planting crops, works one block at a time").defineInRange("cropManagerTicksBetweenPlanting", 5, 5, 160);
         SERVER_BUILDER.pop();
 
-        SERVER_BUILDER.comment("SOIL Settings").push(SUBCATEGORY_SOIL);
+        SERVER_BUILDER.comment("Soil Settings").push(SUBCATEGORY_SOIL);
         SOIL_SOFT_TRAMPLE = SERVER_BUILDER.comment("Enables the soft trample feature (plants drop to minimum age on trample)").define("soilEnableSoftTrample", true);
         SOIL_REQUIRES_FERTILIZER = SERVER_BUILDER.comment("When tilling dirt with a hoe, will only turn into soil with use of fertilizer in off-hand").define("soilTillsWithFertilizer", true);
         SOIL_CHANCE_TO_BOOST_CROP_GROWTH = SERVER_BUILDER.comment("Chance per random tick to tick crops planted above; every random tick").defineInRange("soilChanceToBoostCropTicks", 0.15f, 0f, 1f);
@@ -94,6 +100,13 @@ public class ConfigSettings {
         SOIL_BOOST_CROP_DROPS = SERVER_BUILDER.comment("Enables the drop additions for the tilled soil").define("soilEnableAdditionalDrops", true);
         SOIL_CHANCE_PER_NUTRIENT_LEVEL_TO_BOOST_DROPS = SERVER_BUILDER.comment("Chance per nutrient level to boost crop drops").defineInRange("soilChancePerNutrientLevelToBoostDrops", 0.2f, 0f, 1f);
         SOIL_MAX_ADDITIONAL_DROPS = SERVER_BUILDER.comment("Max additional drops for each different item that can be added").defineInRange("soilMaxAdditionalDrops", 5, 0, 5);
+        SERVER_BUILDER.pop();
+
+        SERVER_BUILDER.comment("Irrigation Sprayer Settings").push(SUBCATEGORY_SPRAYER);
+        SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH = SERVER_BUILDER.comment("Chance per random tick to tick crops within radius; every random tick").defineInRange("sprayerChanceToBoostCropTicks", 1f, 0f, 1f);
+        SPRAYER_CROP_TICK_COUNT = SERVER_BUILDER.comment("Number of ticks for each crop to potentially be updated during").defineInRange("sprayerCropUpdateTickCount", 10, 1, 25);
+        SPRAYER_VERTICAL_RANGE = SERVER_BUILDER.comment("Max number of blocks down from the sprayer the crop can be").defineInRange("sprayerMaxVerticalRange", 8, 2, 15);
+        SPRAYER_CHANCE_TO_ANIMATE = SERVER_BUILDER.comment("Chance per animation tick for the sprayer to spawn particles").defineInRange("sprayerChanceToAnimate", 0.2f, 0f, 1f);
         SERVER_BUILDER.pop();
 
     }

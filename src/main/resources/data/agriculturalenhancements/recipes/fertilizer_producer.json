@@ -6,10 +6,10 @@
     "HFH"
   ],
   "key": {
-    "#": {
+    "S": {
       "tag": "minecraft:planks"
     },
-    "S": {
+    "#": {
       "tag": "minecraft:stone_tool_materials"
     },
     "C": {

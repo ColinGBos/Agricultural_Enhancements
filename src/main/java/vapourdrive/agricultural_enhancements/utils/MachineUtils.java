@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.base.IFuelUser;
+import vapourdrive.agricultural_enhancements.content.base.IFuelUser;
 
 import java.util.ArrayList;
 import java.util.Collections;

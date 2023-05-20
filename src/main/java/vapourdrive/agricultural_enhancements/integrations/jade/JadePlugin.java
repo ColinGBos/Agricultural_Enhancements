@@ -6,11 +6,10 @@ import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
-import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineBlock;
-import vapourdrive.agricultural_enhancements.modules.base.IFuelUser;
-import vapourdrive.agricultural_enhancements.modules.irrigation.IrrigationPipeBlock;
-import vapourdrive.agricultural_enhancements.modules.soil.TilledSoilBlock;
+import vapourdrive.agricultural_enhancements.content.base.AbstractBaseFuelUserTile;
+import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineBlock;
+import vapourdrive.agricultural_enhancements.content.irrigation.IrrigationPipeBlock;
+import vapourdrive.agricultural_enhancements.content.soil.TilledSoilBlock;
 
 @WailaPlugin
 public class JadePlugin implements IWailaPlugin {

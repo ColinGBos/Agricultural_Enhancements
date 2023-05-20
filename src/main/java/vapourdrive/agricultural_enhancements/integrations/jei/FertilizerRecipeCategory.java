@@ -20,15 +20,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerRecipe;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.FertilizerProducerData;
+import vapourdrive.agricultural_enhancements.content.fertilizer.FertilizerRecipe;
+import vapourdrive.agricultural_enhancements.content.fertilizer.producer.FertilizerProducerData;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static vapourdrive.agricultural_enhancements.modules.base.AbstractBaseMachineScreen.isInRect;
+import static vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineScreen.isInRect;
 
 public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecipe> {
 

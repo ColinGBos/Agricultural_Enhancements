@@ -1,0 +1,112 @@
+{
+  "variants": {
+    "soil_moisture=0,soil_nutrients=0": {
+      "model": "agriculturalenhancements:block/soil_moisture0_nutrients0"
+    },
+    "soil_moisture=1,soil_nutrients=0": {
+      "model": "agriculturalenhancements:block/soil_moisture1_nutrients0"
+    },
+    "soil_moisture=2,soil_nutrients=0": {
+      "model": "agriculturalenhancements:block/soil_moisture2_nutrients0"
+    },
+    "soil_moisture=3,soil_nutrients=0": {
+      "model": "agriculturalenhancements:block/soil_moisture3_nutrients0"
+    },
+    "soil_moisture=4,soil_nutrients=0": {
+      "model": "agriculturalenhancements:block/soil_moisture4_nutrients0"
+    },
+    "soil_moisture=5,soil_nutrients=0": {
+      "model": "agriculturalenhancements:block/soil_moisture5_nutrients0"
+    },
+    "soil_moisture=0,soil_nutrients=1": {
+      "model": "agriculturalenhancements:block/soil_moisture0_nutrients1"
+    },
+    "soil_moisture=1,soil_nutrients=1": {
+      "model": "agriculturalenhancements:block/soil_moisture1_nutrients1"
+    },
+    "soil_moisture=2,soil_nutrients=1": {
+      "model": "agriculturalenhancements:block/soil_moisture2_nutrients1"
+    },
+    "soil_moisture=3,soil_nutrients=1": {
+      "model": "agriculturalenhancements:block/soil_moisture3_nutrients1"
+    },
+    "soil_moisture=4,soil_nutrients=1": {
+      "model": "agriculturalenhancements:block/soil_moisture4_nutrients1"
+    },
+    "soil_moisture=5,soil_nutrients=1": {
+      "model": "agriculturalenhancements:block/soil_moisture5_nutrients1"
+    },
+    "soil_moisture=0,soil_nutrients=2": {
+      "model": "agriculturalenhancements:block/soil_moisture0_nutrients2"
+    },
+    "soil_moisture=1,soil_nutrients=2": {
+      "model": "agriculturalenhancements:block/soil_moisture1_nutrients2"
+    },
+    "soil_moisture=2,soil_nutrients=2": {
+      "model": "agriculturalenhancements:block/soil_moisture2_nutrients2"
+    },
+    "soil_moisture=3,soil_nutrients=2": {
+      "model": "agriculturalenhancements:block/soil_moisture3_nutrients2"
+    },
+    "soil_moisture=4,soil_nutrients=2": {
+      "model": "agriculturalenhancements:block/soil_moisture4_nutrients2"
+    },
+    "soil_moisture=5,soil_nutrients=2": {
+      "model": "agriculturalenhancements:block/soil_moisture5_nutrients2"
+    },
+    "soil_moisture=0,soil_nutrients=3": {
+      "model": "agriculturalenhancements:block/soil_moisture0_nutrients3"
+    },
+    "soil_moisture=1,soil_nutrients=3": {
+      "model": "agriculturalenhancements:block/soil_moisture1_nutrients3"
+    },
+    "soil_moisture=2,soil_nutrients=3": {
+      "model": "agriculturalenhancements:block/soil_moisture2_nutrients3"
+    },
+    "soil_moisture=3,soil_nutrients=3": {
+      "model": "agriculturalenhancements:block/soil_moisture3_nutrients3"
+    },
+    "soil_moisture=4,soil_nutrients=3": {
+      "model": "agriculturalenhancements:block/soil_moisture4_nutrients3"
+    },
+    "soil_moisture=5,soil_nutrients=3": {
+      "model": "agriculturalenhancements:block/soil_moisture5_nutrients3"
+    },
+    "soil_moisture=0,soil_nutrients=4": {
+      "model": "agriculturalenhancements:block/soil_moisture0_nutrients4"
+    },
+    "soil_moisture=1,soil_nutrients=4": {
+      "model": "agriculturalenhancements:block/soil_moisture1_nutrients4"
+    },
+    "soil_moisture=2,soil_nutrients=4": {
+      "model": "agriculturalenhancements:block/soil_moisture2_nutrients4"
+    },
+    "soil_moisture=3,soil_nutrients=4": {
+      "model": "agriculturalenhancements:block/soil_moisture3_nutrients4"
+    },
+    "soil_moisture=4,soil_nutrients=4": {
+      "model": "agriculturalenhancements:block/soil_moisture4_nutrients4"
+    },
+    "soil_moisture=5,soil_nutrients=4": {
+      "model": "agriculturalenhancements:block/soil_moisture5_nutrients4"
+    },
+    "soil_moisture=0,soil_nutrients=5": {
+      "model": "agriculturalenhancements:block/soil_moisture0_nutrients5"
+    },
+    "soil_moisture=1,soil_nutrients=5": {
+      "model": "agriculturalenhancements:block/soil_moisture1_nutrients5"
+    },
+    "soil_moisture=2,soil_nutrients=5": {
+      "model": "agriculturalenhancements:block/soil_moisture2_nutrients5"
+    },
+    "soil_moisture=3,soil_nutrients=5": {
+      "model": "agriculturalenhancements:block/soil_moisture3_nutrients5"
+    },
+    "soil_moisture=4,soil_nutrients=5": {
+      "model": "agriculturalenhancements:block/soil_moisture4_nutrients5"
+    },
+    "soil_moisture=5,soil_nutrients=5": {
+      "model": "agriculturalenhancements:block/soil_moisture5_nutrients5"
+    }
+  }
+}

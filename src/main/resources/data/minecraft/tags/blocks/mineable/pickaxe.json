@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "agriculturalenhancements:harvester",
+    "agriculturalenhancements:fertilizer_producer",
+    "agriculturalenhancements:crop_manager",
     "agriculturalenhancements:irrigation_controller",
     "agriculturalenhancements:irrigation_pipe",
     "agriculturalenhancements:sprayer_pipe"

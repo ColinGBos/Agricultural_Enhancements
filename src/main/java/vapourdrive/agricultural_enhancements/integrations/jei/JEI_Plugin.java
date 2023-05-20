@@ -18,11 +18,11 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.FertilizerRecipe;
-import vapourdrive.agricultural_enhancements.modules.fertilizer.producer.FertilizerProducerScreen;
-import vapourdrive.agricultural_enhancements.modules.harvester.HarvesterScreen;
-import vapourdrive.agricultural_enhancements.modules.irrigation.irrigation_controller.IrrigationControllerScreen;
-import vapourdrive.agricultural_enhancements.modules.manager.CropManagerScreen;
+import vapourdrive.agricultural_enhancements.content.fertilizer.FertilizerRecipe;
+import vapourdrive.agricultural_enhancements.content.fertilizer.producer.FertilizerProducerScreen;
+import vapourdrive.agricultural_enhancements.content.harvester.HarvesterScreen;
+import vapourdrive.agricultural_enhancements.content.irrigation.irrigation_controller.IrrigationControllerScreen;
+import vapourdrive.agricultural_enhancements.content.manager.CropManagerScreen;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import java.util.ArrayList;
@@ -76,12 +76,12 @@ public class JEI_Plugin implements IModPlugin {
         registration.addRecipeCategories(new SeedRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
-    private List<SeedRecipeWrapper> getSeedRecipes(){
+    private List<SeedRecipeWrapper> getSeedRecipes() {
         List<SeedRecipeWrapper> seedList = new ArrayList<>();
-        for (ItemLike seed:AgriculturalEnhancements.seeds){
-            if(seed.asItem() instanceof BlockItem seedBlockItem){
+        for (ItemLike seed : AgriculturalEnhancements.seeds) {
+            if (seed.asItem() instanceof BlockItem seedBlockItem) {
 //                AgriculturalEnhancements.debugLog(""+seed+" "+seedBlockItem.getBlock());
-                seedList.add(new SeedRecipeWrapper(seed,seedBlockItem.getBlock().getName()));
+                seedList.add(new SeedRecipeWrapper(seed, seedBlockItem.getBlock().getName()));
             }
         }
         return seedList;

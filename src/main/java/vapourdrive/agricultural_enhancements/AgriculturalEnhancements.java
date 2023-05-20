@@ -24,6 +24,7 @@ public class AgriculturalEnhancements {
     public static final String MODID = "agriculturalenhancements";
     public static boolean debugMode = true;
     public static ArrayList<ItemLike> seeds = new ArrayList<>();
+
     public AgriculturalEnhancements() {
 //        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigSettings.CLIENT_CONFIG);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigSettings.SERVER_CONFIG);
