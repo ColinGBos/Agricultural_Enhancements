@@ -19,6 +19,7 @@ public class ConfigSettings {
     public static ForgeConfigSpec.IntValue HARVESTER_FUEL_STORAGE;
     public static ForgeConfigSpec.IntValue HARVESTER_FUEL_TO_WORK;
     public static ForgeConfigSpec.IntValue HARVESTER_PROCESS_TIME;
+    public static ForgeConfigSpec.BooleanValue HARVESTER_NON_DESTRUCTIVE_HARVESTING;
 
     public static final String SUBCATEGORY_IRRIGATION_CONTROLLER = "irrigation_controller";
     public static ForgeConfigSpec.IntValue IRRIGATION_CONTROLLER_FUEL_STORAGE;
@@ -76,6 +77,7 @@ public class ConfigSettings {
         HARVESTER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Harvester").defineInRange("harvesterFuelStorage", 64000, 5, 1000000);
         HARVESTER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed to harvest one crop").defineInRange("harvesterFuelConsumption", 2400, 100, 10000);
         HARVESTER_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between harvests").defineInRange("harvesterTicksBetweenHarvests", 20, 20, 320);
+        HARVESTER_NON_DESTRUCTIVE_HARVESTING = SERVER_BUILDER.comment("Enables the non-destructing harvesting of the Harvester - no need to replant crops").define("harvesterNonDestructive", true);
         SERVER_BUILDER.pop();
 
         SERVER_BUILDER.comment("Irrigation Controller Settings").push(SUBCATEGORY_IRRIGATION_CONTROLLER);

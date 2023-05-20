@@ -142,4 +142,8 @@ public class HarvesterContainer extends AbstractBaseMachineContainer {
 
         return itemstack;
     }
+
+    public boolean isNonDestructive() {
+        return this.machineData.get(1) == 1;
+    }
 }

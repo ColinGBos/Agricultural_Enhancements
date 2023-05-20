@@ -4,11 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.content.base.IFuelUser;
@@ -16,7 +13,6 @@ import vapourdrive.agricultural_enhancements.content.base.IFuelUser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class MachineUtils {
     public enum Area {
@@ -35,12 +31,6 @@ public class MachineUtils {
             //i.e. 100% efficiency is 100 consumption per tick, 125% is 80 consumption etc
             return net.minecraftforge.common.ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) * 100;
         }
-    }
-
-    public static Optional<SmeltingRecipe> getMatchingRecipeForInput(Level world, ItemStack itemStack) {
-        RecipeManager recipeManager = world.getRecipeManager();
-        SimpleContainer singleItemInventory = new SimpleContainer(itemStack);
-        return recipeManager.getRecipeFor(RecipeType.SMELTING, singleItemInventory, world);
     }
 
     public static List<ItemStack> cleanItemStacks(Iterable<? extends ItemStack> stacks) {
@@ -67,29 +57,15 @@ public class MachineUtils {
         return ret;
     }
 
-    public static void animate(Level world, BlockPos pos, RandomSource rand, SoundEvent sound, float pitch) {
-//        double d0 = (double)pos.getX() + 0.5D;
-//        double d1 = pos.getY();
-//        double d2 = (double)pos.getZ() + 0.5D;
-//        AgriculturalEnhancements.debugLog("Playing Sound");
+    public static void playSound(Level world, BlockPos pos, RandomSource rand, SoundEvent sound, float pitch) {
+        playSound(world, pos, rand, sound, pitch, 1f);
+    }
+    public static void playSound(Level world, BlockPos pos, RandomSource rand, SoundEvent sound, float pitch, float volume) {
         if (pitch == 0f) {
-            pitch = (rand.nextFloat() - 0.5f) / 2f;
+            pitch = 1f + ((rand.nextFloat() - 0.5f) / 2f);
         }
-        float randVolume = (rand.nextFloat() - 0.5f) / 2f;
-        world.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F + randVolume, 1.0F + pitch);
-
-//        double d3 = 0.52D;
-//        double d4 = rand.nextDouble();
-//        double d6 = rand.nextDouble();
-//        AgriculturalEnhancements.debugLog("Spawning Particle Sound");
-//        world.addParticle(ParticleTypes.ASH, d0+d4, d1 + d6, d2+d3, 0.0D, 0.0D, 0.0D);
-//        if (!world.isClientSide()){
-//            ServerLevel serverLevel = (ServerLevel) level;
-//            assert serverLevel != null;
-//            BlockParticleOption particle = new BlockParticleOption(ParticleTypes.BLOCK, world.getBlockState(pos));
-//            serverLevel.sendParticles(particle, 0.5, 0.5, 0.8, 10, 0.0D, 0.0D, 0.0D, 0.0D);
-//        }
-//        world.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
+        volume = volume * (1f+((rand.nextFloat() - 0.5f) / 2f));
+        world.playSound(null, pos, sound, SoundSource.BLOCKS, volume, pitch);
     }
 
     public static void doFuelProcess(ItemStack fuel, int wait, IFuelUser user) {

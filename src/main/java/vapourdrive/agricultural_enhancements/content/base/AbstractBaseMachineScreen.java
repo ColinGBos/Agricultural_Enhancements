@@ -122,8 +122,9 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
         }
 
         if (notCarrying && isInRect(this.leftPos + INFO_XPOS - 1, this.topPos + INFO_YPOS - 1, INFO_WIDTH + 2, INFO_HEIGHT + 2, mouseX, mouseY)) {
-            hoveringText.add(Component.translatable("agriculturalenhancements." + ID + ".info"));
-            hoveringText.add(Component.translatable("agriculturalenhancements.fuel_excess.info"));
+
+            getAdditionalInfoHover(hoveringText);
+
         }
 
         // If hoveringText is not empty draw the hovering text.  Otherwise, use vanilla to render tooltip for the slots
@@ -132,6 +133,11 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
         } else {
             super.renderTooltip(matrixStack, mouseX, mouseY);
         }
+    }
+
+    protected void getAdditionalInfoHover(List<Component> hoveringText) {
+        hoveringText.add(Component.translatable("agriculturalenhancements." + ID + ".info"));
+        hoveringText.add(Component.translatable("agriculturalenhancements.fuel_excess.info"));
     }
 
     // Returns true if the given x,y coordinates are within the given rectangle

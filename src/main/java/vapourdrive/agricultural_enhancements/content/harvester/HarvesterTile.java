@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -74,13 +75,15 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
                         List<ItemStack> drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
 //                        AgriculturalEnhancements.debugLog("Drops pre-cull: " + drops);
                         ItemStack seed = crop.getCloneItemStack(level, pos, targetState);
-                        for (ItemStack drop : drops) {
-                            if (ItemStack.isSame(drop, seed)) {
-                                drop.shrink(1);
-                                if (drop.isEmpty()) {
-                                    drops.remove(drop);
+                        if(isNonDestructive()) {
+                            for (ItemStack drop : drops) {
+                                if (ItemStack.isSame(drop, seed)) {
+                                    drop.shrink(1);
+                                    if (drop.isEmpty()) {
+                                        drops.remove(drop);
+                                    }
+                                    break;
                                 }
-                                break;
                             }
                         }
 
@@ -89,8 +92,12 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
                                 MachineUtils.pushOutput(stack, false, this);
                             }
 //                            AgriculturalEnhancements.debugLog("Server Success");
-                            MachineUtils.animate(level, pos, level.getRandom(), SoundEvents.CROP_BREAK, 0f);
-                            level.setBlockAndUpdate(pos, targetState.setValue(crop.getAgeProperty(), 1));
+                            MachineUtils.playSound(level, pos, level.getRandom(), SoundEvents.CROP_BREAK, 0f, 0.7f);
+                            if(isNonDestructive()) {
+                                level.setBlockAndUpdate(pos, targetState.setValue(crop.getAgeProperty(), 1));
+                            }else{
+                                level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                            }
                             consumeFuel(getMinFuelToWork(), false);
                         }
                     }
@@ -98,6 +105,28 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
 //                AgriculturalEnhancements.debugLog(""+targetState);
             }
         }
+    }
+
+    public boolean isNonDestructive(){
+        if(!ConfigSettings.HARVESTER_NON_DESTRUCTIVE_HARVESTING.get()){
+            return false;
+        }
+        else{
+            return harvesterData.get(HarvesterData.Data.MODE)==1;
+        }
+    }
+
+    public boolean toggleMode(){
+        if(ConfigSettings.HARVESTER_NON_DESTRUCTIVE_HARVESTING.get()){
+            if(harvesterData.get(HarvesterData.Data.MODE)==0){
+                harvesterData.set(HarvesterData.Data.MODE, 1);
+            } else{
+                harvesterData.set(HarvesterData.Data.MODE, 0);
+            }
+            return true;
+        }
+        harvesterData.set(HarvesterData.Data.MODE, 0);
+        return false;
     }
 
     @Override
@@ -122,6 +151,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         fuelHandler.deserializeNBT(tag.getCompound("invFuel"));
         ingredientHandler.deserializeNBT(tag.getCompound("invIngredient"));
         harvesterData.set(HarvesterData.Data.FUEL, tag.getInt("fuel"));
+        harvesterData.set(HarvesterData.Data.MODE, tag.getInt("mode"));
         harvestTimer = tag.getInt("harvestTimer");
     }
 
@@ -133,6 +163,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         tag.put("invIngredient", ingredientHandler.serializeNBT());
         tag.putInt("fuel", getCurrentFuel());
         tag.putInt("harvestTimer", harvestTimer);
+        tag.putInt("mode", harvesterData.get(HarvesterData.Data.MODE));
     }
 
     @Nonnull

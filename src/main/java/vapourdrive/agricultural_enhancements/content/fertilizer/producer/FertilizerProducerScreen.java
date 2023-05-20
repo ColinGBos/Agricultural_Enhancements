@@ -1,6 +1,7 @@
 package vapourdrive.agricultural_enhancements.content.fertilizer.producer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -70,6 +71,12 @@ public class FertilizerProducerScreen extends AbstractBaseMachineScreen<Fertiliz
         if (!hoveringText.isEmpty()) {
             renderComponentTooltip(matrixStack, hoveringText, mouseX, mouseY);
         }
+    }
+
+    @Override
+    protected void getAdditionalInfoHover(List<Component> hoveringText) {
+        super.getAdditionalInfoHover(hoveringText);
+        hoveringText.add(Component.translatable("agriculturalenhancements.fertilizer_producer.wrench").withStyle(ChatFormatting.GOLD));
     }
 
 

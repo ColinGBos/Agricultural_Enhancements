@@ -1,5 +1,6 @@
 package vapourdrive.agricultural_enhancements.integrations.jade;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;
@@ -14,7 +15,7 @@ public enum IrrigationContentProvider implements IBlockComponentProvider {
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig pluginConfig) {
         int irrigation = blockAccessor.getBlockState().getValue(IrrigationPipeBlock.IRRIGATION);
-        tooltip.add(Component.translatable("agriculturalenhancements.irrigation", irrigation));
+        tooltip.add(Component.translatable("agriculturalenhancements.irrigation", irrigation).withStyle(ChatFormatting.AQUA));
     }
 
     @Override

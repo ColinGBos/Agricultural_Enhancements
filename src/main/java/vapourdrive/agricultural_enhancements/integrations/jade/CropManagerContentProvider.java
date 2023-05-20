@@ -12,31 +12,33 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.base.IFuelUser;
+import vapourdrive.agricultural_enhancements.content.manager.CropManagerTile;
 
 import java.text.DecimalFormat;
 
-public enum IFuelUserContentProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
+public enum CropManagerContentProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
     INSTANCE;
     private final DecimalFormat df = new DecimalFormat("#,###");
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig pluginConfig) {
-        if (blockAccessor.getServerData().contains("Fuel")) {
-            int i = blockAccessor.getServerData().getInt("Fuel");
-            tooltip.add(Component.translatable("agriculturalenhancements.fuel", df.format(i)).withStyle(ChatFormatting.GOLD));
+        if (blockAccessor.getServerData().contains("Fertilizer")) {
+            int i = blockAccessor.getServerData().getInt("Fertilizer");
+            tooltip.add(Component.translatable("agriculturalenhancements.fertilizer", df.format(i)).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
     @Override
     public ResourceLocation getUid() {
-        return JadePlugin.FUEL;
+        return JadePlugin.CROP_MANAGER;
     }
 
     @Override
     public void appendServerData(CompoundTag data, ServerPlayer player, Level world, BlockEntity t, boolean showDetails) {
-        if (t instanceof IFuelUser user) {
-            data.putInt("Fuel", user.getCurrentFuel() / 100);
+        if (t instanceof CropManagerTile user) {
+            data.putInt("Fertilizer", user.getCurrentFertilizer() / ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get());
         }
     }
 }

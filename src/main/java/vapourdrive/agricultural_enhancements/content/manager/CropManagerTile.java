@@ -94,7 +94,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                     continue;
                 }
                 level.setBlockAndUpdate(soilPos, Registration.TILLED_SOIL_BLOCK.get().getStateForPlacement(level, soilPos));
-                MachineUtils.animate(level, soilPos, level.getRandom(), SoundEvents.HOE_TILL, 0f);
+                MachineUtils.playSound(level, soilPos, level.getRandom(), SoundEvents.HOE_TILL, 0f, 0.5f);
 
 //                AgriculturalEnhancements.debugLog(""+soilState);
             }
@@ -127,7 +127,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                     continue;
                 }
                 level.setBlockAndUpdate(pos, targetState.setValue(TilledSoilBlock.SOIL_NUTRIENTS, TilledSoilBlock.MAX_NUTRIENTS));
-                MachineUtils.animate(level, pos, level.getRandom(), SoundEvents.GRAVEL_HIT, 0f);
+                MachineUtils.playSound(level, pos, level.getRandom(), SoundEvents.GRAVEL_HIT, 0f, 0.5f);
                 consumeFertilizer((TilledSoilBlock.MAX_NUTRIENTS - currentFert) * ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get(), false);
                 consumeFuel(getMinFuelToWork() * TilledSoilBlock.MAX_NUTRIENTS - currentFert, false);
 //                AgriculturalEnhancements.debugLog(""+targetState);
@@ -158,7 +158,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                 BlockState cropState = blockItem.getBlock().defaultBlockState();
                 if (cropState.canSurvive(level, cropPos)) {
                     level.setBlockAndUpdate(cropPos, blockItem.getBlock().defaultBlockState());
-                    MachineUtils.animate(level, cropPos, level.getRandom(), SoundEvents.CROP_PLANTED, 0f);
+                    MachineUtils.playSound(level, cropPos, level.getRandom(), SoundEvents.CROP_PLANTED, 0f);
                     stack.shrink(1);
                     consumeFuel(getMinFuelToWork(), false);
                 }
@@ -364,5 +364,9 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
             machineData.set(CropManagerData.Data.FERTILIZER, getCurrentFertilizer() - toConsume);
         }
         return true;
+    }
+
+    public void resetTillage() {
+        this.hasTilled = false;
     }
 }

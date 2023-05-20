@@ -59,7 +59,7 @@ public class FertilizerProducerBlock extends AbstractBaseMachineBlock {
         if (blockEntity instanceof FertilizerProducerTile machine) {
             boolean poison = machine.ventElement();
             if (poison) {
-                MachineUtils.animate(level, pos, level.getRandom(), SoundEvents.BUBBLE_COLUMN_UPWARDS_AMBIENT, 0f);
+                MachineUtils.playSound(level, pos, level.getRandom(), SoundEvents.BUBBLE_COLUMN_UPWARDS_AMBIENT, 0f);
                 player.addEffect(new MobEffectInstance(MobEffects.POISON, 160));
                 player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 100));
             }

@@ -18,6 +18,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineBlock;
+import vapourdrive.agricultural_enhancements.content.manager.CropManagerTile;
 
 import javax.annotation.Nullable;
 
@@ -26,6 +27,15 @@ public class HarvesterBlock extends AbstractBaseMachineBlock {
 
     public HarvesterBlock() {
         super(BlockBehaviour.Properties.of(Material.STONE), 0.2f);
+    }
+
+    @Override
+    protected boolean sneakWrenchMachine(Player player, Level level, BlockPos pos) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof HarvesterTile machine) {
+            return machine.toggleMode();
+        }
+        return false;
     }
 
     @Nullable

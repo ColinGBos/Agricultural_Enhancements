@@ -1,6 +1,7 @@
 package vapourdrive.agricultural_enhancements.content.manager;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -58,5 +59,11 @@ public class CropManagerScreen extends AbstractBaseMachineScreen<CropManagerCont
         if (!hoveringText.isEmpty()) {
             renderComponentTooltip(matrixStack, hoveringText, mouseX, mouseY);
         }
+    }
+
+    @Override
+    protected void getAdditionalInfoHover(List<Component> hoveringText) {
+        super.getAdditionalInfoHover(hoveringText);
+        hoveringText.add(Component.translatable("agriculturalenhancements.crop_manager.wrench").withStyle(ChatFormatting.GOLD));
     }
 }

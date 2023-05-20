@@ -4,10 +4,11 @@ import net.minecraft.world.inventory.ContainerData;
 
 public class HarvesterData implements ContainerData {
     public enum Data {
-        FUEL
+        FUEL,
+        MODE
     }
 
-    private final int[] data = {0};
+    private final int[] data = {0,0};
 
     public int get(Data data) {
         return this.get(data.ordinal());
