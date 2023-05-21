@@ -23,7 +23,7 @@ public class AgriculturalEnhancements {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "agriculturalenhancements";
-    public static boolean debugMode = true;
+    public static boolean debugMode = false;
     public static ArrayList<ItemLike> seeds = new ArrayList<>();
 
     public AgriculturalEnhancements() {

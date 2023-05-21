@@ -26,9 +26,9 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
     protected final int p;
     protected final int k;
 
-    public FertilizerRecipe(ResourceLocation id, Lazy<Ingredient> ingredient, int n, int p, int k) {
+    public FertilizerRecipe(ResourceLocation id, Ingredient ingredient, int n, int p, int k) {
         this.id = id;
-        this.ingredient = ingredient;
+        this.ingredient = Lazy.of(()->ingredient);
         this.n = n;
         this.p = p;
         this.k = k;
@@ -84,7 +84,7 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
 
     public static class Type implements RecipeType<FertilizerRecipe> {
         public static final Type INSTANCE = new Type();
-        //public static final String ID = "fertilizer";
+        public static final String ID = "fertilizer";
 
         private Type() {
         }
@@ -92,11 +92,11 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
 
     public static class Serializer implements RecipeSerializer<FertilizerRecipe> {
         public static final Serializer INSTANCE = new Serializer();
-        //public static final ResourceLocation ID = new ResourceLocation(AgriculturalEnhancements.MODID, "fertilizer");
+        public static final ResourceLocation ID = new ResourceLocation(AgriculturalEnhancements.MODID, "fertilizer");
 
         @Override
         public @NotNull FertilizerRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
-            Lazy<Ingredient> ingredient = Lazy.of(() -> Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient")));
+            Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient"));
             int n = GsonHelper.getAsInt(json, "n");
             int p = GsonHelper.getAsInt(json, "p");
             int k = GsonHelper.getAsInt(json, "k");
@@ -106,7 +106,7 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
 
         @Override
         public @Nullable FertilizerRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf pBuffer) {
-            Lazy<Ingredient> ingredient = Lazy.of(() -> Ingredient.fromNetwork(pBuffer));
+            Ingredient ingredient = Ingredient.fromNetwork(pBuffer);
             int[] results = pBuffer.readVarIntArray();
             int n = results[0];
             int p = results[1];
