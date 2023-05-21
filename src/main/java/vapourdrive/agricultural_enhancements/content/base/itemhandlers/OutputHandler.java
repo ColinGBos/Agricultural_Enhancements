@@ -40,7 +40,7 @@ public class OutputHandler extends ItemStackHandler {
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
         //'external' attempts to insert stacks should be unsuccessful
         AgriculturalEnhancements.debugLog("Insert Item");
-        if (AgriculturalEnhancements.debugMode) {
+        if (AgriculturalEnhancements.isDebugMode()) {
             AgriculturalEnhancements.debugLog("trying to debug insert into output.");
             return internalInsertItem(slot, stack, simulate);
         }

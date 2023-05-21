@@ -222,7 +222,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
                 level.playSound(player, pos, SoundEvents.COPPER_BREAK, SoundSource.BLOCKS, 1.0F, pitch);
                 AgriculturalEnhancements.debugLog("Irrigation: " + state.getValue(IRRIGATION));
             }
-        } else if (AgriculturalEnhancements.debugMode) {
+        } else if (AgriculturalEnhancements.isDebugMode()) {
             if (player.isCrouching()) {
                 level.setBlockAndUpdate(pos, state.setValue(IRRIGATION, 15));
                 IIrrigationBlock pipe = (IIrrigationBlock) state.getBlock();

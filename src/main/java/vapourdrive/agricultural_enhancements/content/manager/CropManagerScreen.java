@@ -23,7 +23,7 @@ public class CropManagerScreen extends AbstractBaseMachineScreen<CropManagerCont
 
     @Override
     protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
-        if (AgriculturalEnhancements.debugMode) {
+        if (AgriculturalEnhancements.isDebugMode()) {
             int horStart = -100;
             drawString(matrixStack, Minecraft.getInstance().font, "N: " + menu.getFertilizerStored(CropManagerData.Data.FERTILIZER), horStart, 10, 0xffffff);
 

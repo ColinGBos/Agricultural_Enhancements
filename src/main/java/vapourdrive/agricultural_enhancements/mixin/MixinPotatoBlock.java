@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(PotatoBlock.class)
 public class MixinPotatoBlock {
     @Final
-    @Shadow
     private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{
             Block.box(2.0D, 0.0D, 2.0D, 14.0D, 2.0D, 14.0D),
             Block.box(2.0D, 0.0D, 2.0D, 14.0D, 3.0D, 14.0D),

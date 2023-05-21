@@ -14,6 +14,6 @@ public class SlotOutput extends AbstractMachineSlot {
 
     @Override
     public boolean mayPlace(@Nonnull ItemStack stack) {
-        return AgriculturalEnhancements.debugMode;
+        return AgriculturalEnhancements.isDebugMode();
     }
 }

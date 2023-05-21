@@ -1,5 +1,6 @@
 package vapourdrive.agricultural_enhancements.content.fertilizer;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
@@ -95,23 +97,13 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
         public static final ResourceLocation ID = new ResourceLocation(AgriculturalEnhancements.MODID, "fertilizer");
 
         @Override
-        public FertilizerRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
-            Ingredient ingredient;
-            if (GsonHelper.isArrayNode(json, "ingredient")) {
-                ingredient = Ingredient.fromJson(GsonHelper.getAsJsonArray(json, "ingredient"));
-            } else {
-                ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient"));
-            }
+        public @NotNull FertilizerRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
+            Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient"));
+//            Ingredient ingredient = CraftingHelper.getIngredient(GsonHelper.getAsJsonObject(json, "ingredient"));
+            AgriculturalEnhancements.debugLog("fromJSON"+ Arrays.toString(ingredient.getItems()));
             int n = GsonHelper.getAsInt(json, "n");
             int p = GsonHelper.getAsInt(json, "p");
             int k = GsonHelper.getAsInt(json, "k");
-
-            AgriculturalEnhancements.debugLog(Arrays.toString(ingredient.getItems()));
-
-//            if(!ForgeHooks.hasNoElements(ingredient)) {
-//                return new FertilizerRecipe(id, ingredient, n, p, k);
-//            }
-//            return null;
 
             return new FertilizerRecipe(id, ingredient, n, p, k);
         }
@@ -119,19 +111,18 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
         @Override
         public @Nullable FertilizerRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf pBuffer) {
             Ingredient ingredient = Ingredient.fromNetwork(pBuffer);
+            AgriculturalEnhancements.debugLog("fromNetwork"+ Arrays.toString(ingredient.getItems()));
             int[] results = pBuffer.readVarIntArray();
             int n = results[0];
             int p = results[1];
             int k = results[2];
-            if (!ForgeHooks.hasNoElements(ingredient)) {
-                return new FertilizerRecipe(id, ingredient, n, p, k);
-            }
-            return null;
+            return new FertilizerRecipe(id, ingredient, n, p, k);
         }
 
         @Override
         public void toNetwork(@NotNull FriendlyByteBuf pBuffer, FertilizerRecipe pRecipe) {
             pRecipe.ingredient.toNetwork(pBuffer);
+            AgriculturalEnhancements.debugLog(Arrays.toString(pRecipe.ingredient.getItems()));
             pBuffer.writeVarIntArray(new int[]{pRecipe.n, pRecipe.p, pRecipe.k});
         }
     }

@@ -14,7 +14,7 @@ import java.util.List;
 public class TooltipEvent {
     @SubscribeEvent
     public static void onToolTipEarly(ItemTooltipEvent event) {
-        if (AgriculturalEnhancements.debugMode) {
+        if (AgriculturalEnhancements.isDebugMode()) {
             List<Component> tips = event.getToolTip();
             ItemStack stack = event.getItemStack();
             tips.add(Component.literal(Arrays.toString(stack.getTags().toArray())));

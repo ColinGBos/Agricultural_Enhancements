@@ -10,10 +10,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.content.base.FarmerWrench;
 import vapourdrive.agricultural_enhancements.content.fertilizer.Fertilizer;
 import vapourdrive.agricultural_enhancements.content.fertilizer.FertilizerRecipe;
@@ -34,18 +36,8 @@ public class Registration {
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     private static final DeferredRegister<BlockEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
     private static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
-    private static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MODID);
-    private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, MODID);
-
-    public static void init() {
-        BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        TILES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        CONTAINERS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        RECIPE_SERIALIZERS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        RECIPE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-    }
-
+    protected static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, MODID);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MODID);
     public static final RegistryObject<HarvesterBlock> HARVESTER_BLOCK = BLOCKS.register("harvester", HarvesterBlock::new);
     public static final RegistryObject<FertilizerProducerBlock> FERTILIZER_PRODUCER_BLOCK = BLOCKS.register("fertilizer_producer", FertilizerProducerBlock::new);
     public static final RegistryObject<CropManagerBlock> CROP_MANAGER_BLOCK = BLOCKS.register("crop_manager", CropManagerBlock::new);
@@ -97,8 +89,17 @@ public class Registration {
         return new IrrigationControllerContainer(windowId, world, pos, inv, inv.player, new IrrigationControllerData());
     }));
 
-
-    public static final RegistryObject<RecipeSerializer<FertilizerRecipe>> FERTILIZER_SERIALIZER = RECIPE_SERIALIZERS.register("fertilizer", () -> FertilizerRecipe.Serializer.INSTANCE);
     public static final RegistryObject<RecipeType<FertilizerRecipe>> FERTILIZER_TYPE = RECIPE_TYPES.register("fertilizer", () -> FertilizerRecipe.Type.INSTANCE);
+    public static final RegistryObject<RecipeSerializer<FertilizerRecipe>> FERTILIZER_SERIALIZER = RECIPE_SERIALIZERS.register("fertilizer", () -> FertilizerRecipe.Serializer.INSTANCE);
 
+
+    public static void init(IEventBus eventBus) {
+        AgriculturalEnhancements.debugLog("TEEEEEST#############################");
+        BLOCKS.register(eventBus);
+        ITEMS.register(eventBus);
+        TILES.register(eventBus);
+        CONTAINERS.register(eventBus);
+        RECIPE_TYPES.register(eventBus);
+        RECIPE_SERIALIZERS.register(eventBus);
+    }
 }

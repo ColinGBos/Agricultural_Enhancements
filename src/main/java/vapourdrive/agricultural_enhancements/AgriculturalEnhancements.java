@@ -2,6 +2,8 @@ package vapourdrive.agricultural_enhancements;
 
 
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -26,10 +28,11 @@ public class AgriculturalEnhancements {
     public static ArrayList<ItemLike> seeds = new ArrayList<>();
 
     public AgriculturalEnhancements() {
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 //        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ConfigSettings.CLIENT_CONFIG);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigSettings.SERVER_CONFIG);
 
-        Registration.init();
+        Registration.init(eventBus);
 
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ModSetup::init);
@@ -42,7 +45,7 @@ public class AgriculturalEnhancements {
         }
     }
 
-    private static boolean isDebugMode() {
+    public static boolean isDebugMode() {
         return java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("jdwp") && debugMode;
     }
 

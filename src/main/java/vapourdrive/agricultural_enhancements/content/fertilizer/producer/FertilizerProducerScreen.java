@@ -24,7 +24,7 @@ public class FertilizerProducerScreen extends AbstractBaseMachineScreen<Fertiliz
 
     @Override
     protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
-        if (AgriculturalEnhancements.debugMode) {
+        if (AgriculturalEnhancements.isDebugMode()) {
             int horStart = -100;
             drawString(matrixStack, Minecraft.getInstance().font, "N: " + menu.getElementStored(FertilizerProducerData.Data.N), horStart, 10, 0xffffff);
             drawString(matrixStack, Minecraft.getInstance().font, "P: " + menu.getElementStored(FertilizerProducerData.Data.P), horStart, 20, 0xffffff);
