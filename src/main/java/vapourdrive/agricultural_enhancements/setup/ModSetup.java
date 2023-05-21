@@ -8,20 +8,18 @@ import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 
 import static vapourdrive.agricultural_enhancements.AgriculturalEnhancements.seeds;
-import static vapourdrive.agricultural_enhancements.setup.Registration.RECIPE_SERIALIZERS;
-import static vapourdrive.agricultural_enhancements.setup.Registration.RECIPE_TYPES;
 
 @Mod.EventBusSubscriber(modid = AgriculturalEnhancements.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModSetup {
 
     public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab("agriculturalenhancements") {
         @Override
-        public ItemStack makeIcon() {
+        public @NotNull ItemStack makeIcon() {
             return new ItemStack(Registration.HARVESTER_BLOCK.get());
         }
     };

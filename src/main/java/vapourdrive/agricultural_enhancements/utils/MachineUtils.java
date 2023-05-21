@@ -60,11 +60,12 @@ public class MachineUtils {
     public static void playSound(Level world, BlockPos pos, RandomSource rand, SoundEvent sound, float pitch) {
         playSound(world, pos, rand, sound, pitch, 1f);
     }
+
     public static void playSound(Level world, BlockPos pos, RandomSource rand, SoundEvent sound, float pitch, float volume) {
         if (pitch == 0f) {
             pitch = 1f + ((rand.nextFloat() - 0.5f) / 2f);
         }
-        volume = volume * (1f+((rand.nextFloat() - 0.5f) / 2f));
+        volume = volume * (1f + ((rand.nextFloat() - 0.5f) / 2f));
         world.playSound(null, pos, sound, SoundSource.BLOCKS, volume, pitch);
     }
 

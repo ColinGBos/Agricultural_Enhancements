@@ -13,7 +13,6 @@ import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.content.base.IFuelUser;
 import vapourdrive.agricultural_enhancements.content.manager.CropManagerTile;
 
 import java.text.DecimalFormat;

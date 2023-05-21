@@ -42,21 +42,6 @@ public class WateringCan extends Item {
 
     @Override
     public @NotNull InteractionResult useOn(@NotNull UseOnContext ctx) {
-//        if(getWater(ctx.getItemInHand()) >= getMaxWater()) {
-//            return InteractionResult.PASS;
-//        }
-//        BlockPos pos = ctx.getClickedPos();
-//        Direction direction = ctx.getClickedFace();
-//        BlockPos waterPos = pos.relative(direction);
-//        BlockState state = ctx.getLevel().getBlockState(waterPos);
-//        if (state.getBlock() instanceof LiquidBlock liquidBlock) {
-//            if (liquidBlock.getFluidState(state).isSourceOfType(Fluids.WATER)) {
-//                setWater(ctx.getItemInHand(), getMaxWater());
-//                liquidBlock.pickupBlock(ctx.getLevel(), waterPos, state);
-//                return InteractionResult.SUCCESS;
-//            }
-//        }
-//        water(pos, ctx.getLevel(), ctx.getItemInHand());
         return InteractionResult.PASS;
     }
 
@@ -125,17 +110,6 @@ public class WateringCan extends Item {
             level.addParticle(ParticleTypes.SPLASH, pos.getX() + 0.5 + d3 * 5, pos.getY() + 1.25, pos.getZ() + 0.5 + d4 * 5, d3, 0.0D, d4);
         }
     }
-
-//    public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {
-//        if (pEntityLiving instanceof Player player) {
-//            int i = this.getUseDuration(pStack) - pTimeLeft;
-//            if (i >= 10) {
-//                BlockPos pos = player.getOnPos().relative(Direction.UP).relative(player.getDirection());
-//                player.startUsingItem(player.getUsedItemHand());
-//                water(pos, pLevel, pStack);
-//            }
-//        }
-//    }
 
     public void onUsingTick(ItemStack stack, LivingEntity pLivingEntity, int count) {
         if (getWater(stack) <= 0) {

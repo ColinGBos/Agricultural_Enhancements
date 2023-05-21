@@ -8,7 +8,7 @@ public class HarvesterData implements ContainerData {
         MODE
     }
 
-    private final int[] data = {0,0};
+    private final int[] data = {0, 0};
 
     public int get(Data data) {
         return this.get(data.ordinal());

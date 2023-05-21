@@ -3,7 +3,6 @@ package vapourdrive.agricultural_enhancements.integrations.jade;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -15,7 +14,6 @@ import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.fertilizer.producer.FertilizerProducerTile;
-import vapourdrive.agricultural_enhancements.content.manager.CropManagerTile;
 
 import java.text.DecimalFormat;
 

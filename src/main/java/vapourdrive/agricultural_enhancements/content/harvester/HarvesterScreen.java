@@ -19,9 +19,9 @@ public class HarvesterScreen extends AbstractBaseMachineScreen<HarvesterContaine
     @Override
     protected void getAdditionalInfoHover(List<Component> hoveringText) {
         super.getAdditionalInfoHover(hoveringText);
-        if(ConfigSettings.HARVESTER_NON_DESTRUCTIVE_HARVESTING.get()) {
+        if (ConfigSettings.HARVESTER_NON_DESTRUCTIVE_HARVESTING.get()) {
             hoveringText.add(Component.translatable("agriculturalenhancements.harvester.wrench").withStyle(ChatFormatting.GOLD));
         }
-        hoveringText.add(Component.translatable("agriculturalenhancements.harvester.nondestructive."+this.machineContainer.isNonDestructive()).withStyle(ChatFormatting.GREEN));
+        hoveringText.add(Component.translatable("agriculturalenhancements.harvester.nondestructive." + this.machineContainer.isNonDestructive()).withStyle(ChatFormatting.GREEN));
     }
 }

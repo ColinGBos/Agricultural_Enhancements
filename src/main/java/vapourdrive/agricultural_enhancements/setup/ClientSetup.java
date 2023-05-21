@@ -21,12 +21,4 @@ public class ClientSetup {
             MenuScreens.register(Registration.CROP_MANAGER_CONTAINER.get(), CropManagerScreen::new);
         });
     }
-
-//    @SubscribeEvent
-//    public void onTooltipPre(RenderTooltipEvent.GatherComponents event) {
-//        Item item = event.getItemStack().getItem();
-//        if (item.getRegistryName().getNamespace().equals(FurnaceMk2.MODID)) {
-//            event.setMaxWidth(200);
-//        }
-//    }
 }

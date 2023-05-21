@@ -147,17 +147,10 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
                     BlockState neighbor = pLevel.getBlockState(pPos.relative(direction));
                     if (neighbor.getBlock() instanceof IIrrigationBlock pipe) {
                         int neighborLevel = neighbor.getValue(IRRIGATION);
-//                        if (level >= neighborLevel && neighborLevel > 0) {
                         if (neighborLevel > 0) {
-//                            pLevel.setBlock(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0), 2);
-//                            neighbor.updateShape(direction, neighbor.setValue(IRRIGATION, 0), pLevel, pPos, pPos.relative(direction));
-
                             pLevel.setBlockAndUpdate(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0));
                             pipe.bringNeighboursDown(direction.getOpposite(), pLevel, pPos.relative(direction), neighborLevel, pPos);
                         }
-//                        else if(neighborLevel > level){
-//                            pipe.bringNeighboursUp(direction.getOpposite(), pLevel, pPos.relative(direction), neighborLevel);
-//                        }
                     }
                 }
             }
@@ -190,18 +183,11 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
                 BlockState neighbor = pLevel.getBlockState(pPos.relative(direction));
                 if (neighbor.getBlock() instanceof IIrrigationBlock pipe) {
                     int neighborLevel = neighbor.getValue(IRRIGATION);
-                    //if (level >= neighborLevel && neighborLevel > 0) {
                     if (neighborLevel > 0) {
-//                        neighbor.updateShape(direction, neighbor.setValue(IRRIGATION, 0), pLevel, pPos, pPos.relative(direction));
-//                        pLevel.setBlock(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0),2);
-
                         pLevel.setBlockAndUpdate(pPos.relative(direction), neighbor.setValue(IRRIGATION, 0));
                         AgriculturalEnhancements.debugLog("Bringing irrigation down: " + pLevel.getBlockState(pPos.relative(direction)).getValue(IRRIGATION));
                         pipe.bringNeighboursDown(direction.getOpposite(), pLevel, pPos.relative(direction), level, originPos);
                     }
-//                    else if (neighborLevel>level){
-//                        pipe.bringNeighboursUp(null, pLevel, pPos.relative(direction), neighborLevel);
-//                    }
                 }
             }
         }

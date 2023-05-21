@@ -45,7 +45,7 @@ public abstract class AbstractBaseMachineBlock extends BaseEntityBlock {
 
     @Override
     @SuppressWarnings("deprecation")
-    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult trace) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult trace) {
         if (player.getItemInHand(hand).is(wrench)) {
             return InteractionResult.PASS;
         } else if (!level.isClientSide) {
@@ -70,12 +70,14 @@ public abstract class AbstractBaseMachineBlock extends BaseEntityBlock {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     public void disassemble(BlockState state, @NotNull Level level, @NotNull BlockPos blockPos) {
         dropItemStack(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), getProtectedItemStack(level, blockPos, state));
         onRemove(state, level, blockPos, Blocks.AIR.defaultBlockState(), false);
         level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
     }
 
+    @SuppressWarnings("deprecation")
     protected ItemStack getProtectedItemStack(@NotNull Level world, @NotNull BlockPos blockPos, BlockState state) {
         ItemStack stack = getCloneItemStack(world, blockPos, state).copy();
         BlockEntity blockEntity = world.getBlockEntity(blockPos);

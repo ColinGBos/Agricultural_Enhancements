@@ -20,7 +20,7 @@ public enum HarvesterContentProvider implements IBlockComponentProvider, IServer
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig pluginConfig) {
         if (blockAccessor.getServerData().contains("NonDestructive")) {
             boolean nonDestructive = blockAccessor.getServerData().getBoolean("NonDestructive");
-            tooltip.add(Component.translatable("agriculturalenhancements.harvester.nondestructive_short."+nonDestructive));
+            tooltip.add(Component.translatable("agriculturalenhancements.harvester.nondestructive_short." + nonDestructive));
         }
     }
 

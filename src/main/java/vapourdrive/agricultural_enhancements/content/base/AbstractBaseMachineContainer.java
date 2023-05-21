@@ -74,28 +74,28 @@ public abstract class AbstractBaseMachineContainer extends AbstractContainerMenu
     }
 
 
-    private int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
-        for (int i = 0; i < amount; i++) {
+    private int addPlayerInvRow(IItemHandler handler, int index, int x, int y) {
+        for (int i = 0; i < 9; i++) {
             addSlot(new SlotItemHandler(handler, index, x, y));
-            x += dx;
+            x += 18;
             index++;
         }
         return index;
     }
 
-    private void addSlotBox(IItemHandler handler, int index, int x, int y, int columns, int spacingX, int rows, int spacingY) {
-        for (int j = 0; j < rows; j++) {
-            index = addSlotRange(handler, index, x, y, columns, spacingX);
-            y += spacingY;
+    private void addPlayerInv(IItemHandler handler, int index, int x, int y) {
+        for (int j = 0; j < 3; j++) {
+            index = addPlayerInvRow(handler, index, x, y);
+            y += 18;
         }
     }
 
     protected void layoutPlayerInventorySlots(int leftCol, int topRow) {
         // Player inventory
-        int index = addSlotRange(playerInventory, 0, leftCol, topRow + 58, 9, 18);
+        int index = addPlayerInvRow(playerInventory, 0, leftCol, topRow + 58);
 
         //hotbar
-        addSlotBox(playerInventory, index, leftCol, topRow, 9, 18, 3, 18);
+        addPlayerInv(playerInventory, index, leftCol, topRow);
 
     }
 

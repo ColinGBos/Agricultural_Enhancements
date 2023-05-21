@@ -23,8 +23,6 @@ public class FertilizerProducerItem extends BaseMachineItem {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
-//        DecimalFormat df = new DecimalFormat("#,###");
-//        list.add(Component.literal(df.format(ConfigSettings.FURNACE_BASE_SPEED.get()*100 )+"% speed").withStyle(ChatFormatting.BLUE));
         list.add(Component.translatable("agriculturalenhancements.fertilizer_producer.info_1").withStyle(ChatFormatting.BLUE));
         super.appendHoverText(stack, level, list, flag);
     }

@@ -2,7 +2,6 @@ package vapourdrive.agricultural_enhancements;
 
 
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -47,10 +46,6 @@ public class AgriculturalEnhancements {
 
     public static boolean isDebugMode() {
         return java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("jdwp") && debugMode;
-    }
-
-    public static void infolog(String toLog) {
-        LOGGER.log(Level.INFO, toLog);
     }
 
 }

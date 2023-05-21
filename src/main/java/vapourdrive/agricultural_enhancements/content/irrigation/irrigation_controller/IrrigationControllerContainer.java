@@ -27,10 +27,6 @@ public class IrrigationControllerContainer extends AbstractBaseMachineContainer 
     public static final int OUTPUT_INVENTORY_XPOS = 62;
     public static final int OUTPUT_INVENTORY_YPOS = 58;
 
-//    public FurnaceMk2Container(int windowId, Level world, BlockPos pos, Inventory inv, Player player) {
-//        this(windowId, world, pos, inv, player, new FurnaceData());
-//    }
-
     public IrrigationControllerContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, IrrigationControllerData machineData) {
         super(windowId, world, pos, inv, player, Registration.IRRIGATION_CONTROLLER_CONTAINER.get(), machineData);
 

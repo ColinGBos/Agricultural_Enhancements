@@ -5,7 +5,6 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(CropBlock.class)
 public class MixinCropBlock {
