@@ -5,7 +5,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public class ConfigSettings {
     public static final String CATEGORY_MOD = "agricultural_enhancements";
 
-    public static ForgeConfigSpec SERVER_CONFIG;
+    public static final ForgeConfigSpec SERVER_CONFIG;
     //    public static ForgeConfigSpec CLIENT_CONFIG;
     public static final String SUBCATEGORY_FERTILIZER_PRODUCER = "fertilizer_producer";
     public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_FUEL_STORAGE;
@@ -47,6 +47,12 @@ public class ConfigSettings {
     public static ForgeConfigSpec.DoubleValue SPRAYER_CHANCE_TO_ANIMATE;
     public static ForgeConfigSpec.IntValue SPRAYER_CROP_TICK_COUNT;
     public static ForgeConfigSpec.IntValue SPRAYER_VERTICAL_RANGE;
+
+    public static final String SUBCATEGORY_MIXINS = "mixins";
+    public static ForgeConfigSpec.BooleanValue REPLACE_CROP_BLOCK_SHAPE;
+    public static ForgeConfigSpec.BooleanValue REPLACE_BEETROOT_SHAPE;
+    public static ForgeConfigSpec.BooleanValue REPLACE_POTATO_SHAPE;
+    public static ForgeConfigSpec.BooleanValue REPLACE_CARROT_SHAPE;
 
     static {
         ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
@@ -109,6 +115,13 @@ public class ConfigSettings {
         SPRAYER_CROP_TICK_COUNT = SERVER_BUILDER.comment("Number of ticks for each crop to potentially be updated during").defineInRange("sprayerCropUpdateTickCount", 10, 1, 25);
         SPRAYER_VERTICAL_RANGE = SERVER_BUILDER.comment("Max number of blocks down from the sprayer the crop can be").defineInRange("sprayerMaxVerticalRange", 8, 2, 15);
         SPRAYER_CHANCE_TO_ANIMATE = SERVER_BUILDER.comment("Chance per animation tick for the sprayer to spawn particles").defineInRange("sprayerChanceToAnimate", 0.2f, 0f, 1f);
+        SERVER_BUILDER.pop();
+
+        SERVER_BUILDER.comment("Mixin Settings").push(SUBCATEGORY_MIXINS);
+        REPLACE_CROP_BLOCK_SHAPE = SERVER_BUILDER.comment("Replace the hitbox of Crop Block with a tighter shape (allows access to soil and follows texture better)").define("replaceCropBlockShape", false);
+        REPLACE_BEETROOT_SHAPE = SERVER_BUILDER.comment("Replace the hitbox of BeetRoot Block with a tighter shape (allows access to soil and follows texture better)").define("replaceBeetRootBlockShape", false);
+        REPLACE_POTATO_SHAPE = SERVER_BUILDER.comment("Replace the hitbox of Potato Block with a tighter shape (allows access to soil and follows texture better)").define("replacePotatoBlockShape", false);
+        REPLACE_CARROT_SHAPE = SERVER_BUILDER.comment("Replace the hitbox of Carrot Block with a tighter shape (allows access to soil and follows texture better)").define("replaceCarrotBlockShape", false);
         SERVER_BUILDER.pop();
 
     }

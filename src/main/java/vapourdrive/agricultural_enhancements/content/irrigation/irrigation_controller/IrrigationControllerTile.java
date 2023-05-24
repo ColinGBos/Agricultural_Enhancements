@@ -156,7 +156,6 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
         return true;
     }
 
-    @Override
     public boolean consumeFuel(int toConsume, boolean simulate) {
         if (getCurrentFuel() < toConsume) {
             return false;

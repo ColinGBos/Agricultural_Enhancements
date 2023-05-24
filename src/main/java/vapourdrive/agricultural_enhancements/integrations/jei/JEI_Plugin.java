@@ -80,7 +80,6 @@ public class JEI_Plugin implements IModPlugin {
         List<SeedRecipeWrapper> seedList = new ArrayList<>();
         for (ItemLike seed : AgriculturalEnhancements.seeds) {
             if (seed.asItem() instanceof BlockItem seedBlockItem) {
-//                AgriculturalEnhancements.debugLog(""+seed+" "+seedBlockItem.getBlock());
                 seedList.add(new SeedRecipeWrapper(seed, seedBlockItem.getBlock().getName()));
             }
         }

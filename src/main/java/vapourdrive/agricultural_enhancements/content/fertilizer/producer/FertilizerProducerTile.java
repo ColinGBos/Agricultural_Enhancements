@@ -46,8 +46,8 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
 
     public final FertilizerProducerData fertilizerProducerData = new FertilizerProducerData();
-    public int[] elementToAdd = {0, 0, 0};
-    public int[] incrementalElementToAdd = {0, 0, 0};
+    public final int[] elementToAdd = {0, 0, 0};
+    public final int[] incrementalElementToAdd = {0, 0, 0};
     public int createFertTimer = 0;
     public int consumerTimer = 0;
 

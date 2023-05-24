@@ -34,7 +34,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class WateringCan extends Item {
-    DecimalFormat df = new DecimalFormat("#,###");
+    final DecimalFormat df = new DecimalFormat("#,###");
+    private static final int maxWater = 1000;
 
     public WateringCan(Item.Properties properties) {
         super(properties.stacksTo(1));
@@ -190,8 +191,8 @@ public class WateringCan extends Item {
         stack.getOrCreateTag().putInt("Water", Math.max(getWater(stack) - water, 0));
     }
 
-    public int getMaxWater() {
-        return 1000;
+    public static int getMaxWater() {
+        return maxWater;
     }
 
 }

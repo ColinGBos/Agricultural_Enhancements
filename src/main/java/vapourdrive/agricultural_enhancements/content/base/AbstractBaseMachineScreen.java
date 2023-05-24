@@ -36,7 +36,7 @@ public class AbstractBaseMachineScreen<T extends AbstractBaseMachineContainer> e
     final boolean STACK_INFO_SIDEWAYS;
     final String ID;
 
-    protected DecimalFormat df = new DecimalFormat("#,###");
+    protected final DecimalFormat df = new DecimalFormat("#,###");
 
     public AbstractBaseMachineScreen(T container, Inventory inv, Component name, String id, int fuelX, int fuelY, int helpX, int helpY, int titleX) {
         super(container, inv, name);

@@ -29,15 +29,15 @@ displayName = "Agricultural Enhancements" #mandatory
 # A file name (in the root of the mod JAR) containing a logo for display
 # logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
-credits = "Thanks goes to everyone who has contributed to the global modding knowledge database, bl4ckscor3 for the experience handling reference code, MCJTY and TheGreyGhost for excellent tutorials/resources" #optional
+credits = "Thanks goes to everyone who has contributed to the global modding knowledge database, MCJTY, Kaupenjoe, and TheGreyGhost for tutorials/resources" #optional
 # A text field displayed in the mod UI
 authors = "VapourDrive" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description = '''
-This mod contains vanilla-style upgrades to the agricultural experience
+This mod contains thoughtfully created upgrades and additions to the agricultural experience
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.furnacemk2]] #optional
+[[dependencies.agriculturalenhancements]] #optional
 # the modid of the dependency
 modId = "forge" #mandatory
 # Does this dependency have to exist - if not, ordering below must be specified

@@ -6,6 +6,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -23,8 +24,8 @@ public class AgriculturalEnhancements {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "agriculturalenhancements";
-    public static boolean debugMode = false;
-    public static ArrayList<ItemLike> seeds = new ArrayList<>();
+    public static final boolean debugMode = false;
+    public static final ArrayList<ItemLike> seeds = new ArrayList<>();
 
     public AgriculturalEnhancements() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -34,7 +35,7 @@ public class AgriculturalEnhancements {
         Registration.init(eventBus);
 
         // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ModSetup::init);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent event) -> ModSetup.init());
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::setup);
     }
 

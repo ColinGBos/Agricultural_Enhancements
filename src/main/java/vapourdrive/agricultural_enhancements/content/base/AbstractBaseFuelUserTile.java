@@ -24,7 +24,7 @@ public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IF
 
     public final int[] FUEL_SLOT = {0};
 
-    public int[] OUTPUT_SLOTS;
+    public final int[] OUTPUT_SLOTS;
 
     public AbstractBaseFuelUserTile(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState, int maxFuel, int minWorkFuel, int[] OUTPUT_SLOTS) {
         super(pType, pPos, pBlockState);
@@ -33,7 +33,6 @@ public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IF
         this.OUTPUT_SLOTS = OUTPUT_SLOTS;
     }
 
-    @Override
     public void tickServer(BlockState state) {
         ItemStack fuel = getStackInSlot(MachineUtils.Area.FUEL, 0);
         MachineUtils.doFuelProcess(fuel, fuelTimer, this);

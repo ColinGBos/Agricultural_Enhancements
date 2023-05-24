@@ -7,7 +7,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
@@ -24,7 +23,7 @@ public class ModSetup {
         }
     };
 
-    public static void init(final FMLCommonSetupEvent event) {
+    public static void init() {
         for (Item item : ForgeRegistries.ITEMS) {
             if (item instanceof BlockItem blockItem) {
                 if (blockItem.getBlock() instanceof CropBlock || blockItem.getBlock() instanceof BushBlock) {

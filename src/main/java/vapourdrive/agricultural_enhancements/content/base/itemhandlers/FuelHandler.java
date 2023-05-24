@@ -10,7 +10,7 @@ import vapourdrive.agricultural_enhancements.content.base.AbstractBaseFuelUserTi
 import javax.annotation.Nonnull;
 
 public class FuelHandler extends ItemStackHandler {
-    AbstractBaseFuelUserTile tile;
+    final AbstractBaseFuelUserTile tile;
 
     public FuelHandler(AbstractBaseFuelUserTile tile, int size) {
         this.tile = tile;

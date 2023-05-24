@@ -11,7 +11,7 @@ import vapourdrive.agricultural_enhancements.setup.Registration;
 import javax.annotation.Nonnull;
 
 public class IngredientHandler extends ItemStackHandler {
-    AbstractBaseFuelUserTile tile;
+    final AbstractBaseFuelUserTile tile;
 
     public IngredientHandler(AbstractBaseFuelUserTile tile, int size) {
         this.tile = tile;

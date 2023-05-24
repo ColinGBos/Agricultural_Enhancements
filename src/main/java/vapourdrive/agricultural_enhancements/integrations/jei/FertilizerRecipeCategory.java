@@ -43,7 +43,7 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
     private final IDrawableStatic n;
     private final IDrawableStatic p;
     private final IDrawableStatic k;
-    protected DecimalFormat df = new DecimalFormat("#,###");
+    protected final DecimalFormat df = new DecimalFormat("#,###");
 
 
     public FertilizerRecipeCategory(IGuiHelper guiHelper) {

@@ -84,6 +84,7 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
 
     public static class Type implements RecipeType<FertilizerRecipe> {
         public static final Type INSTANCE = new Type();
+        @SuppressWarnings("unused")
         public static final String ID = "fertilizer";
 
         private Type() {
@@ -92,6 +93,7 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
 
     public static class Serializer implements RecipeSerializer<FertilizerRecipe> {
         public static final Serializer INSTANCE = new Serializer();
+        @SuppressWarnings("unused")
         public static final ResourceLocation ID = new ResourceLocation(AgriculturalEnhancements.MODID, "fertilizer");
 
         @Override

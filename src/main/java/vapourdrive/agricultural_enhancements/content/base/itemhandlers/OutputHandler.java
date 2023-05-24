@@ -10,7 +10,7 @@ import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import javax.annotation.Nonnull;
 
 public class OutputHandler extends ItemStackHandler {
-    BlockEntity tile;
+    final BlockEntity tile;
 
     public OutputHandler(BlockEntity tile, int size) {
         this.tile = tile;

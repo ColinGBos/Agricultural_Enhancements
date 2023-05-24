@@ -57,7 +57,6 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         super(CROP_MANAGER_TILE.get(), pos, state, ConfigSettings.CROP_MANAGER_FUEL_STORAGE.get() * 100, ConfigSettings.CROP_MANAGER_FUEL_TO_WORK.get(), new int[]{0, 1, 2});
     }
 
-    @Override
     public void tickServer(BlockState state) {
         super.tickServer(state);
         if (!hasTilled && canWork(state)) {
@@ -193,7 +192,6 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         return 0;
     }
 
-    @Override
     public boolean canWork(BlockState state) {
         if (getCurrentFuel() < getMinFuelToWork()) {
             changeStateIfNecessary(state, false);
