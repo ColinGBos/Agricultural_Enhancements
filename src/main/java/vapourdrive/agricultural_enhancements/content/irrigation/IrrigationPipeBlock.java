@@ -100,6 +100,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
         return this.defaultBlockState().setValue(IRRIGATION, irrigation);
     }
 
+    @Override
     public boolean canConnect(BlockState state, Direction direction) {
         if (direction == Direction.UP) {
             return state.is(this);
