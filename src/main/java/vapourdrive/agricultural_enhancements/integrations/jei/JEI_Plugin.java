@@ -64,6 +64,16 @@ public class JEI_Plugin implements IModPlugin {
         registration.addIngredientInfo(new ItemStack(Registration.IRRIGATION_CONTROLLER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.irrigation_controller.info"));
         registration.addIngredientInfo(new ItemStack(Registration.FERTILIZER_PRODUCER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.fertilizer_producer.info", ConfigSettings.FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER.get()));
         registration.addIngredientInfo(new ItemStack(Registration.CROP_MANAGER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.crop_manager.info"));
+        registration.addIngredientInfo(new ItemStack(Registration.SOIL_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.soil.info"));
+        if(ConfigSettings.SOIL_REQUIRES_FERTILIZER.get()) {
+            registration.addIngredientInfo(new ItemStack(Registration.TILLED_SOIL_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.tilled_soil.info"), Component.translatable("agriculturalenhancements.tilled_soil.fertilizer_true.info"));
+        } else {
+            registration.addIngredientInfo(new ItemStack(Registration.TILLED_SOIL_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.tilled_soil.info"), Component.translatable("agriculturalenhancements.tilled_soil.fertilizer_false.info"));
+        }
+        registration.addIngredientInfo(new ItemStack(Registration.IRRIGATION_PIPE_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.irrigation_pipe.info"));
+        registration.addIngredientInfo(new ItemStack(Registration.SPRAYER_PIPE_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.sprayer_pipe.info", ConfigSettings.SPRAYER_VERTICAL_RANGE.get()));
+        registration.addIngredientInfo(new ItemStack(Registration.FARMER_WRENCH.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.farmer_wrench.info"));
+        registration.addIngredientInfo(new ItemStack(Registration.WATERING_CAN.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.watering_can.info"));
 
         RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
         List<FertilizerRecipe> recipeList = recipeManager.getAllRecipesFor(FertilizerRecipe.Type.INSTANCE);

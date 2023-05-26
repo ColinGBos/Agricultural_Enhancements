@@ -169,8 +169,10 @@ public class WateringCan extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(Component.literal("Water: ").append(df.format(getWater(pStack)) + "/" + df.format(getMaxWater()) + " mB").withStyle(ChatFormatting.BLUE));
+    public void appendHoverText(@NotNull ItemStack pStack, @Nullable Level pLevel, List<Component> list, @NotNull TooltipFlag pIsAdvanced) {
+        String water = df.format(getWater(pStack)) + "/" + df.format(getMaxWater());
+        list.add(Component.translatable("agriculturalenhancements.watering_can.water", water).withStyle(ChatFormatting.BLUE));
+        list.add(Component.translatable("agriculturalenhancements.watering_can.info").withStyle(ChatFormatting.GRAY));
     }
 
     public int getWater(ItemStack stack) {

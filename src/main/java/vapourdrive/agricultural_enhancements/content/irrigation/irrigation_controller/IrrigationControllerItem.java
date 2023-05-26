@@ -19,7 +19,7 @@ public class IrrigationControllerItem extends BaseMachineItem {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
-        list.add(Component.translatable("agriculturalenhancements.irrigation_controller.info_1").withStyle(ChatFormatting.BLUE));
+        list.add(Component.translatable("agriculturalenhancements.irrigation_controller.info_1").withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, level, list, flag);
     }
 }

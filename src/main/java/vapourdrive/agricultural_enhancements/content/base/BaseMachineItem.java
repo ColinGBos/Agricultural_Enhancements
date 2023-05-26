@@ -30,7 +30,7 @@ public class BaseMachineItem extends BlockItem {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
-        list.add(Component.translatable("agriculturalenhancements.fuel.info").withStyle(ChatFormatting.BLUE));
+        list.add(Component.translatable("agriculturalenhancements.fuel.info").withStyle(ChatFormatting.GRAY));
         if (stack.getTag() != null) {
             list = appendAdditionalTagInfo(list, stack.getTag());
 //            list.add(Component.literal("Fuel"+stack.getTag().getInt(AgriculturalEnhancements.MODID + ".fuel")));

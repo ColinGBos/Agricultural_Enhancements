@@ -22,7 +22,7 @@ public class FertilizerProducerItem extends BaseMachineItem {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
-        list.add(Component.translatable("agriculturalenhancements.fertilizer_producer.info_1").withStyle(ChatFormatting.BLUE));
+        list.add(Component.translatable("agriculturalenhancements.fertilizer_producer.info_1").withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, level, list, flag);
     }
 

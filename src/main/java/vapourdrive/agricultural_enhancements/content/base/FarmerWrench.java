@@ -1,5 +1,6 @@
 package vapourdrive.agricultural_enhancements.content.base;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -46,6 +47,6 @@ public class FarmerWrench extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(Component.translatable("agriculturalenhancements.farmer_wrench.info"));
+        pTooltipComponents.add(Component.translatable("agriculturalenhancements.farmer_wrench.info").withStyle(ChatFormatting.GRAY));
     }
 }
