@@ -3,7 +3,7 @@
   "ingredient": {
     "item": "minecraft:bone_meal"
   },
-  "n": 5,
-  "p": 20,
+  "n": 500,
+  "p": 2000,
   "k": 0
 }

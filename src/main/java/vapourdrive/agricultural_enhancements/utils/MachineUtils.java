@@ -69,8 +69,8 @@ public class MachineUtils {
         world.playSound(null, pos, sound, SoundSource.BLOCKS, volume, pitch);
     }
 
-    public static void doFuelProcess(ItemStack fuel, int wait, IFuelUser user) {
-        if (wait % 10 == 0) {
+    public static void doFuelProcess(ItemStack fuel, IFuelUser user) {
+        if (user.getFuelToAdd() == 0) {
 //            AgriculturalEnhancements.debugLog("Doing fuel process");
             user.setFuelToAdd(tryConsumeFuelStack(fuel, user));
             if (!user.addFuel(user.getFuelToAdd(), true)) {

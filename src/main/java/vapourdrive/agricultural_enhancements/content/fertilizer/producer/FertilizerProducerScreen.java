@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineScreen;
 
 import java.util.ArrayList;
@@ -59,8 +58,8 @@ public class FertilizerProducerScreen extends AbstractBaseMachineScreen<Fertiliz
         int i = 0;
         for (FertilizerProducerData.Data element : elements) {
             if (notCarrying && isInRect(this.leftPos + 67 + (10 * i), this.topPos + 19, 6, 46, mouseX, mouseY)) {
-                int elementValue = machineContainer.getElementStored(element) / ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get();
-                hoveringText.add(Component.translatable("agriculturalenhancements." + element.name().toLowerCase(), df.format(elementValue) + "/" + df.format(this.machineContainer.getMaxElement() / ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get())));
+                int elementValue = machineContainer.getElementStored(element);
+                hoveringText.add(Component.translatable("agriculturalenhancements." + element.name().toLowerCase(), df.format(elementValue) + "/" + df.format(this.machineContainer.getMaxElement())));
             }
             i++;
         }

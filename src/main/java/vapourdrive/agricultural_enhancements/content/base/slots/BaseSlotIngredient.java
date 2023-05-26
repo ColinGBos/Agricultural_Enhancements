@@ -3,7 +3,6 @@ package vapourdrive.agricultural_enhancements.content.base.slots;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 
 import javax.annotation.Nonnull;
 
@@ -29,12 +28,9 @@ public class BaseSlotIngredient extends AbstractMachineSlot {
     @Override
     public boolean mayPlace(@Nonnull ItemStack stack) {
         if (stack.isEmpty() || !this.isValidIngredient(stack)) {
-            AgriculturalEnhancements.debugLog("Returning false from parent class");
             return false;
         }
-        boolean ret = itemHandler.isItemValid(index, stack);
-        AgriculturalEnhancements.debugLog("Itemhandler says: " + ret);
-        return ret;
+        return itemHandler.isItemValid(index, stack);
     }
 
 

@@ -16,9 +16,9 @@
         "ingredient": {
           "tag": "minecraft:fishes"
         },
-        "n": 12,
-        "p": 3,
-        "k": 3
+        "n": 1200,
+        "p": 300,
+        "k": 300
       }
     }
   ]

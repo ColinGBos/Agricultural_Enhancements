@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.base.BaseMachineItem;
 
 import javax.annotation.Nullable;
@@ -29,7 +28,7 @@ public class CropManagerItem extends BaseMachineItem {
 
     @Override
     protected List<Component> appendAdditionalTagInfo(List<Component> list, CompoundTag tag) {
-        String fertilizer = df.format(tag.getInt(AgriculturalEnhancements.MODID + ".fertilizer") / ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get());
+        String fertilizer = df.format(tag.getInt(AgriculturalEnhancements.MODID + ".fertilizer"));
         list.add(Component.translatable("agriculturalenhancements.fertilizer", fertilizer));
         return list;
     }

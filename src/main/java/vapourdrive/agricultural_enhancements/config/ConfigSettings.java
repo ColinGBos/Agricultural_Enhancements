@@ -73,8 +73,8 @@ public class ConfigSettings {
         SERVER_BUILDER.comment("Fertilizer Producer Settings").push(SUBCATEGORY_FERTILIZER_PRODUCER);
         FERTILIZER_PRODUCER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Fertilizer Producer").defineInRange("fertilizerProducerFuelStorage", 128000, 5, 1000000);
         FERTILIZER_PRODUCER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed to break down one ingredient").defineInRange("fertilizerProducerFuelConsumption", 1000, 100, 10000);
-        FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER = SERVER_BUILDER.comment("Amount of each nutrient for making one fertilizer").defineInRange("nutrientPerFertilizer", 5, 1, 25);
-        FERTILIZER_PRODUCER_MAX_NUTRIENTS = SERVER_BUILDER.comment("Amount of each nutrient for making one fertilizer").defineInRange("fertilizerProducerNutrientStorage", 256, 10, 10000);
+        FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER = SERVER_BUILDER.comment("Amount of each nutrient for making one fertilizer").defineInRange("nutrientPerFertilizer", 250, 10, 5000);
+        FERTILIZER_PRODUCER_MAX_NUTRIENTS = SERVER_BUILDER.comment("Amount of each nutrient for making one fertilizer").defineInRange("fertilizerProducerNutrientStorage", 25600, 1000, 10000000);
         FERTILIZER_PRODUCER_INGREDIENT_TIME = SERVER_BUILDER.comment("Ticks to break down one ingredient").defineInRange("fertilizerProducerTimeToConsumeIngredient", 40, 20, 320);
         FERTILIZER_PRODUCER_PRODUCE_TIME = SERVER_BUILDER.comment("Ticks to make one fertilizer").defineInRange("fertilizerProducerTimeToProduceFertilizer", 40, 20, 320);
         SERVER_BUILDER.pop();
@@ -94,7 +94,7 @@ public class ConfigSettings {
 
         SERVER_BUILDER.comment("Crop Manager Settings").push(SUBCATEGORY_CROP_MANAGER);
         CROP_MANAGER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Crop Manager").defineInRange("cropManagerFuelStorage", 128000, 5, 1000000);
-        CROP_MANAGER_FERTILIZER_STORAGE = SERVER_BUILDER.comment("Fertilizer Storage for the Crop Manager").defineInRange("cropManagerFertilizerStorage", 25600, 800, 1000000);
+        CROP_MANAGER_FERTILIZER_STORAGE = SERVER_BUILDER.comment("Fertilizer Storage for the Crop Manager").defineInRange("cropManagerFertilizerStorage", 256000, 8000, 10000000);
         CROP_MANAGER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel to do one unit of work, planting or managing soil").defineInRange("cropManagerFuelConsumption", 2400, 10, 10000);
         CROP_MANAGER_SOIL_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between fertilizing soil, works all 9 blocks").defineInRange("cropManagerTicksBetweenFertilizingSoil", 40, 20, 320);
         CROP_MANAGER_CROP_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between planting crops, works one block at a time").defineInRange("cropManagerTicksBetweenPlanting", 5, 5, 160);

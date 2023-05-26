@@ -86,24 +86,20 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
             }
             if (canPushAllOutputs(Collections.singletonList(new ItemStack(Registration.FERTILISER.get())), this)) {
                 pushOutput(new ItemStack(Registration.FERTILISER.get()), false, this);
-                AgriculturalEnhancements.debugLog("Pushed the output");
                 consumeElement(Element.N, i, false);
                 consumeElement(Element.P, i, false);
                 consumeElement(Element.K, i, false);
             }
         }
-//        AgriculturalEnhancements.debugLog("Wait modulo maxWait: "+ wait%maxWait);
     }
 
     public void doConsumeProcess(ItemStack stack) {
         if (consumerTimer == 0 && consumeFuel(minWorkFuel, true) && !stack.isEmpty()) {
             int[] toAdds = tryConsumeStack(stack);
             if (toAdds != null) {
-//                AgriculturalEnhancements.debugLog("resulting lookup: " + toAdds[0]);
                 for (Element element : Element.values()) {
-                    int emnt = toAdds[element.ordinal()] * consumeMaxTime;
+                    int emnt = toAdds[element.ordinal()];
                     if (emnt > 0) {
-//            AgriculturalEnhancements.debugLog("Doing fuel process");
                         setElementToAdd(element, emnt);
                         if (!addElement(element, getElementToAdd(element), true)) {
                             setElementToAdd(element, getMaxElement() - getCurrentElement(element));
@@ -122,10 +118,11 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
             }
         }
         if (increment) {
-            consumerTimer++;
             consumeFuel(minWorkFuel / consumeMaxTime, false);
+            consumerTimer++;
+        } else {
+            consumerTimer = 0;
         }
-
     }
 
     public int[] tryConsumeStack(ItemStack stack) {
@@ -181,7 +178,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     }
 
     public int getMaxElement() {
-        return ConfigSettings.FERTILIZER_PRODUCER_MAX_NUTRIENTS.get() * consumeMaxTime;
+        return ConfigSettings.FERTILIZER_PRODUCER_MAX_NUTRIENTS.get();
     }
 
     public boolean addElement(Element element, int toAdd, boolean simulate) {
@@ -206,17 +203,17 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     }
 
     public boolean consumeElement(Element element, int toConsume, boolean simulate, boolean force) {
-        if (getCurrentElement(element) < toConsume * consumeMaxTime && !force) {
+        if (getCurrentElement(element) < toConsume && !force) {
             return false;
         }
         if (!simulate) {
             switch (element) {
                 case N ->
-                        fertilizerProducerData.set(FertilizerProducerData.Data.N, Math.max(0, getCurrentElement(element) - toConsume * consumeMaxTime));
+                        fertilizerProducerData.set(FertilizerProducerData.Data.N, Math.max(0, getCurrentElement(element) - toConsume));
                 case P ->
-                        fertilizerProducerData.set(FertilizerProducerData.Data.P, Math.max(0, getCurrentElement(element) - toConsume * consumeMaxTime));
+                        fertilizerProducerData.set(FertilizerProducerData.Data.P, Math.max(0, getCurrentElement(element) - toConsume));
                 case K ->
-                        fertilizerProducerData.set(FertilizerProducerData.Data.K, Math.max(0, getCurrentElement(element) - toConsume * consumeMaxTime));
+                        fertilizerProducerData.set(FertilizerProducerData.Data.K, Math.max(0, getCurrentElement(element) - toConsume));
             }
         }
         return true;
@@ -229,7 +226,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
             if (getCurrentElement(element) > 0) {
                 ret = true;
             }
-            consumeElement(element, 10, false, true);
+            consumeElement(element, 1000, false, true);
             AgriculturalEnhancements.debugLog(element.name() + getCurrentElement(element));
         }
         return ret;

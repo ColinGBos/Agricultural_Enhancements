@@ -18,6 +18,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.fertilizer.FertilizerRecipe;
 import vapourdrive.agricultural_enhancements.content.fertilizer.producer.FertilizerProducerScreen;
 import vapourdrive.agricultural_enhancements.content.harvester.HarvesterScreen;
@@ -61,7 +62,7 @@ public class JEI_Plugin implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addIngredientInfo(new ItemStack(Registration.HARVESTER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.harvester.info"));
         registration.addIngredientInfo(new ItemStack(Registration.IRRIGATION_CONTROLLER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.irrigation_controller.info"));
-        registration.addIngredientInfo(new ItemStack(Registration.FERTILIZER_PRODUCER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.fertilizer_producer.info"));
+        registration.addIngredientInfo(new ItemStack(Registration.FERTILIZER_PRODUCER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.fertilizer_producer.info", ConfigSettings.FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER.get()));
         registration.addIngredientInfo(new ItemStack(Registration.CROP_MANAGER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.crop_manager.info"));
 
         RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();

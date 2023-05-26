@@ -14,7 +14,6 @@ public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IF
 
     public final int maxFuel;
     public final int minWorkFuel;
-    public int fuelTimer = 0;
 
     public int toAdd = 0;
     public int increment = 0;
@@ -35,11 +34,7 @@ public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IF
 
     public void tickServer(BlockState state) {
         ItemStack fuel = getStackInSlot(MachineUtils.Area.FUEL, 0);
-        MachineUtils.doFuelProcess(fuel, fuelTimer, this);
-        fuelTimer++;
-        if (fuelTimer >= 10) {
-            fuelTimer = 0;
-        }
+        MachineUtils.doFuelProcess(fuel, this);
     }
 
     @Override
@@ -47,7 +42,6 @@ public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IF
         super.load(tag);
         increment = tag.getInt("increment");
         toAdd = tag.getInt("toAdd");
-        fuelTimer = tag.getInt("fuelTimer");
     }
 
     @Override
@@ -55,7 +49,6 @@ public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IF
         super.saveAdditional(tag);
         tag.putInt("increment", increment);
         tag.putInt("toAdd", toAdd);
-        tag.putInt("fuelTimer", fuelTimer);
     }
 
     public void changeStateIfNecessary(BlockState state, Boolean working) {

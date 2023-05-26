@@ -12,7 +12,6 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
-import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.manager.CropManagerTile;
 
 import java.text.DecimalFormat;
@@ -37,7 +36,7 @@ public enum CropManagerContentProvider implements IBlockComponentProvider, IServ
     @Override
     public void appendServerData(CompoundTag data, ServerPlayer player, Level world, BlockEntity t, boolean showDetails) {
         if (t instanceof CropManagerTile user) {
-            data.putInt("Fertilizer", user.getCurrentFertilizer() / ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get());
+            data.putInt("Fertilizer", user.getCurrentFertilizer());
         }
     }
 }

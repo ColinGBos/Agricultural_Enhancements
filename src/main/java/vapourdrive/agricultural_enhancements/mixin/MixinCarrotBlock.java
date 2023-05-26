@@ -26,9 +26,9 @@ public class MixinCarrotBlock extends CropBlock {
     @Inject(at = @At("HEAD"), method = "getShape(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;", cancellable = true)
     private void getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext, CallbackInfoReturnable<VoxelShape> callback) {
         VoxelShape shape;
-        if(ConfigSettings.REPLACE_CARROT_SHAPE.get()){
+        if (ConfigSettings.REPLACE_CARROT_SHAPE.get()) {
             shape = SKINNY_SHAPE[pState.getValue(this.getAgeProperty())];
-        } else{
+        } else {
             shape = SHAPE_BY_AGE[pState.getValue(this.getAgeProperty())];
         }
 
@@ -40,13 +40,13 @@ public class MixinCarrotBlock extends CropBlock {
     private static VoxelShape[] SHAPE_BY_AGE;
 
     private static final VoxelShape[] SKINNY_SHAPE = new VoxelShape[]{
-        Block.box(2.0D, 0.0D, 2.0D, 14.0D, 2.0D, 14.0D),
-        Block.box(2.0D, 0.0D, 2.0D, 14.0D, 3.0D, 14.0D),
-        Block.box(2.0D, 0.0D, 2.0D, 14.0D, 4.0D, 14.0D),
-        Block.box(2.0D, 0.0D, 2.0D, 14.0D, 5.0D, 14.0D),
-        Block.box(2.0D, 0.0D, 2.0D, 14.0D, 6.0D, 14.0D),
-        Block.box(2.0D, 0.0D, 2.0D, 14.0D, 8.0D, 14.0D),
-        Block.box(2.0D, 0.0D, 2.0D, 14.0D, 10.0D, 14.0D),
-        Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D)
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 2.0D, 14.0D),
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 3.0D, 14.0D),
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 4.0D, 14.0D),
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 5.0D, 14.0D),
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 6.0D, 14.0D),
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 8.0D, 14.0D),
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 10.0D, 14.0D),
+            Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D)
     };
 }
