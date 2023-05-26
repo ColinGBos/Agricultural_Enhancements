@@ -33,7 +33,7 @@ public class CropManagerBlock extends AbstractBaseMachineBlock {
     protected boolean sneakWrenchMachine(Player player, Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof CropManagerTile machine) {
-            machine.resetTillage();
+            machine.resetTillage(level.getBlockState(pos));
             return true;
         }
         return false;

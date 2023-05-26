@@ -50,7 +50,6 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     public int incrementalFertilizerToAdd = 0;
     private int soilTimer = 0;
     private int plantTimer = 0;
-    private boolean hasTilled = false;
 
     private final ArrayList<Integer> blocks = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
 
@@ -60,9 +59,6 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
 
     public void tickServer(BlockState state) {
         super.tickServer(state);
-        if (!hasTilled && canWork(state)) {
-            hasTilled = doTillProcesses(state);
-        }
         ItemStack ingredient = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
         doConsumeProcess(ingredient);
         if (soilTimer == ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get()) {
@@ -77,7 +73,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         plantTimer++;
     }
 
-    private boolean doTillProcesses(BlockState state) {
+    private void doTillProcesses(BlockState state) {
         if (canWork(state)) {
             AgriculturalEnhancements.debugLog("Can work, tilling soil");
             Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
@@ -103,9 +99,6 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
 
 //                AgriculturalEnhancements.debugLog(""+soilState);
             }
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -218,7 +211,6 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         machineData.set(CropManagerData.Data.FERTILIZER, tag.getInt("fertilizer"));
         soilTimer = tag.getInt("soilTimer");
         plantTimer = tag.getInt("plantTimer");
-        hasTilled = tag.getBoolean("hasTilled");
     }
 
     @Override
@@ -232,7 +224,6 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         tag.putInt("fertilizer", getCurrentFertilizer());
         tag.putInt("soilTimer", soilTimer);
         tag.putInt("plantTimer", plantTimer);
-        tag.putBoolean("hasTilled", hasTilled);
     }
 
     @Nonnull
@@ -370,7 +361,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         return true;
     }
 
-    public void resetTillage() {
-        this.hasTilled = false;
+    public void resetTillage(BlockState state) {
+        doTillProcesses(state);
     }
 }

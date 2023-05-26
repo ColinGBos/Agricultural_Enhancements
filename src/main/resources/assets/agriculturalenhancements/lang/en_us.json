@@ -1,8 +1,8 @@
 {
   "agriculturalenhancements.crop_manager": "Crop Manager",
-  "agriculturalenhancements.crop_manager.info": "Fuel-powered machine that plants crops and fertilizes soil up to 9 blocks away behind itself\nConsumes fertilizer more efficiently than hand-use\nTills applicable soil once when first powered",
+  "agriculturalenhancements.crop_manager.info": "Fuel-powered machine that plants crops and fertilizes soil up to 9 blocks away behind itself\nConsumes fertilizer more efficiently than hand-use\nTills soil up to 9 blocks away when using the Farmer's Wrench",
   "agriculturalenhancements.crop_manager.info_1": "Plants crops and fertilizes soil",
-  "agriculturalenhancements.crop_manager.wrench": "Crouch-right-click with the Farmer's wrench to reset the one-time tilling function",
+  "agriculturalenhancements.crop_manager.wrench": "Crouch-right-click with the Farmer's wrench to till soil up to 9 blocks away",
   "agriculturalenhancements.farmer_wrench.info": "Punch machines to disassemble them without losing fuel or broken down ingredients\nRight-click rotatable blocks to rotate\nCrouch-right-click to interact or repair applicable machines",
   "agriculturalenhancements.fertiliser.info": "Used for fertilising soil",
   "agriculturalenhancements.fertiliser.info_1": "Used most efficiently with the Crop Manager",
