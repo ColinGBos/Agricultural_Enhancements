@@ -18,7 +18,6 @@ import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import java.util.ArrayList;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(AgriculturalEnhancements.MODID)
 public class AgriculturalEnhancements {
     // Directly reference a log4j logger.

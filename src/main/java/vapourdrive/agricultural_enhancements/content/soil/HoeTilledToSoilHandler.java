@@ -54,6 +54,6 @@ public class HoeTilledToSoilHandler {
     public static boolean cannotTill(Block block, BlockPos pos, LevelAccessor level) {
         if (block != Blocks.GRASS_BLOCK && block != Blocks.DIRT_PATH && block != Blocks.DIRT && block != Blocks.FARMLAND && block != Registration.SOIL_BLOCK.get()) {
             return false;
-        } else return level.getBlockState(pos.above()).getMaterial().isReplaceable();
+        } else return !level.getBlockState(pos.above()).getMaterial().isReplaceable();
     }
 }
