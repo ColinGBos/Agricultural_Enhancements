@@ -45,7 +45,7 @@
   "agriculturalenhancements.tilled_soil.fertilizer_true.info": "Requires fertilizer in off-hand to create when using a hoe",
   "agriculturalenhancements.tilled_soil.info": "Like farmland, but has moisture and nutrition information.\nMoisture passes naturally between soil (including tilled)",
   "agriculturalenhancements.toolslot": "Tool Slot",
-  "agriculturalenhancements.watering_can.info": "Holds 1 bucket worth of water.\nSpeeds crop growth during use and makes soil moist.\nWorks in a 3x3 area.",
+  "agriculturalenhancements.watering_can.info": "Holds 1 bucket worth of water.\nSpeeds crop growth and irrigates soil.\nWorks in a 3x3 area.",
   "agriculturalenhancements.watering_can.water": "Water: %d mB",
   "block.agriculturalenhancements.crop_manager": "Crop Manager",
   "block.agriculturalenhancements.fertilizer_producer": "Fertilizer Producer",

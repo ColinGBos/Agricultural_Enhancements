@@ -1,6 +1,7 @@
 package vapourdrive.agricultural_enhancements.content.harvester;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -89,5 +90,13 @@ public class HarvesterBlock extends AbstractBaseMachineBlock {
             }
             super.onRemove(state, world, blockPos, newState, isMoving);
         }
+    }
+
+    @Override
+    protected CompoundTag putAdditionalInfo(CompoundTag tag, BlockEntity blockEntity) {
+        if (blockEntity instanceof HarvesterTile machine) {
+            tag.putBoolean(AgriculturalEnhancements.MODID + ".destructive", machine.isNonDestructive());
+        }
+        return tag;
     }
 }

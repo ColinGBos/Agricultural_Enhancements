@@ -73,19 +73,10 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
                         LootContext.Builder builder = (new LootContext.Builder((ServerLevel) level)).withRandom(level.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, tool);
                         List<ItemStack> drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
 //                        AgriculturalEnhancements.debugLog("Drops pre-cull: " + drops);
-                        ItemStack seed = crop.getCloneItemStack(level, pos, targetState);
                         if (isNonDestructive()) {
-                            for (ItemStack drop : drops) {
-                                if (ItemStack.isSame(drop, seed)) {
-                                    drop.shrink(1);
-                                    if (drop.isEmpty()) {
-                                        drops.remove(drop);
-                                    }
-                                    break;
-                                }
-                            }
+                            ItemStack seed = crop.getCloneItemStack(level, pos, targetState);
+                            drops = cullSeed(drops, seed);
                         }
-
                         if (MachineUtils.canPushAllOutputs(drops, this)) {
                             for (ItemStack stack : drops) {
                                 MachineUtils.pushOutput(stack, false, this);
@@ -93,7 +84,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
 //                            AgriculturalEnhancements.debugLog("Server Success");
                             MachineUtils.playSound(level, pos, level.getRandom(), SoundEvents.CROP_BREAK, 0f, 0.7f);
                             if (isNonDestructive()) {
-                                level.setBlockAndUpdate(pos, targetState.setValue(crop.getAgeProperty(), 1));
+                                level.setBlockAndUpdate(pos, crop.getStateForAge(0));
                             } else {
                                 level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                             }
@@ -106,11 +97,32 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         }
     }
 
+    public List<ItemStack> cullSeed(List<ItemStack> drops, ItemStack seed){
+        for (ItemStack drop : drops) {
+            if (ItemStack.isSame(drop, seed)) {
+                drop.shrink(1);
+                if (drop.isEmpty()) {
+                    drops.remove(drop);
+                }
+                break;
+            }
+        }
+        return drops;
+    }
+
     public boolean isNonDestructive() {
         if (!ConfigSettings.HARVESTER_NON_DESTRUCTIVE_HARVESTING.get()) {
             return false;
         } else {
             return harvesterData.get(HarvesterData.Data.MODE) == 1;
+        }
+    }
+
+    public void setMode(boolean isNonDestructive){
+        if(isNonDestructive){
+            harvesterData.set(HarvesterData.Data.MODE, 1);
+        } else {
+            harvesterData.set(HarvesterData.Data.MODE, 0);
         }
     }
 
