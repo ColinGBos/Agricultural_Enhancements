@@ -57,6 +57,14 @@ public class MachineUtils {
         return ret;
     }
 
+    public static int getTotalCount(Iterable<? extends ItemStack> stacks) {
+        int count = 0;
+        for (ItemStack stack : stacks) {
+            count += stack.getCount();
+        }
+        return count;
+    }
+
     public static void playSound(Level world, BlockPos pos, RandomSource rand, SoundEvent sound, float pitch) {
         playSound(world, pos, rand, sound, pitch, 1f);
     }
