@@ -97,6 +97,8 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
                     } else if (targetState.getBlock() instanceof BushBlock) {
                         List<ItemStack> drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
                         if(MachineUtils.getTotalCount(drops) > 1){
+//                          We re-run the drops so they aren't always including bonus drops
+                            drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
                             if (MachineUtils.canPushAllOutputs(drops, this)) {
                                 for (ItemStack stack : drops) {
                                     MachineUtils.pushOutput(stack, false, this);
