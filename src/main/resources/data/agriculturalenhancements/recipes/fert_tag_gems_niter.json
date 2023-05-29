@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:gems/niter"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "agriculturalenhancements:fertilizer",
+        "ingredient": {
+          "tag": "forge:gems/niter"
+        },
+        "n": 1200,
+        "p": 0,
+        "k": 800
+      }
+    }
+  ]
+}
+
