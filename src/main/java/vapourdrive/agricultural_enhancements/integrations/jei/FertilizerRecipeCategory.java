@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.fertilizer.FertilizerRecipe;
 import vapourdrive.agricultural_enhancements.content.fertilizer.producer.FertilizerProducerData;
 import vapourdrive.agricultural_enhancements.setup.Registration;
@@ -119,9 +120,9 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
 
         int[] outputs = recipe.getOutputs();
 
-        n.draw(stack, 41, 4, Math.max(0, 45 - outputs[0]), 0, 0, 0);
-        p.draw(stack, 51, 4, Math.max(0, 45 - outputs[1]), 0, 0, 0);
-        k.draw(stack, 61, 4, Math.max(0, 45 - outputs[2]), 0, 0, 0);
+        n.draw(stack, 41, 4, Math.max(0, 45 - outputs[0] / 100), 0, 0, 0);
+        p.draw(stack, 51, 4, Math.max(0, 45 - outputs[1] / 100), 0, 0, 0);
+        k.draw(stack, 61, 4, Math.max(0, 45 - outputs[2] / 100), 0, 0, 0);
     }
 
     @Override
@@ -138,7 +139,7 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
         }
 
         if (isInRect(71, 19, 23, 17, (int) mouseX, (int) mouseY)) {
-            hoveringText.add(Component.translatable("agriculturalenhancements.fertilizer_producer.info_2"));
+            hoveringText.add(Component.translatable("agriculturalenhancements.fertilizer_producer.info_2", ConfigSettings.FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER.get()));
         }
 
         return hoveringText;

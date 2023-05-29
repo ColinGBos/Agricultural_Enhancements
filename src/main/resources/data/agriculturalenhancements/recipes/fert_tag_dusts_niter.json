@@ -16,9 +16,9 @@
         "ingredient": {
           "tag": "forge:dusts/niter"
         },
-        "n": 12,
+        "n": 1200,
         "p": 0,
-        "k": 8
+        "k": 800
       }
     }
   ]

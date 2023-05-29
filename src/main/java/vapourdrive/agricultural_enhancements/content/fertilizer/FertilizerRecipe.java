@@ -17,8 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
-import java.util.Arrays;
-
 public class FertilizerRecipe implements Recipe<SimpleContainer> {
     protected final ResourceLocation id;
     protected final Lazy<Ingredient> ingredient;
@@ -28,7 +26,7 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
 
     public FertilizerRecipe(ResourceLocation id, Ingredient ingredient, int n, int p, int k) {
         this.id = id;
-        this.ingredient = Lazy.of(()->ingredient);
+        this.ingredient = Lazy.of(() -> ingredient);
         this.n = n;
         this.p = p;
         this.k = k;
@@ -36,12 +34,7 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public boolean matches(@NotNull SimpleContainer pContainer, @NotNull Level pLevel) {
-        AgriculturalEnhancements.debugLog("Checking container " + (pContainer.getItem(0)));
-        AgriculturalEnhancements.debugLog("Checking ingredient " + Arrays.toString(getIngredient().getItems()));
-
-        boolean ret = this.getIngredient().test(pContainer.getItem(0));
-        AgriculturalEnhancements.debugLog("Matches " + ret);
-        return ret;
+        return this.getIngredient().test(pContainer.getItem(0));
     }
 
     @Override

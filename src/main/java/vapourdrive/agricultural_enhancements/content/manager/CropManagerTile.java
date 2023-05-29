@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.capabilities.Capability;
@@ -49,7 +50,6 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     public int incrementalFertilizerToAdd = 0;
     private int soilTimer = 0;
     private int plantTimer = 0;
-    private boolean hasTilled = false;
 
     private final ArrayList<Integer> blocks = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
 
@@ -59,24 +59,21 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
 
     public void tickServer(BlockState state) {
         super.tickServer(state);
-        if (!hasTilled && canWork(state)) {
-            hasTilled = doTillProcesses(state);
-        }
         ItemStack ingredient = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
         doConsumeProcess(ingredient);
         if (soilTimer == ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get()) {
             doNutrientWorkProcesses(state);
             soilTimer = 0;
         }
-        soilTimer++;
         if (plantTimer == ConfigSettings.CROP_MANAGER_CROP_PROCESS_TIME.get()) {
             doPlantWorkProcesses(state);
             plantTimer = 0;
         }
+        soilTimer++;
         plantTimer++;
     }
 
-    private boolean doTillProcesses(BlockState state) {
+    private void doTillProcesses(BlockState state) {
         if (canWork(state)) {
             AgriculturalEnhancements.debugLog("Can work, tilling soil");
             Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
@@ -86,20 +83,22 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                 BlockState soilState = this.level.getBlockState(this.worldPosition.relative(direction, i).below());
                 BlockState cropState = this.level.getBlockState(this.worldPosition.relative(direction, i));
                 BlockPos soilPos = this.worldPosition.relative(direction, i).below();
-                if (!cropState.isAir()) {
+                BlockPos cropPos = soilPos.above();
+                if (!cropState.getMaterial().isReplaceable()) {
+                    AgriculturalEnhancements.debugLog(cropState + " is not replacable");
                     continue;
                 }
                 if (HoeTilledToSoilHandler.cannotTill(soilState.getBlock(), soilPos, level)) {
                     continue;
+                }
+                if (!cropState.isAir()) {
+                    level.setBlockAndUpdate(cropPos, Blocks.AIR.defaultBlockState());
                 }
                 level.setBlockAndUpdate(soilPos, Registration.TILLED_SOIL_BLOCK.get().getStateForPlacement(level, soilPos));
                 MachineUtils.playSound(level, soilPos, level.getRandom(), SoundEvents.HOE_TILL, 0f, 0.5f);
 
 //                AgriculturalEnhancements.debugLog(""+soilState);
             }
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -119,7 +118,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                     continue;
                 }
                 BlockPos pos = this.worldPosition.relative(direction, i).below();
-                if (!consumeFertilizer((TilledSoilBlock.MAX_NUTRIENTS - currentFert) * ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get(), true)) {
+                if (!consumeFertilizer((TilledSoilBlock.MAX_NUTRIENTS - currentFert) * 100, true)) {
                     continue;
                 }
                 if (!consumeFuel(getMinFuelToWork() * TilledSoilBlock.MAX_NUTRIENTS - currentFert, true)) {
@@ -127,7 +126,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                 }
                 level.setBlockAndUpdate(pos, targetState.setValue(TilledSoilBlock.SOIL_NUTRIENTS, TilledSoilBlock.MAX_NUTRIENTS));
                 MachineUtils.playSound(level, pos, level.getRandom(), SoundEvents.GRAVEL_HIT, 0f, 0.5f);
-                consumeFertilizer((TilledSoilBlock.MAX_NUTRIENTS - currentFert) * ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get(), false);
+                consumeFertilizer((TilledSoilBlock.MAX_NUTRIENTS - currentFert) * 100, false);
                 consumeFuel(getMinFuelToWork() * TilledSoilBlock.MAX_NUTRIENTS - currentFert, false);
 //                AgriculturalEnhancements.debugLog(""+targetState);
             }
@@ -167,7 +166,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     }
 
     public void doConsumeProcess(ItemStack stack) {
-        if (soilTimer == ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get()) {
+        if (getFertilizerToAdd() == 0) {
             int toAdd = tryConsumeStack(stack);
             if (toAdd > 0) {
 //            AgriculturalEnhancements.debugLog("Doing fuel process");
@@ -175,7 +174,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                 if (!addFertilizer(getFertilizerToAdd(), true)) {
                     setFertilizerToAdd(getMaxFertilizer() - getCurrentFertilizer());
                 }
-                setIncrementalFertilizerToAdd(getFertilizerToAdd() / ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get());
+                setIncrementalFertilizerToAdd(getFertilizerToAdd() / 10);
             }
         }
         if (getFertilizerToAdd() > 0) {
@@ -187,7 +186,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
     public int tryConsumeStack(ItemStack stack) {
         if (!stack.isEmpty()) {
             removeFromSlot(MachineUtils.Area.INGREDIENT, 0, 1, false);
-            return 5 * ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get();
+            return 500;
         }
         return 0;
     }
@@ -212,7 +211,6 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         machineData.set(CropManagerData.Data.FERTILIZER, tag.getInt("fertilizer"));
         soilTimer = tag.getInt("soilTimer");
         plantTimer = tag.getInt("plantTimer");
-        hasTilled = tag.getBoolean("hasTilled");
     }
 
     @Override
@@ -226,7 +224,6 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         tag.putInt("fertilizer", getCurrentFertilizer());
         tag.putInt("soilTimer", soilTimer);
         tag.putInt("plantTimer", plantTimer);
-        tag.putBoolean("hasTilled", hasTilled);
     }
 
     @Nonnull
@@ -364,7 +361,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         return true;
     }
 
-    public void resetTillage() {
-        this.hasTilled = false;
+    public void resetTillage(BlockState state) {
+        doTillProcesses(state);
     }
 }

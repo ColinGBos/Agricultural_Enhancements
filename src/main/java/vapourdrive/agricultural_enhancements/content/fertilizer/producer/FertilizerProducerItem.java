@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.base.BaseMachineItem;
 
 import javax.annotation.Nullable;
@@ -23,17 +22,17 @@ public class FertilizerProducerItem extends BaseMachineItem {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
-        list.add(Component.translatable("agriculturalenhancements.fertilizer_producer.info_1").withStyle(ChatFormatting.BLUE));
+        list.add(Component.translatable("agriculturalenhancements.fertilizer_producer.info_1").withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, level, list, flag);
     }
 
     @Override
     protected List<Component> appendAdditionalTagInfo(List<Component> list, CompoundTag tag) {
-        String n = df.format(tag.getInt(AgriculturalEnhancements.MODID + ".n") / ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get());
+        String n = df.format(tag.getInt(AgriculturalEnhancements.MODID + ".n"));
         list.add(Component.translatable("agriculturalenhancements.n", n));
-        String p = df.format(tag.getInt(AgriculturalEnhancements.MODID + ".p") / ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get());
+        String p = df.format(tag.getInt(AgriculturalEnhancements.MODID + ".p"));
         list.add(Component.translatable("agriculturalenhancements.p", p));
-        String k = df.format(tag.getInt(AgriculturalEnhancements.MODID + ".k") / ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get());
+        String k = df.format(tag.getInt(AgriculturalEnhancements.MODID + ".k"));
         list.add(Component.translatable("agriculturalenhancements.k", k));
         return list;
     }

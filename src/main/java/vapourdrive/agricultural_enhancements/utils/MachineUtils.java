@@ -57,6 +57,14 @@ public class MachineUtils {
         return ret;
     }
 
+    public static int getTotalCount(Iterable<? extends ItemStack> stacks) {
+        int count = 0;
+        for (ItemStack stack : stacks) {
+            count += stack.getCount();
+        }
+        return count;
+    }
+
     public static void playSound(Level world, BlockPos pos, RandomSource rand, SoundEvent sound, float pitch) {
         playSound(world, pos, rand, sound, pitch, 1f);
     }
@@ -69,8 +77,8 @@ public class MachineUtils {
         world.playSound(null, pos, sound, SoundSource.BLOCKS, volume, pitch);
     }
 
-    public static void doFuelProcess(ItemStack fuel, int wait, IFuelUser user) {
-        if (wait % 10 == 0) {
+    public static void doFuelProcess(ItemStack fuel, IFuelUser user) {
+        if (user.getFuelToAdd() == 0) {
 //            AgriculturalEnhancements.debugLog("Doing fuel process");
             user.setFuelToAdd(tryConsumeFuelStack(fuel, user));
             if (!user.addFuel(user.getFuelToAdd(), true)) {

@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -66,38 +67,47 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
             assert this.level != null;
             for (int i = 1; i <= 9; i++) {
                 BlockState targetState = this.level.getBlockState(this.worldPosition.relative(direction, i));
-                if (targetState.getBlock() instanceof CropBlock crop) {
-                    if (crop.isMaxAge(targetState)) {
-                        BlockPos pos = this.worldPosition.relative(direction, i);
-                        ItemStack tool = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
-                        LootContext.Builder builder = (new LootContext.Builder((ServerLevel) level)).withRandom(level.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, tool);
-                        List<ItemStack> drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
+                if(targetState.getBlock() instanceof CropBlock || targetState.getBlock() instanceof BushBlock) {
+                    BlockPos pos = this.worldPosition.relative(direction, i);
+                    ItemStack tool = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
+                    LootContext.Builder builder = (new LootContext.Builder((ServerLevel) level)).withRandom(level.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, tool);
+
+                    if (targetState.getBlock() instanceof CropBlock crop) {
+                        if (crop.isMaxAge(targetState)) {
+                            List<ItemStack> drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
 //                        AgriculturalEnhancements.debugLog("Drops pre-cull: " + drops);
-                        ItemStack seed = crop.getCloneItemStack(level, pos, targetState);
-                        if (isNonDestructive()) {
-                            for (ItemStack drop : drops) {
-                                if (ItemStack.isSame(drop, seed)) {
-                                    drop.shrink(1);
-                                    if (drop.isEmpty()) {
-                                        drops.remove(drop);
-                                    }
-                                    break;
+                            if (isNonDestructive()) {
+                                ItemStack seed = crop.getCloneItemStack(level, pos, targetState);
+                                drops = cullSeed(drops, seed);
+                            }
+                            if (MachineUtils.canPushAllOutputs(drops, this)) {
+                                for (ItemStack stack : drops) {
+                                    MachineUtils.pushOutput(stack, false, this);
                                 }
+//                            AgriculturalEnhancements.debugLog("Server Success");
+                                MachineUtils.playSound(level, pos, level.getRandom(), SoundEvents.CROP_BREAK, 0f, 0.7f);
+                                if (isNonDestructive()) {
+                                    level.setBlockAndUpdate(pos, crop.getStateForAge(0));
+                                } else {
+                                    level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                                }
+                                consumeFuel(getMinFuelToWork(), false);
                             }
                         }
-
-                        if (MachineUtils.canPushAllOutputs(drops, this)) {
-                            for (ItemStack stack : drops) {
-                                MachineUtils.pushOutput(stack, false, this);
-                            }
+                    } else if (targetState.getBlock() instanceof BushBlock) {
+                        List<ItemStack> drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
+                        if(MachineUtils.getTotalCount(drops) > 1){
+//                          We re-run the drops so they aren't always including bonus drops
+                            drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
+                            if (MachineUtils.canPushAllOutputs(drops, this)) {
+                                for (ItemStack stack : drops) {
+                                    MachineUtils.pushOutput(stack, false, this);
+                                }
 //                            AgriculturalEnhancements.debugLog("Server Success");
-                            MachineUtils.playSound(level, pos, level.getRandom(), SoundEvents.CROP_BREAK, 0f, 0.7f);
-                            if (isNonDestructive()) {
-                                level.setBlockAndUpdate(pos, targetState.setValue(crop.getAgeProperty(), 1));
-                            } else {
+                                MachineUtils.playSound(level, pos, level.getRandom(), SoundEvents.CROP_BREAK, 0f, 0.7f);
                                 level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                                consumeFuel(getMinFuelToWork(), false);
                             }
-                            consumeFuel(getMinFuelToWork(), false);
                         }
                     }
                 }
@@ -106,11 +116,32 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         }
     }
 
+    public List<ItemStack> cullSeed(List<ItemStack> drops, ItemStack seed){
+        for (ItemStack drop : drops) {
+            if (ItemStack.isSame(drop, seed)) {
+                drop.shrink(1);
+                if (drop.isEmpty()) {
+                    drops.remove(drop);
+                }
+                break;
+            }
+        }
+        return drops;
+    }
+
     public boolean isNonDestructive() {
         if (!ConfigSettings.HARVESTER_NON_DESTRUCTIVE_HARVESTING.get()) {
             return false;
         } else {
             return harvesterData.get(HarvesterData.Data.MODE) == 1;
+        }
+    }
+
+    public void setMode(boolean isNonDestructive){
+        if(isNonDestructive){
+            harvesterData.set(HarvesterData.Data.MODE, 1);
+        } else {
+            harvesterData.set(HarvesterData.Data.MODE, 0);
         }
     }
 

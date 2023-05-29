@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineScreen;
 
 import java.util.ArrayList;
@@ -47,9 +46,9 @@ public class CropManagerScreen extends AbstractBaseMachineScreen<CropManagerCont
 
         List<Component> hoveringText = new ArrayList<>();
 
-        if (notCarrying && isInRect(this.leftPos + 32, this.topPos + 19, 16, 46, mouseX, mouseY)) {
-            int m = this.machineContainer.getFertilizerStored(CropManagerData.Data.FERTILIZER) / ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get();
-            hoveringText.add(Component.translatable("item.agriculturalenhancements.fertilizer").append(": ").append(df.format(m) + "/" + df.format(this.machineContainer.getMaxFertilizer() / ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get())));
+        if (notCarrying && isInRect(this.leftPos + 32, this.topPos + 8, 16, 46, mouseX, mouseY)) {
+            int m = this.machineContainer.getFertilizerStored(CropManagerData.Data.FERTILIZER);
+            hoveringText.add(Component.translatable("item.agriculturalenhancements.fertilizer").append(": ").append(df.format(m) + "/" + df.format(this.machineContainer.getMaxFertilizer())));
         }
 
 

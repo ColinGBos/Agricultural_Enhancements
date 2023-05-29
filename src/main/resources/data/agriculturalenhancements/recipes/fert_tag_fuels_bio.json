@@ -16,8 +16,8 @@
         "ingredient": {
           "tag": "forge:fuels/bio"
         },
-        "n": 8,
-        "p": 8,
+        "n": 800,
+        "p": 800,
         "k": 0
       }
     }

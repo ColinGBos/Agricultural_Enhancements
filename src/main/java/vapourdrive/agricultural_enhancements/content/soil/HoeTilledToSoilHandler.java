@@ -22,20 +22,24 @@ public class HoeTilledToSoilHandler {
         AgriculturalEnhancements.debugLog("Hoe use " + event.getFinalState());
         ItemStack offhandStack = Objects.requireNonNull(event.getPlayer()).getOffhandItem();
         int nutrients = 0;
-        if (ConfigSettings.SOIL_REQUIRES_FERTILIZER.get() && !offhandStack.is(Registration.FERTILISER.get())) {
-            return;
-        }
-        boolean consume = false;
-        if (offhandStack.is(Registration.FERTILISER.get())) {
-            nutrients = TilledSoilBlock.MAX_NUTRIENTS;
-            consume = true;
-        }
+
         BlockState state = event.getFinalState();
 
         Block block = state.getBlock();
         if (cannotTill(block, event.getPos(), event.getLevel())) {
             return;
         }
+
+        if (ConfigSettings.SOIL_REQUIRES_FERTILIZER.get() && !offhandStack.is(Registration.FERTILISER.get()) && !state.is(Registration.SOIL_BLOCK.get())) {
+            return;
+        }
+
+        boolean consume = false;
+        if (offhandStack.is(Registration.FERTILISER.get())) {
+            nutrients = TilledSoilBlock.MAX_NUTRIENTS;
+            consume = true;
+        }
+
         int baseMoisture = Math.max((int) ((event.getLevel().getBiome(event.getPos()).get().getDownfall() - 0.1f) / 0.2f), 0);
         if (state.hasProperty(TilledSoilBlock.SOIL_NUTRIENTS) && state.hasProperty(TilledSoilBlock.SOIL_MOISTURE)) {
             nutrients = Math.max(nutrients, state.getValue(TilledSoilBlock.SOIL_NUTRIENTS));
@@ -48,6 +52,8 @@ public class HoeTilledToSoilHandler {
     }
 
     public static boolean cannotTill(Block block, BlockPos pos, LevelAccessor level) {
-        return (block != Blocks.GRASS_BLOCK && block != Blocks.DIRT_PATH && block != Blocks.DIRT && block != Blocks.FARMLAND && block != Registration.SOIL_BLOCK.get()) || !level.getBlockState(pos.above()).isAir();
+        if (block != Blocks.GRASS_BLOCK && block != Blocks.DIRT_PATH && block != Blocks.DIRT && block != Blocks.FARMLAND && block != Registration.SOIL_BLOCK.get()) {
+            return false;
+        } else return !level.getBlockState(pos.above()).getMaterial().isReplaceable();
     }
 }

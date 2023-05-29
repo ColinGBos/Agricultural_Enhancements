@@ -3,7 +3,7 @@
   "ingredient": {
     "item": "minecraft:egg"
   },
-  "n": 8,
-  "p": 2,
-  "k": 1
+  "n": 800,
+  "p": 200,
+  "k": 100
 }

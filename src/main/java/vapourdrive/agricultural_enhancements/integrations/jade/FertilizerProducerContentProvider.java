@@ -12,7 +12,6 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
-import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.fertilizer.producer.FertilizerProducerTile;
 
 import java.text.DecimalFormat;
@@ -47,9 +46,9 @@ public enum FertilizerProducerContentProvider implements IBlockComponentProvider
     @Override
     public void appendServerData(CompoundTag data, ServerPlayer player, Level world, BlockEntity t, boolean showDetails) {
         if (t instanceof FertilizerProducerTile user) {
-            data.putInt("n", user.getCurrentElement(FertilizerProducerTile.Element.N) / ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get());
-            data.putInt("p", user.getCurrentElement(FertilizerProducerTile.Element.P) / ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get());
-            data.putInt("k", user.getCurrentElement(FertilizerProducerTile.Element.K) / ConfigSettings.FERTILIZER_PRODUCER_INGREDIENT_TIME.get());
+            data.putInt("n", user.getCurrentElement(FertilizerProducerTile.Element.N));
+            data.putInt("p", user.getCurrentElement(FertilizerProducerTile.Element.P));
+            data.putInt("k", user.getCurrentElement(FertilizerProducerTile.Element.K));
         }
     }
 }

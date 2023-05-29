@@ -16,9 +16,9 @@
         "ingredient": {
           "tag": "forge:fertilizer"
         },
-        "n": 8,
-        "p": 8,
-        "k": 8
+        "n": 800,
+        "p": 800,
+        "k": 800
       }
     }
   ]

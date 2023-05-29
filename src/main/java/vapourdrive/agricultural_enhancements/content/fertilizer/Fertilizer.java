@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
+import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.soil.TilledSoilBlock;
 
 import javax.annotation.Nullable;
@@ -26,6 +27,9 @@ public class Fertilizer extends Item {
     public void appendHoverText(@NotNull ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.info").withStyle(ChatFormatting.GRAY));
         pTooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.info_1").withStyle(ChatFormatting.GRAY));
+        if(ConfigSettings.SOIL_REQUIRES_FERTILIZER.get()){
+            pTooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.tilling.info").withStyle(ChatFormatting.GRAY));
+        }
     }
 
     @Override

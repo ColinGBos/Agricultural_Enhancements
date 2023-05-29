@@ -4,7 +4,6 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.content.base.slots.BaseSlotIngredient;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
@@ -15,9 +14,6 @@ public class FertilizerSlotIngredient extends BaseSlotIngredient {
 
     @Override
     protected boolean isValidIngredient(ItemStack stack) {
-        AgriculturalEnhancements.debugLog("calling ingredient check");
-        boolean ret = this.world.getRecipeManager().getRecipeFor(Registration.FERTILIZER_TYPE.get(), new SimpleContainer(stack), this.world).isPresent();
-        AgriculturalEnhancements.debugLog("Slot Ingredient check: " + ret);
-        return ret;
+        return this.world.getRecipeManager().getRecipeFor(Registration.FERTILIZER_TYPE.get(), new SimpleContainer(stack), this.world).isPresent();
     }
 }

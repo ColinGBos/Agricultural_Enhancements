@@ -16,9 +16,9 @@
         "ingredient": {
           "tag": "forge:gems/apatite"
         },
-        "n": 4,
-        "p": 16,
-        "k": 4
+        "n": 400,
+        "p": 1600,
+        "k": 400
       }
     }
   ]
