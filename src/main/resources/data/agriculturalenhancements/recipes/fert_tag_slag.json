@@ -7,14 +7,14 @@
           "type": "forge:not",
           "value": {
             "type": "forge:tag_empty",
-            "tag": "forge:dusts/slag"
+            "tag": "forge:slag"
           }
         }
       ],
       "recipe": {
         "type": "agriculturalenhancements:fertilizer",
         "ingredient": {
-          "tag": "forge:dusts/slag"
+          "tag": "forge:slag"
         },
         "n": 0,
         "p": 1200,

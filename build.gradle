@@ -22,7 +22,7 @@ apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remappe
 
 version = mc_version + "-" + mod_version
 group = 'vapourdrive.agriculturalenhancements' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'agriculturalenhancements'
+archivesBaseName = 'agriculturalenhancements-FORGE'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17) // Mojang ships Java 8 to end users, so your mod should target Java 8.
 

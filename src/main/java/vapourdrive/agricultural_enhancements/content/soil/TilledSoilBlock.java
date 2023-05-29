@@ -115,14 +115,7 @@ public class TilledSoilBlock extends Block {
             pLevel.setBlockAndUpdate(pPos, Registration.SOIL_BLOCK.get().defaultBlockState().setValue(SOIL_MOISTURE, moistureIn).setValue(SOIL_NUTRIENTS, nutrients));
             return;
         }
-        int moistureOut = moistureIn;
-        int potentialMoisture = getMaxMoisture(pLevel, pPos);
-        if (potentialMoisture - 1 > moistureIn) {
-            moistureOut++;
-        } else if (moistureIn >= potentialMoisture) {
-            moistureOut--;
-        }
-        moistureOut = Math.max(moistureOut, 0);
+        int moistureOut = getMoistureOut(moistureIn, pLevel, pPos);
 
         if (moistureIn != moistureOut) {
             pLevel.scheduleTick(pPos, this, pRandom.nextInt(200) + 400);
@@ -139,7 +132,7 @@ public class TilledSoilBlock extends Block {
             pLevel.setBlockAndUpdate(pPos, Registration.SOIL_BLOCK.get().defaultBlockState().setValue(SOIL_MOISTURE, moistureIn).setValue(SOIL_NUTRIENTS, nutrientIn));
             return;
         }
-        int moistureOut = moistureIn;
+
         int nutrientOut = nutrientIn;
         BlockPos blockPos = pPos.above();
         BlockState state = pLevel.getBlockState(blockPos);
@@ -153,19 +146,24 @@ public class TilledSoilBlock extends Block {
                 nutrientOut--;
             }
         }
-        int potentialMoisture = getMaxMoisture(pLevel, pPos);
+        int moistureOut = getMoistureOut(moistureIn, pLevel, pPos);
+
+        nutrientOut = Math.max(nutrientOut, 0);
+        if (nutrientIn != nutrientOut || moistureIn != moistureOut) {
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(SOIL_NUTRIENTS, Math.min(nutrientOut, MAX_NUTRIENTS)).setValue(SOIL_MOISTURE, Math.min(moistureOut, MAX_MOISTURE)));
+        }
+
+    }
+
+    public static int getMoistureOut(int moistureIn, Level level, BlockPos pos){
+        int moistureOut = moistureIn;
+        int potentialMoisture = getMaxMoisture(level, pos);
         if (potentialMoisture - 1 > moistureIn) {
             moistureOut++;
         } else if (moistureIn >= potentialMoisture) {
             moistureOut--;
         }
-        nutrientOut = Math.max(nutrientOut, 0);
-        moistureOut = Math.max(moistureOut, 0);
-
-        if (nutrientIn != nutrientOut || moistureIn != moistureOut) {
-            pLevel.setBlockAndUpdate(pPos, pState.setValue(SOIL_NUTRIENTS, Math.min(nutrientOut, MAX_NUTRIENTS)).setValue(SOIL_MOISTURE, Math.min(moistureOut, MAX_MOISTURE)));
-        }
-
+        return Math.max(moistureOut, 0);
     }
 
     @Override
@@ -187,7 +185,7 @@ public class TilledSoilBlock extends Block {
         }
     }
 
-    static int getMaxMoisture(Level level, BlockPos pPos) {
+    public static int getMaxMoisture(Level level, BlockPos pPos) {
         if (level.isRainingAt(pPos.above())) {
             return 6;
         }
@@ -207,8 +205,13 @@ public class TilledSoilBlock extends Block {
                 greatestNeighbor = Math.max(greatestNeighbor, targetMoisture);
             }
         }
-        int baseMoisture = Math.max((int) ((level.getBiome(pPos).get().getDownfall() - 0.3f) / 0.2f), 1);
+        int baseMoisture = getEnvMoisture(level, pPos);
+        AgriculturalEnhancements.debugLog("Base moisture: "+baseMoisture);
         return Math.max(greatestNeighbor, baseMoisture);
+    }
+
+    public static int getEnvMoisture(LevelReader level, BlockPos pos){
+        return Math.max((int) ((level.getBiome(pos).get().getDownfall() - 0.2f) / 0.15f), 0);
     }
 
     @Override

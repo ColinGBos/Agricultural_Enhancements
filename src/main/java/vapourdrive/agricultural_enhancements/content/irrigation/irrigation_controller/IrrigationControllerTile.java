@@ -92,12 +92,17 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
     @Override
     public boolean canWork(BlockState state) {
         assert this.level != null;
-//        AgriculturalEnhancements.debugLog("brightness: " + this.level.getRawBrightness(this.worldPosition.above(), 0));
         if (this.level.getRawBrightness(this.worldPosition.above(), 0) < 9) {
             return false;
         }
         BlockState belowState = this.level.getBlockState(this.worldPosition.below());
-        if (belowState.getFluidState().isSourceOfType(Fluids.WATER)) {
+        if (!belowState.getFluidState().isSourceOfType(Fluids.WATER)) {
+            return false;
+        }
+        Direction direction_rear = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
+        BlockState rearState = this.level.getBlockState(this.worldPosition.relative(direction_rear));
+        BlockState aboveState = this.level.getBlockState(this.worldPosition.above());
+        if(rearState.getBlock() instanceof IIrrigationBlock || aboveState instanceof IIrrigationBlock) {
             return getCurrentFuel() >= getMinFuelToWork();
         }
         return false;

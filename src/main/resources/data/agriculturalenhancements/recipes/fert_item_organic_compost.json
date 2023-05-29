@@ -1,0 +1,23 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:item_exists",
+          "item": "thermal:compost"
+        }
+      ],
+      "recipe": {
+        "type": "agriculturalenhancements:fertilizer",
+        "ingredient": {
+          "item": "thermal:compost"
+        },
+        "n": 1000,
+        "p": 1000,
+        "k": 500
+      }
+    }
+  ]
+}
+

@@ -13,10 +13,12 @@ import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
+import java.util.List;
 import java.util.Objects;
 
 @Mod.EventBusSubscriber
 public class HoeTilledToSoilHandler {
+
     @SubscribeEvent
     public static void hoeTillEvent(BlockEvent.BlockToolModificationEvent event) {
         AgriculturalEnhancements.debugLog("Hoe use " + event.getFinalState());
@@ -40,7 +42,7 @@ public class HoeTilledToSoilHandler {
             consume = true;
         }
 
-        int baseMoisture = Math.max((int) ((event.getLevel().getBiome(event.getPos()).get().getDownfall() - 0.1f) / 0.2f), 0);
+        int baseMoisture = Math.max(0, TilledSoilBlock.getEnvMoisture(event.getLevel(), event.getPos())-1);
         if (state.hasProperty(TilledSoilBlock.SOIL_NUTRIENTS) && state.hasProperty(TilledSoilBlock.SOIL_MOISTURE)) {
             nutrients = Math.max(nutrients, state.getValue(TilledSoilBlock.SOIL_NUTRIENTS));
             baseMoisture = Math.max(baseMoisture, state.getValue(TilledSoilBlock.SOIL_MOISTURE));
@@ -52,8 +54,9 @@ public class HoeTilledToSoilHandler {
     }
 
     public static boolean cannotTill(Block block, BlockPos pos, LevelAccessor level) {
-        if (block != Blocks.GRASS_BLOCK && block != Blocks.DIRT_PATH && block != Blocks.DIRT && block != Blocks.FARMLAND && block != Registration.SOIL_BLOCK.get()) {
-            return false;
+        List<Block> blocks = List.of(Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.DIRT_PATH, Blocks.FARMLAND, Registration.SOIL_BLOCK.get());
+        if (!blocks.contains(block)) {
+            return true;
         } else return !level.getBlockState(pos.above()).getMaterial().isReplaceable();
     }
 }

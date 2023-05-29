@@ -1,0 +1,23 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:item_exists",
+          "item": "thermal:phytogro"
+        }
+      ],
+      "recipe": {
+        "type": "agriculturalenhancements:fertilizer",
+        "ingredient": {
+          "item": "thermal:phytogro"
+        },
+        "n": 800,
+        "p": 800,
+        "k": 800
+      }
+    }
+  ]
+}
+
