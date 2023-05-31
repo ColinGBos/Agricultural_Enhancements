@@ -15,10 +15,10 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineContainer;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotFuel;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotOutput;
 import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.base.AbstractBaseMachineContainer;
+import vapourdrive.vapourware.shared.base.slots.SlotFuel;
+import vapourdrive.vapourware.shared.base.slots.SlotOutput;
 
 import java.util.Objects;
 

@@ -14,10 +14,10 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineContainer;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotFuel;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotOutput;
 import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.base.AbstractBaseMachineContainer;
+import vapourdrive.vapourware.shared.base.slots.SlotFuel;
+import vapourdrive.vapourware.shared.base.slots.SlotOutput;
 
 import java.util.Objects;
 
@@ -46,25 +46,25 @@ public class CropManagerContainer extends AbstractBaseMachineContainer {
         if (tileEntity != null) {
             tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(h -> {
                 addSlot(new SlotFuel(h, 0, 8, 59));
-                addSlot(new SlotFertilzer(h, 1, 32, 59, this.world));
+                addSlot(new SlotFertilzer(h, 1, 32, 59));
                 addSlot(new SlotOutput(h, 2, 56, 23));
                 addSlot(new SlotOutput(h, 3, 56, 23 + 18));
                 addSlot(new SlotOutput(h, 4, 56, 23 + 18 * 2));
-                addSlot(new SlotSeed(h, 5, SEED_INV_XPOS, SEED_INV_YPOS, this.world));
-                addSlot(new SlotSeed(h, 6, SEED_INV_XPOS + 18, SEED_INV_YPOS, this.world));
-                addSlot(new SlotSeed(h, 7, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS, this.world));
-                addSlot(new SlotSeed(h, 8, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS, this.world));
-                addSlot(new SlotSeed(h, 9, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS, this.world));
-                addSlot(new SlotSeed(h, 10, SEED_INV_XPOS, SEED_INV_YPOS + 18, this.world));
-                addSlot(new SlotSeed(h, 11, SEED_INV_XPOS + 18, SEED_INV_YPOS + 18, this.world));
-                addSlot(new SlotSeed(h, 12, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS + 18, this.world));
-                addSlot(new SlotSeed(h, 13, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS + 18, this.world));
-                addSlot(new SlotSeed(h, 14, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS + 18, this.world));
-                addSlot(new SlotSeed(h, 15, SEED_INV_XPOS, SEED_INV_YPOS + (18 * 2), this.world));
-                addSlot(new SlotSeed(h, 16, SEED_INV_XPOS + 18, SEED_INV_YPOS + (18 * 2), this.world));
-                addSlot(new SlotSeed(h, 17, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS + (18 * 2), this.world));
-                addSlot(new SlotSeed(h, 18, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS + (18 * 2), this.world));
-                addSlot(new SlotSeed(h, 19, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS + (18 * 2), this.world));
+                addSlot(new SlotSeed(h, 5, SEED_INV_XPOS, SEED_INV_YPOS));
+                addSlot(new SlotSeed(h, 6, SEED_INV_XPOS + 18, SEED_INV_YPOS));
+                addSlot(new SlotSeed(h, 7, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS));
+                addSlot(new SlotSeed(h, 8, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS));
+                addSlot(new SlotSeed(h, 9, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS));
+                addSlot(new SlotSeed(h, 10, SEED_INV_XPOS, SEED_INV_YPOS + 18));
+                addSlot(new SlotSeed(h, 11, SEED_INV_XPOS + 18, SEED_INV_YPOS + 18));
+                addSlot(new SlotSeed(h, 12, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS + 18));
+                addSlot(new SlotSeed(h, 13, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS + 18));
+                addSlot(new SlotSeed(h, 14, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS + 18));
+                addSlot(new SlotSeed(h, 15, SEED_INV_XPOS, SEED_INV_YPOS + (18 * 2)));
+                addSlot(new SlotSeed(h, 16, SEED_INV_XPOS + 18, SEED_INV_YPOS + (18 * 2)));
+                addSlot(new SlotSeed(h, 17, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS + (18 * 2)));
+                addSlot(new SlotSeed(h, 18, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS + (18 * 2)));
+                addSlot(new SlotSeed(h, 19, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS + (18 * 2)));
             });
         }
     }

@@ -14,15 +14,16 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.FuelHandler;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.OutputHandler;
 import vapourdrive.agricultural_enhancements.content.irrigation.IIrrigationBlock;
 import vapourdrive.agricultural_enhancements.content.irrigation.IrrigationPipeBlock;
-import vapourdrive.agricultural_enhancements.utils.MachineUtils;
+import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
+import vapourdrive.vapourware.shared.base.itemhandlers.FuelHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.OutputHandler;
+import vapourdrive.vapourware.shared.utils.MachineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.IRRIGATION_CONTROLLER_TILE;
 
@@ -95,6 +96,9 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
         if (this.level.getRawBrightness(this.worldPosition.above(), 0) < 9) {
             return false;
         }
+        else if ((Objects.requireNonNull(this.getLevel())).hasNeighborSignal(this.worldPosition)) {
+            return false;
+        }
         BlockState belowState = this.level.getBlockState(this.worldPosition.below());
         if (!belowState.getFluidState().isSourceOfType(Fluids.WATER)) {
             return false;
@@ -102,7 +106,7 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
         Direction direction_rear = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
         BlockState rearState = this.level.getBlockState(this.worldPosition.relative(direction_rear));
         BlockState aboveState = this.level.getBlockState(this.worldPosition.above());
-        if(rearState.getBlock() instanceof IIrrigationBlock || aboveState instanceof IIrrigationBlock) {
+        if(rearState.getBlock() instanceof IIrrigationBlock || aboveState.getBlock() instanceof IIrrigationBlock) {
             return getCurrentFuel() >= getMinFuelToWork();
         }
         return false;

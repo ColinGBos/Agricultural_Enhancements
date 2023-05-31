@@ -21,15 +21,16 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.FuelHandler;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.IngredientHandler;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.OutputHandler;
-import vapourdrive.agricultural_enhancements.utils.MachineUtils;
+import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
+import vapourdrive.vapourware.shared.base.itemhandlers.FuelHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.IngredientHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.OutputHandler;
+import vapourdrive.vapourware.shared.utils.MachineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.HARVESTER_TILE;
 
@@ -160,18 +161,18 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
 
     @Override
     public boolean canWork(BlockState state) {
-        if (getCurrentFuel() < getMinFuelToWork()) {
-            changeStateIfNecessary(state, false);
-            return false;
+        boolean canWork = true;
+        if ((Objects.requireNonNull(this.getLevel())).hasNeighborSignal(this.worldPosition)) {
+            canWork = false;
+        } else if (this.getCurrentFuel() < this.getMinFuelToWork()) {
+            canWork = false;
+        } else if (outputHandler.isFull()) {
+            canWork = false;
         }
-        if (outputHandler.isFull()) {
-            changeStateIfNecessary(state, false);
-            return false;
-        } else {
-            changeStateIfNecessary(state, true);
-            return true;
-        }
+        this.changeStateIfNecessary(state, canWork);
+        return canWork;
     }
+
 
     @Override
     public void load(@NotNull CompoundTag tag) {

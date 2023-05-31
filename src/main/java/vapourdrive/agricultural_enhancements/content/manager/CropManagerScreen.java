@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineScreen;
+import vapourdrive.vapourware.shared.base.AbstractBaseMachineScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class CropManagerScreen extends AbstractBaseMachineScreen<CropManagerCont
     protected final CropManagerContainer machineContainer;
 
     public CropManagerScreen(CropManagerContainer container, Inventory inv, Component name) {
-        super(container, inv, name, "crop_manager", 12, 8, 158, 6, 1, true);
+        super(container, inv, name, AgriculturalEnhancements.MODID, "crop_manager", 12, 8, 46, 158, 6, 1, true);
         machineContainer = container;
     }
 

@@ -1,8 +1,8 @@
 package vapourdrive.agricultural_enhancements.content.harvester;
 
 import net.minecraft.world.item.ItemStack;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.IngredientHandler;
+import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
+import vapourdrive.vapourware.shared.base.itemhandlers.IngredientHandler;
 
 import javax.annotation.Nonnull;
 

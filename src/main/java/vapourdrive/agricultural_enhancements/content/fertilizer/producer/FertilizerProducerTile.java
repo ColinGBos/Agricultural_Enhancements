@@ -13,21 +13,21 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.FuelHandler;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.IngredientHandler;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.OutputHandler;
 import vapourdrive.agricultural_enhancements.content.fertilizer.FertilizerUtils;
 import vapourdrive.agricultural_enhancements.setup.Registration;
-import vapourdrive.agricultural_enhancements.utils.MachineUtils;
+import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
+import vapourdrive.vapourware.shared.base.itemhandlers.FuelHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.IngredientHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.OutputHandler;
+import vapourdrive.vapourware.shared.utils.MachineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.FERTILIZER_PRODUCER_TILE;
-import static vapourdrive.agricultural_enhancements.utils.MachineUtils.canPushAllOutputs;
-import static vapourdrive.agricultural_enhancements.utils.MachineUtils.pushOutput;
+import static vapourdrive.vapourware.shared.utils.MachineUtils.canPushAllOutputs;
+import static vapourdrive.vapourware.shared.utils.MachineUtils.pushOutput;
 
 public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
 
@@ -232,15 +232,15 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         return ret;
     }
 
-    @Override
-    public boolean canWork(BlockState state) {
-        if (getCurrentFuel() < getMinFuelToWork()) {
-            changeStateIfNecessary(state, false);
-            return false;
-        }
-        changeStateIfNecessary(state, true);
-        return true;
-    }
+//    @Override
+//    public boolean canWork(BlockState state) {
+//        if (getCurrentFuel() < getMinFuelToWork()) {
+//            changeStateIfNecessary(state, false);
+//            return false;
+//        }
+//        changeStateIfNecessary(state, true);
+//        return true;
+//    }
 
     @Override
     public void load(@NotNull CompoundTag tag) {

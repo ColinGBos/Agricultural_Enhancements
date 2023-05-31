@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.BaseMachineItem;
+import vapourdrive.vapourware.shared.base.BaseMachineItem;
 
 import javax.annotation.Nullable;
 import java.util.List;

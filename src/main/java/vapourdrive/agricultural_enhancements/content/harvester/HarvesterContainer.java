@@ -12,10 +12,10 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineContainer;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotFuel;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotOutput;
 import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.base.AbstractBaseMachineContainer;
+import vapourdrive.vapourware.shared.base.slots.SlotFuel;
+import vapourdrive.vapourware.shared.base.slots.SlotOutput;
 
 import java.util.Objects;
 
@@ -54,7 +54,7 @@ public class HarvesterContainer extends AbstractBaseMachineContainer {
                 addSlot(new SlotOutput(h, 13, OUTPUT_INVENTORY_XPOS + (18 * 2), OUTPUT_INVENTORY_YPOS + (18 * 2)));
                 addSlot(new SlotOutput(h, 14, OUTPUT_INVENTORY_XPOS + (18 * 3), OUTPUT_INVENTORY_YPOS + (18 * 2)));
                 addSlot(new SlotOutput(h, 15, OUTPUT_INVENTORY_XPOS + (18 * 4), OUTPUT_INVENTORY_YPOS + (18 * 2)));
-                addSlot(new HarvesterSlotIngredient(h, 16, 143, OUTPUT_INVENTORY_YPOS + (18 * 2), world));
+                addSlot(new HarvesterSlotIngredient(h, 16, 143, OUTPUT_INVENTORY_YPOS + (18 * 2)));
             });
         }
     }

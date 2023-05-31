@@ -15,7 +15,7 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.utils.MachineUtils;
+import vapourdrive.vapourware.shared.utils.MachineUtils;
 
 import java.util.List;
 

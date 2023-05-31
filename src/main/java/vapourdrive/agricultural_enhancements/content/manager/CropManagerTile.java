@@ -17,13 +17,13 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.FuelHandler;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.OutputHandler;
 import vapourdrive.agricultural_enhancements.content.soil.HoeTilledToSoilHandler;
 import vapourdrive.agricultural_enhancements.content.soil.TilledSoilBlock;
 import vapourdrive.agricultural_enhancements.setup.Registration;
-import vapourdrive.agricultural_enhancements.utils.MachineUtils;
+import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
+import vapourdrive.vapourware.shared.base.itemhandlers.FuelHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.OutputHandler;
+import vapourdrive.vapourware.shared.utils.MachineUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

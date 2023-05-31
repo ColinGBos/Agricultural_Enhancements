@@ -7,7 +7,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
-import vapourdrive.agricultural_enhancements.content.base.BaseMachineItem;
+import vapourdrive.vapourware.shared.base.BaseMachineItem;
 
 import javax.annotation.Nullable;
 import java.util.List;

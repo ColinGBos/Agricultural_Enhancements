@@ -4,12 +4,14 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
-import vapourdrive.agricultural_enhancements.content.base.slots.BaseSlotIngredient;
 import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.base.slots.BaseSlotIngredient;
 
 public class FertilizerSlotIngredient extends BaseSlotIngredient {
+    final Level world;
     public FertilizerSlotIngredient(IItemHandler itemHandler, int index, int xPosition, int yPosition, Level world) {
-        super(itemHandler, index, xPosition, yPosition, world);
+        super(itemHandler, index, xPosition, yPosition);
+        this.world = world;
     }
 
     @Override

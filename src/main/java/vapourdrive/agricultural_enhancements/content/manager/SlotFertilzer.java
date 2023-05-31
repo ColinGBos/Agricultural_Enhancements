@@ -1,14 +1,13 @@
 package vapourdrive.agricultural_enhancements.content.manager;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
-import vapourdrive.agricultural_enhancements.content.base.slots.BaseSlotIngredient;
 import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.base.slots.BaseSlotIngredient;
 
 public class SlotFertilzer extends BaseSlotIngredient {
-    public SlotFertilzer(IItemHandler itemHandler, int index, int xPosition, int yPosition, Level world) {
-        super(itemHandler, index, xPosition, yPosition, world, "agriculturalenhancements.fertilizerslot");
+    public SlotFertilzer(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+        super(itemHandler, index, xPosition, yPosition, "agriculturalenhancements.fertilizerslot");
     }
 
     @Override

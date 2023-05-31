@@ -29,7 +29,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineScreen.isInRect;
+import static vapourdrive.vapourware.shared.base.AbstractBaseMachineScreen.isInRect;
 
 public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecipe> {
 

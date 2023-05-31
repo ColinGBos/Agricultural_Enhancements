@@ -72,7 +72,6 @@ public class JEI_Plugin implements IModPlugin {
         }
         registration.addIngredientInfo(new ItemStack(Registration.IRRIGATION_PIPE_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.irrigation_pipe.info"));
         registration.addIngredientInfo(new ItemStack(Registration.SPRAYER_PIPE_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.sprayer_pipe.info", ConfigSettings.SPRAYER_VERTICAL_RANGE.get()));
-        registration.addIngredientInfo(new ItemStack(Registration.FARMER_WRENCH.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.farmer_wrench.info"));
         registration.addIngredientInfo(new ItemStack(Registration.WATERING_CAN.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.watering_can.info"));
 
         RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
