@@ -30,6 +30,7 @@ import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.HARVESTER_TILE;
 
@@ -160,17 +161,17 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
 
     @Override
     public boolean canWork(BlockState state) {
-        if (getCurrentFuel() < getMinFuelToWork()) {
-            changeStateIfNecessary(state, false);
-            return false;
+        boolean canWork = true;
+        if(Objects.requireNonNull(this.getLevel()).hasNeighborSignal(this.worldPosition)){
+            canWork = false;
+        }else if (getCurrentFuel() < getMinFuelToWork()) {
+            canWork = false;
         }
-        if (outputHandler.isFull()) {
-            changeStateIfNecessary(state, false);
-            return false;
-        } else {
-            changeStateIfNecessary(state, true);
-            return true;
+        else if (outputHandler.isFull()) {
+            canWork = false;
         }
+        changeStateIfNecessary(state, canWork);
+        return canWork;
     }
 
     @Override

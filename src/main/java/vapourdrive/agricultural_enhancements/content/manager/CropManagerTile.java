@@ -191,14 +191,18 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         return 0;
     }
 
-    public boolean canWork(BlockState state) {
-        if (getCurrentFuel() < getMinFuelToWork()) {
-            changeStateIfNecessary(state, false);
-            return false;
-        }
-        changeStateIfNecessary(state, true);
-        return true;
-    }
+//    @Override
+//    public boolean canWork(BlockState state) {
+//        boolean canWork = true;
+//        if(Objects.requireNonNull(this.getLevel()).hasNeighborSignal(this.worldPosition)){
+//            canWork = false;
+//        }
+//        else if (getCurrentFuel() < getMinFuelToWork()) {
+//            canWork = false;
+//        }
+//        changeStateIfNecessary(state, canWork);
+//        return canWork;
+//    }
 
     @Override
     public void load(@NotNull CompoundTag tag) {

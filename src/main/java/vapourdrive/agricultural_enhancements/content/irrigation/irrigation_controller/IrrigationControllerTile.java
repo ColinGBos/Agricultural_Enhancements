@@ -24,6 +24,8 @@ import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import java.util.Objects;
+
 import static vapourdrive.agricultural_enhancements.setup.Registration.IRRIGATION_CONTROLLER_TILE;
 
 public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
@@ -91,6 +93,9 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
 
     @Override
     public boolean canWork(BlockState state) {
+        if(Objects.requireNonNull(this.getLevel()).hasNeighborSignal(this.worldPosition)){
+            return false;
+        }
         assert this.level != null;
         if (this.level.getRawBrightness(this.worldPosition.above(), 0) < 9) {
             return false;
@@ -107,7 +112,6 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
         }
         return false;
     }
-
 
     @Override
     public void load(@NotNull CompoundTag tag) {

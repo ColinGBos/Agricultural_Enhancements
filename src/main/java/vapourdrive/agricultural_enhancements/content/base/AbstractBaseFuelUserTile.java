@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.utils.MachineUtils;
 
+import java.util.Objects;
+
 public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IFuelUser {
 
     public final int maxFuel;
@@ -49,6 +51,19 @@ public abstract class AbstractBaseFuelUserTile extends BlockEntity implements IF
         super.saveAdditional(tag);
         tag.putInt("increment", increment);
         tag.putInt("toAdd", toAdd);
+    }
+
+    @Override
+    public boolean canWork(BlockState state) {
+        boolean canWork = true;
+        if(Objects.requireNonNull(this.getLevel()).hasNeighborSignal(this.worldPosition)){
+            canWork = false;
+        }
+        else if (getCurrentFuel() < getMinFuelToWork()) {
+            canWork = false;
+        }
+        changeStateIfNecessary(state, canWork);
+        return canWork;
     }
 
     public void changeStateIfNecessary(BlockState state, Boolean working) {
