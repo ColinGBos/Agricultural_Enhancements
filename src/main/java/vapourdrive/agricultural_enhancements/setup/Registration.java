@@ -27,6 +27,7 @@ import vapourdrive.agricultural_enhancements.content.soil.SoilBlock;
 import vapourdrive.agricultural_enhancements.content.soil.TilledSoilBlock;
 import vapourdrive.vapourware.setup.ModSetup;
 import vapourdrive.vapourware.shared.base.BaseInfoItemBlock;
+import vapourdrive.vapourware.shared.utils.CompUtils;
 
 import static vapourdrive.agricultural_enhancements.AgriculturalEnhancements.MODID;
 
@@ -49,18 +50,18 @@ public class Registration {
     public static final RegistryObject<Item> FERTILIZER_PRODUCER_ITEM = ITEMS.register("fertilizer_producer", () -> new FertilizerProducerItem(FERTILIZER_PRODUCER_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP)));
     public static final RegistryObject<Item> CROP_MANAGER_ITEM = ITEMS.register("crop_manager", () -> new CropManagerItem(CROP_MANAGER_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP)));
     @SuppressWarnings("unused")
-    public static final RegistryObject<Item> TILLED_SOIL_ITEM = ITEMS.register("tilled_soil", () -> new BaseInfoItemBlock(TILLED_SOIL_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP), MODID,"tilled_soil"));
+    public static final RegistryObject<Item> TILLED_SOIL_ITEM = ITEMS.register("tilled_soil", () -> new BaseInfoItemBlock(TILLED_SOIL_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP), CompUtils.getComp(MODID, "tilled_soil")));
     @SuppressWarnings("unused")
-    public static final RegistryObject<Item> SOIL_ITEM = ITEMS.register("soil", () -> new BaseInfoItemBlock(SOIL_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP), MODID,"soil"));
+    public static final RegistryObject<Item> SOIL_ITEM = ITEMS.register("soil", () -> new BaseInfoItemBlock(SOIL_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP), CompUtils.getComp(MODID, "soil")));
     @SuppressWarnings("unused")
     public static final RegistryObject<WateringCan> WATERING_CAN = ITEMS.register("watering_can", () -> new WateringCan(new Item.Properties().tab(ModSetup.VAPOUR_GROUP)));
     public static final RegistryObject<Fertilizer> FERTILISER = ITEMS.register("fertilizer", () -> new Fertilizer(new Item.Properties().tab(ModSetup.VAPOUR_GROUP)));
     @SuppressWarnings("unused")
     public static final RegistryObject<Item> IRRIGATION_CONTROLLER_ITEM = ITEMS.register("irrigation_controller", () -> new IrrigationControllerItem(IRRIGATION_CONTROLLER_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP)));
     @SuppressWarnings("unused")
-    public static final RegistryObject<Item> IRRIGATION_PIPE_ITEM = ITEMS.register("irrigation_pipe", () -> new BaseInfoItemBlock(IRRIGATION_PIPE_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP), MODID,"irrigation_pipe"));
+    public static final RegistryObject<Item> IRRIGATION_PIPE_ITEM = ITEMS.register("irrigation_pipe", () -> new BaseInfoItemBlock(IRRIGATION_PIPE_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP), CompUtils.getComp(MODID, "irrigation_pipe")));
     @SuppressWarnings("unused")
-    public static final RegistryObject<Item> SPRAYER_PIPE_ITEM = ITEMS.register("sprayer_pipe", () -> new BaseInfoItemBlock(SPRAYER_PIPE_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP), MODID,"sprayer_pipe", ConfigSettings.SPRAYER_VERTICAL_RANGE));
+    public static final RegistryObject<Item> SPRAYER_PIPE_ITEM = ITEMS.register("sprayer_pipe", () -> new BaseInfoItemBlock(SPRAYER_PIPE_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP),CompUtils.getArgComp(MODID, "sprayer_pipe", ConfigSettings.SPRAYER_VERTICAL_RANGE)));
 
     @SuppressWarnings("all")
     public static final RegistryObject<BlockEntityType<HarvesterTile>> HARVESTER_TILE = TILES.register("harvester", () -> BlockEntityType.Builder.of(HarvesterTile::new, HARVESTER_BLOCK.get()).build(null));

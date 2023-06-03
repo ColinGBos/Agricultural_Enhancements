@@ -60,7 +60,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
 
     public void tickServer(BlockState state) {
         super.tickServer(state);
-        ItemStack ingredient = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
+        ItemStack ingredient = getStackInSlot(MachineUtils.Area.INGREDIENT_1, 0);
         doWorkProcesses(ingredient, state);
 
         createFertTimer++;
@@ -145,7 +145,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
                     }
                 }
                 if (hasSpace) {
-                    removeFromSlot(MachineUtils.Area.INGREDIENT, 0, 1, false);
+                    removeFromSlot(MachineUtils.Area.INGREDIENT_1, 0, 1, false);
                     return emnts;
                 }
             }
@@ -231,16 +231,6 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         }
         return ret;
     }
-
-//    @Override
-//    public boolean canWork(BlockState state) {
-//        if (getCurrentFuel() < getMinFuelToWork()) {
-//            changeStateIfNecessary(state, false);
-//            return false;
-//        }
-//        changeStateIfNecessary(state, true);
-//        return true;
-//    }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
@@ -328,8 +318,8 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.getStackInSlot(FUEL_SLOT[index]);
             case OUTPUT -> outputHandler.getStackInSlot(OUTPUT_SLOTS[index]);
-            case INGREDIENT -> ingredientHandler.getStackInSlot(INGREDIENT_SLOT[index]);
-            case INGREDIENT_2 -> ItemStack.EMPTY;
+            case INGREDIENT_1 -> ingredientHandler.getStackInSlot(INGREDIENT_SLOT[index]);
+            default -> ItemStack.EMPTY;
         };
     }
 
@@ -338,7 +328,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         switch (area) {
             case FUEL -> fuelHandler.extractItem(FUEL_SLOT[index], amount, simulate);
             case OUTPUT -> outputHandler.extractItem(OUTPUT_SLOTS[index], amount, simulate);
-            case INGREDIENT -> ingredientHandler.extractItem(INGREDIENT_SLOT[index], amount, simulate);
+            case INGREDIENT_1 -> ingredientHandler.extractItem(INGREDIENT_SLOT[index], amount, simulate);
         }
     }
 
@@ -347,8 +337,8 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.insertItem(FUEL_SLOT[index], stack, simulate);
             case OUTPUT -> outputHandler.insertItem(OUTPUT_SLOTS[index], stack, simulate, true);
-            case INGREDIENT -> ingredientHandler.insertItem(INGREDIENT_SLOT[index], stack, simulate);
-            case INGREDIENT_2 -> ItemStack.EMPTY;
+            case INGREDIENT_1 -> ingredientHandler.insertItem(INGREDIENT_SLOT[index], stack, simulate);
+            default -> ItemStack.EMPTY;
         };
     }
 }

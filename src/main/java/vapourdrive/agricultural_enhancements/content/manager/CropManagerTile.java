@@ -59,7 +59,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
 
     public void tickServer(BlockState state) {
         super.tickServer(state);
-        ItemStack ingredient = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
+        ItemStack ingredient = getStackInSlot(MachineUtils.Area.INGREDIENT_1, 0);
         doConsumeProcess(ingredient);
         if (soilTimer == ConfigSettings.CROP_MANAGER_SOIL_PROCESS_TIME.get()) {
             doNutrientWorkProcesses(state);
@@ -185,7 +185,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
 
     public int tryConsumeStack(ItemStack stack) {
         if (!stack.isEmpty()) {
-            removeFromSlot(MachineUtils.Area.INGREDIENT, 0, 1, false);
+            removeFromSlot(MachineUtils.Area.INGREDIENT_1, 0, 1, false);
             return 500;
         }
         return 0;
@@ -279,8 +279,9 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.getStackInSlot(FUEL_SLOT[index]);
             case OUTPUT -> outputHandler.getStackInSlot(OUTPUT_SLOTS[index]);
-            case INGREDIENT -> fertilizerHandler.getStackInSlot(FERTILIZER_SLOT[index]);
+            case INGREDIENT_1 -> fertilizerHandler.getStackInSlot(FERTILIZER_SLOT[index]);
             case INGREDIENT_2 -> seedHandler.getStackInSlot(SEED_SLOTS[index]);
+            default -> ItemStack.EMPTY;
         };
     }
 
@@ -299,7 +300,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         switch (area) {
             case FUEL -> fuelHandler.extractItem(FUEL_SLOT[index], amount, simulate);
             case OUTPUT -> outputHandler.extractItem(OUTPUT_SLOTS[index], amount, simulate);
-            case INGREDIENT -> fertilizerHandler.extractItem(FERTILIZER_SLOT[index], amount, simulate);
+            case INGREDIENT_1 -> fertilizerHandler.extractItem(FERTILIZER_SLOT[index], amount, simulate);
             case INGREDIENT_2 -> seedHandler.extractItem(SEED_SLOTS[index], amount, simulate);
         }
     }
@@ -309,8 +310,9 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.insertItem(FUEL_SLOT[index], stack, simulate);
             case OUTPUT -> outputHandler.insertItem(OUTPUT_SLOTS[index], stack, simulate, true);
-            case INGREDIENT -> fertilizerHandler.insertItem(FERTILIZER_SLOT[index], stack, simulate);
+            case INGREDIENT_1 -> fertilizerHandler.insertItem(FERTILIZER_SLOT[index], stack, simulate);
             case INGREDIENT_2 -> seedHandler.insertItem(SEED_SLOTS[index], stack, simulate);
+            default -> ItemStack.EMPTY;
         };
     }
 

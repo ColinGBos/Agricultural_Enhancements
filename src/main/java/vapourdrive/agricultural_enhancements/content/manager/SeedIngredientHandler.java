@@ -14,7 +14,6 @@ public class SeedIngredientHandler extends IngredientHandler {
 
     @Override
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        AgriculturalEnhancements.debugLog("Why is the seed handler working?...");
         return AgriculturalEnhancements.seeds.contains(stack.getItem());
     }
 }
