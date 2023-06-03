@@ -6,13 +6,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.vapourware.shared.base.BaseMachineItem;
-import vapourdrive.vapourware.shared.utils.CompUtils;
+import vapourdrive.vapourware.shared.utils.DeferredComponent;
 
 import java.util.List;
 
 public class CropManagerItem extends BaseMachineItem {
     public CropManagerItem(Block block, Properties properties) {
-        super(block, properties, CompUtils.getComp(AgriculturalEnhancements.MODID, "crop_manager.info_1"));
+        super(block, properties, new DeferredComponent(AgriculturalEnhancements.MODID, "crop_manager.info_1"));
     }
 
     @Override

@@ -6,13 +6,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.vapourware.shared.base.BaseMachineItem;
-import vapourdrive.vapourware.shared.utils.CompUtils;
+import vapourdrive.vapourware.shared.utils.DeferredComponent;
 
 import java.util.List;
 
 public class HarvesterItem extends BaseMachineItem {
     public HarvesterItem(Block block, Properties properties) {
-        super(block, properties, CompUtils.getComp(AgriculturalEnhancements.MODID, "harvester.info_1"));
+        super(block, properties, new DeferredComponent(AgriculturalEnhancements.MODID, "harvester.info_1"));
     }
 
     @Override
