@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Inventory;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.vapourware.shared.base.AbstractBaseMachineScreen;
+import vapourdrive.vapourware.shared.utils.DeferredComponent;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class HarvesterScreen extends AbstractBaseMachineScreen<HarvesterContaine
     protected final HarvesterContainer machineContainer;
 
     public HarvesterScreen(HarvesterContainer container, Inventory inv, Component name) {
-        super(container, inv, name, AgriculturalEnhancements.MODID, "harvester", 12, 8, 158, 6, 1);
+        super(container, inv, name, new DeferredComponent(AgriculturalEnhancements.MODID, "harvester"), true);
         this.machineContainer = container;
     }
 

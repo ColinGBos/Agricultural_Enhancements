@@ -2,12 +2,12 @@ package vapourdrive.agricultural_enhancements.content.fertilizer.producer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.vapourware.shared.base.AbstractBaseMachineScreen;
+import vapourdrive.vapourware.shared.utils.DeferredComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +17,8 @@ public class FertilizerProducerScreen extends AbstractBaseMachineScreen<Fertiliz
     protected final FertilizerProducerContainer machineContainer;
 
     public FertilizerProducerScreen(FertilizerProducerContainer container, Inventory inv, Component name) {
-        super(container, inv, name, AgriculturalEnhancements.MODID, "fertilizer_producer", 12, 8, 46, 158, 6, 1, true);
+        super(container, inv, name, new DeferredComponent(AgriculturalEnhancements.MODID, "fertilizer_producer"), true);
         machineContainer = container;
-    }
-
-    @Override
-    protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
-        if (AgriculturalEnhancements.isDebugMode()) {
-            int horStart = -100;
-            drawString(matrixStack, Minecraft.getInstance().font, "N: " + menu.getElementStored(FertilizerProducerData.Data.N), horStart, 10, 0xffffff);
-            drawString(matrixStack, Minecraft.getInstance().font, "P: " + menu.getElementStored(FertilizerProducerData.Data.P), horStart, 20, 0xffffff);
-            drawString(matrixStack, Minecraft.getInstance().font, "K: " + menu.getElementStored(FertilizerProducerData.Data.K), horStart, 30, 0xffffff);
-
-        }
-        super.renderLabels(matrixStack, mouseX, mouseY);
     }
 
     @Override
@@ -63,8 +51,6 @@ public class FertilizerProducerScreen extends AbstractBaseMachineScreen<Fertiliz
             }
             i++;
         }
-
-        // If the mouse is over the experience bar, add hovering text
 
         // If hoveringText is not empty draw the hovering text.  Otherwise, use vanilla to render tooltip for the slots
         if (!hoveringText.isEmpty()) {
