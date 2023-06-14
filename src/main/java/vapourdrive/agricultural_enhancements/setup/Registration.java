@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -25,7 +26,6 @@ import vapourdrive.agricultural_enhancements.content.irrigation.irrigation_contr
 import vapourdrive.agricultural_enhancements.content.manager.*;
 import vapourdrive.agricultural_enhancements.content.soil.SoilBlock;
 import vapourdrive.agricultural_enhancements.content.soil.TilledSoilBlock;
-import vapourdrive.vapourware.setup.ModSetup;
 import vapourdrive.vapourware.shared.base.BaseInfoItemBlock;
 import vapourdrive.vapourware.shared.utils.DeferredComponent;
 
@@ -46,22 +46,22 @@ public class Registration {
     public static final RegistryObject<IrrigationPipeBlock> IRRIGATION_PIPE_BLOCK = BLOCKS.register("irrigation_pipe", IrrigationPipeBlock::new);
     public static final RegistryObject<SprayerPipeBlock> SPRAYER_PIPE_BLOCK = BLOCKS.register("sprayer_pipe", SprayerPipeBlock::new);
     public static final RegistryObject<IrrigationControllerBlock> IRRIGATION_CONTROLLER_BLOCK = BLOCKS.register("irrigation_controller", IrrigationControllerBlock::new);
-    public static final RegistryObject<Item> HARVESTER_ITEM = ITEMS.register("harvester", () -> new HarvesterItem(HARVESTER_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP)));
-    public static final RegistryObject<Item> FERTILIZER_PRODUCER_ITEM = ITEMS.register("fertilizer_producer", () -> new FertilizerProducerItem(FERTILIZER_PRODUCER_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP)));
-    public static final RegistryObject<Item> CROP_MANAGER_ITEM = ITEMS.register("crop_manager", () -> new CropManagerItem(CROP_MANAGER_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP)));
+    public static final RegistryObject<Item> HARVESTER_ITEM = ITEMS.register("harvester", () -> new HarvesterItem(HARVESTER_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> FERTILIZER_PRODUCER_ITEM = ITEMS.register("fertilizer_producer", () -> new FertilizerProducerItem(FERTILIZER_PRODUCER_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> CROP_MANAGER_ITEM = ITEMS.register("crop_manager", () -> new CropManagerItem(CROP_MANAGER_BLOCK.get(), new Item.Properties()));
     @SuppressWarnings("unused")
-    public static final RegistryObject<Item> TILLED_SOIL_ITEM = ITEMS.register("tilled_soil", () -> new BaseInfoItemBlock(TILLED_SOIL_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP), new DeferredComponent(MODID, "tilled_soil")));
+    public static final RegistryObject<Item> TILLED_SOIL_ITEM = ITEMS.register("tilled_soil", () -> new BaseInfoItemBlock(TILLED_SOIL_BLOCK.get(), new Item.Properties(), new DeferredComponent(MODID, "tilled_soil")));
     @SuppressWarnings("unused")
-    public static final RegistryObject<Item> SOIL_ITEM = ITEMS.register("soil", () -> new BaseInfoItemBlock(SOIL_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP), new DeferredComponent(MODID, "soil")));
+    public static final RegistryObject<Item> SOIL_ITEM = ITEMS.register("soil", () -> new BaseInfoItemBlock(SOIL_BLOCK.get(), new Item.Properties(), new DeferredComponent(MODID, "soil")));
     @SuppressWarnings("unused")
-    public static final RegistryObject<WateringCan> WATERING_CAN = ITEMS.register("watering_can", () -> new WateringCan(new Item.Properties().tab(ModSetup.VAPOUR_GROUP)));
-    public static final RegistryObject<Fertilizer> FERTILISER = ITEMS.register("fertilizer", () -> new Fertilizer(new Item.Properties().tab(ModSetup.VAPOUR_GROUP)));
+    public static final RegistryObject<WateringCan> WATERING_CAN = ITEMS.register("watering_can", () -> new WateringCan(new Item.Properties()));
+    public static final RegistryObject<Fertilizer> FERTILISER = ITEMS.register("fertilizer", () -> new Fertilizer(new Item.Properties()));
     @SuppressWarnings("unused")
-    public static final RegistryObject<Item> IRRIGATION_CONTROLLER_ITEM = ITEMS.register("irrigation_controller", () -> new IrrigationControllerItem(IRRIGATION_CONTROLLER_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP)));
+    public static final RegistryObject<Item> IRRIGATION_CONTROLLER_ITEM = ITEMS.register("irrigation_controller", () -> new IrrigationControllerItem(IRRIGATION_CONTROLLER_BLOCK.get(), new Item.Properties()));
     @SuppressWarnings("unused")
-    public static final RegistryObject<Item> IRRIGATION_PIPE_ITEM = ITEMS.register("irrigation_pipe", () -> new BaseInfoItemBlock(IRRIGATION_PIPE_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP), new DeferredComponent(MODID, "irrigation_pipe")));
+    public static final RegistryObject<Item> IRRIGATION_PIPE_ITEM = ITEMS.register("irrigation_pipe", () -> new BaseInfoItemBlock(IRRIGATION_PIPE_BLOCK.get(), new Item.Properties(), new DeferredComponent(MODID, "irrigation_pipe")));
     @SuppressWarnings("unused")
-    public static final RegistryObject<Item> SPRAYER_PIPE_ITEM = ITEMS.register("sprayer_pipe", () -> new BaseInfoItemBlock(SPRAYER_PIPE_BLOCK.get(), new Item.Properties().tab(ModSetup.VAPOUR_GROUP),new DeferredComponent(MODID, "sprayer_pipe", ConfigSettings.SPRAYER_VERTICAL_RANGE)));
+    public static final RegistryObject<Item> SPRAYER_PIPE_ITEM = ITEMS.register("sprayer_pipe", () -> new BaseInfoItemBlock(SPRAYER_PIPE_BLOCK.get(), new Item.Properties(), new DeferredComponent(MODID, "sprayer_pipe", ConfigSettings.SPRAYER_VERTICAL_RANGE)));
 
     @SuppressWarnings("all")
     public static final RegistryObject<BlockEntityType<HarvesterTile>> HARVESTER_TILE = TILES.register("harvester", () -> BlockEntityType.Builder.of(HarvesterTile::new, HARVESTER_BLOCK.get()).build(null));
@@ -107,5 +107,21 @@ public class Registration {
         CONTAINERS.register(eventBus);
         RECIPE_TYPES.register(eventBus);
         RECIPE_SERIALIZERS.register(eventBus);
+    }
+
+    public static void buildContents(BuildCreativeModeTabContentsEvent event) {
+        // Add to ingredients tab
+        if (event.getTabKey() == vapourdrive.vapourware.setup.Registration.VAPOUR_GROUP.getKey()) {
+            event.accept(HARVESTER_ITEM);
+            event.accept(FERTILIZER_PRODUCER_ITEM);
+            event.accept(CROP_MANAGER_ITEM);
+            event.accept(IRRIGATION_CONTROLLER_ITEM);
+            event.accept(IRRIGATION_PIPE_ITEM);
+            event.accept(SPRAYER_PIPE_ITEM);
+            event.accept(TILLED_SOIL_ITEM);
+            event.accept(SOIL_ITEM);
+            event.accept(WATERING_CAN);
+            event.accept(FERTILISER);
+        }
     }
 }

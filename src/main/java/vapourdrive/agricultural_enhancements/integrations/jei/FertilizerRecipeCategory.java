@@ -3,7 +3,6 @@ package vapourdrive.agricultural_enhancements.integrations.jei;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -15,6 +14,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -112,17 +112,17 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
     }
 
     @Override
-    public void draw(@NotNull FertilizerRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull PoseStack stack, double mouseX, double mouseY) {
+    public void draw(@NotNull FertilizerRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull GuiGraphics guiGraphics, double mouseX, double mouseY) {
         IDrawableAnimated arrow = getArrow();
-        arrow.draw(stack, 71, 19);
+        arrow.draw(guiGraphics, 71, 19);
         IDrawableAnimated fuel = getFuel();
-        fuel.draw(stack, 3, 4);
+        fuel.draw(guiGraphics, 3, 4);
 
         int[] outputs = recipe.getOutputs();
 
-        n.draw(stack, 41, 4, Math.max(0, 45 - outputs[0] / 100), 0, 0, 0);
-        p.draw(stack, 51, 4, Math.max(0, 45 - outputs[1] / 100), 0, 0, 0);
-        k.draw(stack, 61, 4, Math.max(0, 45 - outputs[2] / 100), 0, 0, 0);
+        n.draw(guiGraphics, 41, 4, Math.max(0, 45 - outputs[0] / 100), 0, 0, 0);
+        p.draw(guiGraphics, 51, 4, Math.max(0, 45 - outputs[1] / 100), 0, 0, 0);
+        k.draw(guiGraphics, 61, 4, Math.max(0, 45 - outputs[2] / 100), 0, 0, 0);
     }
 
     @Override

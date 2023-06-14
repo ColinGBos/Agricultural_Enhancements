@@ -4,9 +4,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -16,7 +13,7 @@ import vapourdrive.agricultural_enhancements.content.fertilizer.producer.Fertili
 
 import java.text.DecimalFormat;
 
-public enum FertilizerProducerContentProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
+public enum FertilizerProducerContentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
     INSTANCE;
     private final DecimalFormat df = new DecimalFormat("#,###");
 
@@ -44,8 +41,8 @@ public enum FertilizerProducerContentProvider implements IBlockComponentProvider
     }
 
     @Override
-    public void appendServerData(CompoundTag data, ServerPlayer player, Level world, BlockEntity t, boolean showDetails) {
-        if (t instanceof FertilizerProducerTile user) {
+    public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+        if (accessor.getBlockEntity() instanceof FertilizerProducerTile user) {
             data.putInt("n", user.getCurrentElement(FertilizerProducerTile.Element.N));
             data.putInt("p", user.getCurrentElement(FertilizerProducerTile.Element.P));
             data.putInt("k", user.getCurrentElement(FertilizerProducerTile.Element.K));

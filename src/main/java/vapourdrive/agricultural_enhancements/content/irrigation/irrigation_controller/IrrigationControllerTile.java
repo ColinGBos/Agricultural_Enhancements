@@ -95,8 +95,7 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
         assert this.level != null;
         if (this.level.getRawBrightness(this.worldPosition.above(), 0) < 9) {
             return false;
-        }
-        else if ((Objects.requireNonNull(this.getLevel())).hasNeighborSignal(this.worldPosition)) {
+        } else if ((Objects.requireNonNull(this.getLevel())).hasNeighborSignal(this.worldPosition)) {
             return false;
         }
         BlockState belowState = this.level.getBlockState(this.worldPosition.below());
@@ -106,7 +105,7 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
         Direction direction_rear = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
         BlockState rearState = this.level.getBlockState(this.worldPosition.relative(direction_rear));
         BlockState aboveState = this.level.getBlockState(this.worldPosition.above());
-        if(rearState.getBlock() instanceof IIrrigationBlock || aboveState.getBlock() instanceof IIrrigationBlock) {
+        if (rearState.getBlock() instanceof IIrrigationBlock || aboveState.getBlock() instanceof IIrrigationBlock) {
             return getCurrentFuel() >= getMinFuelToWork();
         }
         return false;
@@ -184,7 +183,7 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.getStackInSlot(FUEL_SLOT[index]);
             case OUTPUT -> outputHandler.getStackInSlot(OUTPUT_SLOTS[index]);
-            case INGREDIENT, INGREDIENT_2 -> ItemStack.EMPTY;
+            default -> ItemStack.EMPTY;
         };
     }
 
@@ -201,7 +200,7 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.insertItem(FUEL_SLOT[index], stack, simulate);
             case OUTPUT -> outputHandler.insertItem(OUTPUT_SLOTS[index], stack, simulate, true);
-            case INGREDIENT, INGREDIENT_2 -> ItemStack.EMPTY;
+            default -> ItemStack.EMPTY;
         };
     }
 }

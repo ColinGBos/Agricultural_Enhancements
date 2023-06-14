@@ -1,6 +1,7 @@
 package vapourdrive.agricultural_enhancements.content.fertilizer;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -38,8 +39,8 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull SimpleContainer pContainer) {
-        return getResultItem().copy();
+    public @NotNull ItemStack assemble(@NotNull SimpleContainer pContainer, @NotNull RegistryAccess access) {
+        return getResultItem(access).copy();
     }
 
     public int[] getOutputs() {
@@ -56,7 +57,7 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem() {
+    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess access) {
         return new ItemStack(Registration.FERTILISER.get());
     }
 

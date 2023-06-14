@@ -9,6 +9,7 @@ import vapourdrive.vapourware.shared.base.slots.BaseSlotIngredient;
 
 public class FertilizerSlotIngredient extends BaseSlotIngredient {
     final Level world;
+
     public FertilizerSlotIngredient(IItemHandler itemHandler, int index, int xPosition, int yPosition, Level world) {
         super(itemHandler, index, xPosition, yPosition);
         this.world = world;

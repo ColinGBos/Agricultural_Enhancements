@@ -34,8 +34,9 @@ public class AgriculturalEnhancements {
         Registration.init(eventBus);
 
         // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent event) -> ModSetup.init());
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::setup);
+        eventBus.addListener((FMLCommonSetupEvent event) -> ModSetup.init());
+        eventBus.addListener(ClientSetup::setup);
+        eventBus.addListener(Registration::buildContents);
     }
 
     public static void debugLog(String toLog) {

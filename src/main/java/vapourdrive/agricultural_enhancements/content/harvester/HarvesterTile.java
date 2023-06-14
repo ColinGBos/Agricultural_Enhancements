@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
@@ -69,10 +69,12 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
             assert this.level != null;
             for (int i = 1; i <= 9; i++) {
                 BlockState targetState = this.level.getBlockState(this.worldPosition.relative(direction, i));
-                if(targetState.getBlock() instanceof CropBlock || targetState.getBlock() instanceof BushBlock) {
+                if (targetState.getBlock() instanceof CropBlock || targetState.getBlock() instanceof BushBlock) {
                     BlockPos pos = this.worldPosition.relative(direction, i);
                     ItemStack tool = getStackInSlot(MachineUtils.Area.INGREDIENT_1, 0);
-                    LootContext.Builder builder = (new LootContext.Builder((ServerLevel) level)).withRandom(level.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, tool);
+                    LootParams.Builder builder =
+                            (new LootParams.Builder((ServerLevel) level)).withParameter(LootContextParams.ORIGIN,
+                                    Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, tool);
 
                     if (targetState.getBlock() instanceof CropBlock crop) {
                         if (crop.isMaxAge(targetState)) {
@@ -98,7 +100,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
                         }
                     } else if (targetState.getBlock() instanceof BushBlock) {
                         List<ItemStack> drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
-                        if(MachineUtils.getTotalCount(drops) > 1){
+                        if (MachineUtils.getTotalCount(drops) > 1) {
 //                          We re-run the drops so they aren't always including bonus drops
                             drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
                             if (MachineUtils.canPushAllOutputs(drops, this)) {
@@ -118,9 +120,9 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         }
     }
 
-    public List<ItemStack> cullSeed(List<ItemStack> drops, ItemStack seed){
+    public List<ItemStack> cullSeed(List<ItemStack> drops, ItemStack seed) {
         for (ItemStack drop : drops) {
-            if (ItemStack.isSame(drop, seed)) {
+            if (ItemStack.isSameItem(drop, seed)) {
                 drop.shrink(1);
                 if (drop.isEmpty()) {
                     drops.remove(drop);
@@ -139,8 +141,8 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         }
     }
 
-    public void setMode(boolean isNonDestructive){
-        if(isNonDestructive){
+    public void setMode(boolean isNonDestructive) {
+        if (isNonDestructive) {
             harvesterData.set(HarvesterData.Data.MODE, 1);
         } else {
             harvesterData.set(HarvesterData.Data.MODE, 0);

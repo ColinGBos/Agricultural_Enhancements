@@ -84,7 +84,7 @@ public class CropManagerTile extends AbstractBaseFuelUserTile {
                 BlockState cropState = this.level.getBlockState(this.worldPosition.relative(direction, i));
                 BlockPos soilPos = this.worldPosition.relative(direction, i).below();
                 BlockPos cropPos = soilPos.above();
-                if (!cropState.getMaterial().isReplaceable()) {
+                if (!cropState.canBeReplaced()) {
                     AgriculturalEnhancements.debugLog(cropState + " is not replacable");
                     continue;
                 }

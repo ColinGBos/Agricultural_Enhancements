@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.level.BlockEvent;
@@ -39,8 +39,12 @@ public class CropDropSoilHandler {
                 if (nutrients <= 0) {
                     return;
                 }
-                LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel) level)).withRandom(level.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, ItemStack.EMPTY);
-                List<ItemStack> drops = state.getDrops(lootcontext$builder);
+
+                LootParams.Builder builder =
+                        (new LootParams.Builder((ServerLevel) level)).withParameter(LootContextParams.ORIGIN,
+                                Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, event.getPlayer().getMainHandItem());
+
+                List<ItemStack> drops = state.getDrops(builder);
 //                        AgriculturalEnhancements.debugLog("Drops pre-clean: " + drops);
                 drops = MachineUtils.cleanItemStacks(drops);
                 for (ItemStack stack : drops) {

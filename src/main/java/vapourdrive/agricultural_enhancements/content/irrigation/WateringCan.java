@@ -51,7 +51,7 @@ public class WateringCan extends Item {
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
         if (getWater(pPlayer.getItemInHand(pUsedHand)) < getMaxWater()) {
             BlockPos pos;
-            BlockHitResult blockhitresult = getPlayerPOVHitResult(pPlayer.getLevel(), pPlayer, ClipContext.Fluid.SOURCE_ONLY);
+            BlockHitResult blockhitresult = getPlayerPOVHitResult(pPlayer.level(), pPlayer, ClipContext.Fluid.SOURCE_ONLY);
             if (blockhitresult.getType() == HitResult.Type.BLOCK) {
                 pos = blockhitresult.getBlockPos();
                 BlockState state = pLevel.getBlockState(pos);
@@ -112,7 +112,8 @@ public class WateringCan extends Item {
         }
     }
 
-    public void onUsingTick(ItemStack stack, LivingEntity pLivingEntity, int count) {
+    @Override
+    public void onUseTick(@NotNull Level level, @NotNull LivingEntity pLivingEntity, @NotNull ItemStack stack, int count) {
         if (getWater(stack) <= 0) {
             return;
         }
@@ -121,16 +122,16 @@ public class WateringCan extends Item {
             AgriculturalEnhancements.debugLog("Tick");
             if (pLivingEntity instanceof Player player) {
                 BlockPos pos = player.getOnPos().relative(Direction.UP).relative(player.getDirection());
-                BlockHitResult blockhitresult = getPlayerPOVHitResult(player.getLevel(), player, ClipContext.Fluid.NONE);
+                BlockHitResult blockhitresult = getPlayerPOVHitResult(player.level(), player, ClipContext.Fluid.NONE);
                 if (blockhitresult.getType() == HitResult.Type.BLOCK) {
                     pos = blockhitresult.getBlockPos();
                 }
                 if (count % 10 == 0) {
                     AgriculturalEnhancements.debugLog("Count: " + count);
-                    water(pos, pLivingEntity.getLevel(), stack);
+                    water(pos, pLivingEntity.level(), stack);
                     consumeWater(stack, 50);
                 }
-                splash(pLivingEntity.getLevel(), pos);
+                splash(pLivingEntity.level(), pos);
             }
         }
     }

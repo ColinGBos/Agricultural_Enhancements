@@ -65,7 +65,7 @@ public class JEI_Plugin implements IModPlugin {
         registration.addIngredientInfo(new ItemStack(Registration.FERTILIZER_PRODUCER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.fertilizer_producer.info", ConfigSettings.FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER.get()));
         registration.addIngredientInfo(new ItemStack(Registration.CROP_MANAGER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.crop_manager.info"));
         registration.addIngredientInfo(new ItemStack(Registration.SOIL_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.soil.info"));
-        if(ConfigSettings.SOIL_REQUIRES_FERTILIZER.get()) {
+        if (ConfigSettings.SOIL_REQUIRES_FERTILIZER.get()) {
             registration.addIngredientInfo(new ItemStack(Registration.TILLED_SOIL_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.tilled_soil.info"), Component.translatable("agriculturalenhancements.tilled_soil.fertilizer_true.info"));
         } else {
             registration.addIngredientInfo(new ItemStack(Registration.TILLED_SOIL_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.tilled_soil.info"), Component.translatable("agriculturalenhancements.tilled_soil.fertilizer_false.info"));

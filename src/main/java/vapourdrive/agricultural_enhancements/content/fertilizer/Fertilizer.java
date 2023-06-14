@@ -27,7 +27,7 @@ public class Fertilizer extends Item {
     public void appendHoverText(@NotNull ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.info").withStyle(ChatFormatting.GRAY));
         pTooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.info_1").withStyle(ChatFormatting.GRAY));
-        if(ConfigSettings.SOIL_REQUIRES_FERTILIZER.get()){
+        if (ConfigSettings.SOIL_REQUIRES_FERTILIZER.get()) {
             pTooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.tilling.info").withStyle(ChatFormatting.GRAY));
         }
     }

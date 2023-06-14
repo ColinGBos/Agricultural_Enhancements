@@ -17,12 +17,12 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.PipeBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
@@ -34,8 +34,9 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
     public static final IntegerProperty IRRIGATION = IntegerProperty.create("irrigation", 0, 15);
 
     public IrrigationPipeBlock() {
-        super(0.125F, BlockBehaviour.Properties.of(Material.METAL)
-                .sound(SoundType.METAL)
+        super(0.125F, BlockBehaviour.Properties.of()
+                .mapColor(MapColor.STONE)
+                .instrument(NoteBlockInstrument.BASEDRUM)
                 .strength(1.5f)
                 .requiresCorrectToolForDrops()
         );

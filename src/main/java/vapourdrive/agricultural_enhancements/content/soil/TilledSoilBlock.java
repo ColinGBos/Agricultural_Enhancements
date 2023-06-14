@@ -20,7 +20,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -38,7 +39,7 @@ public class TilledSoilBlock extends Block {
     public static final int MAX_NUTRIENTS = 5;
 
     public TilledSoilBlock() {
-        super(BlockBehaviour.Properties.of(Material.DIRT).strength(0.6f).sound(SoundType.GRAVEL));
+        super(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).instrument(NoteBlockInstrument.BANJO).strength(0.6f).sound(SoundType.GRAVEL));
         this.registerDefaultState(this.stateDefinition.any().setValue(SOIL_MOISTURE, 0).setValue(SOIL_NUTRIENTS, 3));
     }
 
@@ -80,8 +81,9 @@ public class TilledSoilBlock extends Block {
         return meetsSurviveConditions(blockstate);
     }
 
+    @SuppressWarnings("deprecation")
     private boolean meetsSurviveConditions(BlockState blockstate) {
-        return !blockstate.getMaterial().isSolid() || blockstate.getBlock() instanceof FenceGateBlock || blockstate.getBlock() instanceof MovingPistonBlock;
+        return !blockstate.isSolid() || blockstate.getBlock() instanceof FenceGateBlock || blockstate.getBlock() instanceof MovingPistonBlock;
     }
 
     @Override
@@ -90,7 +92,7 @@ public class TilledSoilBlock extends Block {
     }
 
     public BlockState getStateForPlacement(Level level, BlockPos pos) {
-        int baseMoisture = Math.max((int) ((level.getBiome(pos).get().getDownfall() - 0.3f) / 0.2f), 0);
+        int baseMoisture = Math.max((int) ((level.getBiome(pos).get().getModifiedClimateSettings().downfall() - 0.3f) / 0.2f), 0);
         return this.defaultBlockState().setValue(SOIL_MOISTURE, baseMoisture);
     }
 
@@ -155,7 +157,7 @@ public class TilledSoilBlock extends Block {
 
     }
 
-    public static int getMoistureOut(int moistureIn, Level level, BlockPos pos){
+    public static int getMoistureOut(int moistureIn, Level level, BlockPos pos) {
         int moistureOut = moistureIn;
         int potentialMoisture = getMaxMoisture(level, pos);
         if (potentialMoisture - 1 > moistureIn) {
@@ -181,7 +183,7 @@ public class TilledSoilBlock extends Block {
         BlockPos blockPos = pPos.above();
         BlockState state = pLevel.getBlockState(blockPos);
         if (!state.isAir() && state.getBlock() instanceof CropBlock crop) {
-            pLevel.setBlockAndUpdate(blockPos, state.setValue(crop.getAgeProperty(), 1));
+            pLevel.setBlockAndUpdate(blockPos, crop.defaultBlockState());
         }
     }
 
@@ -206,12 +208,12 @@ public class TilledSoilBlock extends Block {
             }
         }
         int baseMoisture = getEnvMoisture(level, pPos);
-        AgriculturalEnhancements.debugLog("Base moisture: "+baseMoisture);
+        AgriculturalEnhancements.debugLog("Base moisture: " + baseMoisture);
         return Math.max(greatestNeighbor, baseMoisture);
     }
 
-    public static int getEnvMoisture(LevelReader level, BlockPos pos){
-        return Math.max((int) ((level.getBiome(pos).get().getDownfall() - 0.2f) / 0.15f), 0);
+    public static int getEnvMoisture(LevelReader level, BlockPos pos) {
+        return Math.max((int) ((level.getBiome(pos).get().getModifiedClimateSettings().downfall() - 0.2f) / 0.15f), 0);
     }
 
     @Override
