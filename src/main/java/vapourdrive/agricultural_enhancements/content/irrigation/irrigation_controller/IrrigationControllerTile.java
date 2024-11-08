@@ -2,38 +2,40 @@ package vapourdrive.agricultural_enhancements.content.irrigation.irrigation_cont
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.FuelHandler;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.OutputHandler;
 import vapourdrive.agricultural_enhancements.content.irrigation.IIrrigationBlock;
 import vapourdrive.agricultural_enhancements.content.irrigation.IrrigationPipeBlock;
-import vapourdrive.agricultural_enhancements.utils.MachineUtils;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
+import vapourdrive.vapourware.shared.base.itemhandlers.FuelHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.OutputHandler;
+import vapourdrive.vapourware.shared.utils.MachineUtils;
 
 import java.util.Objects;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.IRRIGATION_CONTROLLER_TILE;
 
-public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
+public class IrrigationControllerTile extends AbstractBaseFuelUserTile implements MenuProvider {
 
     private final FuelHandler fuelHandler = new FuelHandler(this, FUEL_SLOT.length);
     private final OutputHandler outputHandler = new OutputHandler(this, OUTPUT_SLOTS.length);
     private final CombinedInvWrapper combined = new CombinedInvWrapper(fuelHandler, outputHandler);
-    private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
+//    private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
 
     public final IrrigationControllerData machineData = new IrrigationControllerData();
     private int irrigateTimer = 0;
@@ -93,11 +95,10 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
 
     @Override
     public boolean canWork(BlockState state) {
-        if(Objects.requireNonNull(this.getLevel()).hasNeighborSignal(this.worldPosition)){
-            return false;
-        }
         assert this.level != null;
         if (this.level.getRawBrightness(this.worldPosition.above(), 0) < 9) {
+            return false;
+        } else if ((Objects.requireNonNull(this.getLevel())).hasNeighborSignal(this.worldPosition)) {
             return false;
         }
         BlockState belowState = this.level.getBlockState(this.worldPosition.below());
@@ -107,17 +108,18 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
         Direction direction_rear = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
         BlockState rearState = this.level.getBlockState(this.worldPosition.relative(direction_rear));
         BlockState aboveState = this.level.getBlockState(this.worldPosition.above());
-        if(rearState.getBlock() instanceof IIrrigationBlock || aboveState instanceof IIrrigationBlock) {
+        if (rearState.getBlock() instanceof IIrrigationBlock || aboveState.getBlock() instanceof IIrrigationBlock) {
             return getCurrentFuel() >= getMinFuelToWork();
         }
         return false;
     }
 
+
     @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
-        fuelHandler.deserializeNBT(tag.getCompound("invFuel"));
-        outputHandler.deserializeNBT(tag.getCompound("invOut"));
+    public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.loadAdditional(tag, registries);
+        fuelHandler.deserializeNBT(registries, tag.getCompound("invFuel"));
+        outputHandler.deserializeNBT(registries, tag.getCompound("invOut"));
         machineData.set(IrrigationControllerData.Data.FUEL, tag.getInt("fuel"));
         irrigateTimer = tag.getInt("irrigateTimer");
         consumeFuelTimer = tag.getInt("consumeFuelTimer");
@@ -125,26 +127,17 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.put("invFuel", fuelHandler.serializeNBT());
-        tag.put("invOut", outputHandler.serializeNBT());
+    public void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.put("invFuel", fuelHandler.serializeNBT(registries));
+        tag.put("invOut", outputHandler.serializeNBT(registries));
         tag.putInt("fuel", getCurrentFuel());
         tag.putInt("irrigateTimer", irrigateTimer);
         tag.putInt("consumeFuelTimer", consumeFuelTimer);
 
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side) {
-        if (capability == ForgeCapabilities.ITEM_HANDLER) {
-            return combinedHandler.cast();
-        }
-        return super.getCapability(capability, side);
-    }
-
-    public IItemHandler getItemHandler() {
+    public IItemHandler getItemHandler(@Nullable Direction side) {
         return combined;
     }
 
@@ -184,7 +177,7 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.getStackInSlot(FUEL_SLOT[index]);
             case OUTPUT -> outputHandler.getStackInSlot(OUTPUT_SLOTS[index]);
-            case INGREDIENT, INGREDIENT_2 -> ItemStack.EMPTY;
+            default -> ItemStack.EMPTY;
         };
     }
 
@@ -201,7 +194,17 @@ public class IrrigationControllerTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.insertItem(FUEL_SLOT[index], stack, simulate);
             case OUTPUT -> outputHandler.insertItem(OUTPUT_SLOTS[index], stack, simulate, true);
-            case INGREDIENT, INGREDIENT_2 -> ItemStack.EMPTY;
+            default -> ItemStack.EMPTY;
         };
+    }
+
+    @Override
+    public @NotNull Component getDisplayName() {
+        return Component.translatable(AgriculturalEnhancements.MODID+".irrigation_controller");
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int id, @NotNull Inventory inventory, @NotNull Player player) {
+        return new IrrigationControllerMenu(id, this.level, this.worldPosition, player.getInventory(), player, this.getMachineData());
     }
 }

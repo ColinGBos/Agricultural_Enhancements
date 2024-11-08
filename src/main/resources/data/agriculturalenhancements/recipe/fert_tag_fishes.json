@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "minecraft:fishes"
+      }
+    }
+  ],
+  "type": "agriculturalenhancements:fertilizer",
+  "ingredient": {
+    "tag": "minecraft:fishes"
+  },
+  "n": 1200,
+  "p": 300,
+  "k": 300
+}
+

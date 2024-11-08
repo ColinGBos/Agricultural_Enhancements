@@ -3,7 +3,6 @@ package vapourdrive.agricultural_enhancements.integrations.jei;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -15,9 +14,11 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
@@ -29,12 +30,12 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineScreen.isInRect;
+import static vapourdrive.vapourware.shared.base.AbstractBaseMachineScreen.isInRect;
 
-public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecipe> {
+public class FertilizerRecipeCategory implements IRecipeCategory<RecipeHolder<FertilizerRecipe>> {
 
-    public final static ResourceLocation UID = new ResourceLocation(AgriculturalEnhancements.MODID, "fertilizer_producer");
-    public final static ResourceLocation TEXTURE = new ResourceLocation(AgriculturalEnhancements.MODID, "textures/gui/fertilizer_producer_jei.png");
+    public final static ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(AgriculturalEnhancements.MODID, "fertilizer_producer");
+    public final static ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(AgriculturalEnhancements.MODID, "textures/gui/fertilizer_producer_jei.png");
 
     private final IDrawable background;
     private final IDrawable icon;
@@ -85,8 +86,13 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
         return this.cachedFuel.getUnchecked(breakTime);
     }
 
+//    @Override
+//    public @NotNull RecipeType<FertilizerRecipe> getRecipeType() {
+//        return JEI_Plugin.FERTILIZER_TYPE;
+//    }
+
     @Override
-    public @NotNull RecipeType<FertilizerRecipe> getRecipeType() {
+    public @NotNull RecipeType<RecipeHolder<FertilizerRecipe>> getRecipeType() {
         return JEI_Plugin.FERTILIZER_TYPE;
     }
 
@@ -106,31 +112,37 @@ public class FertilizerRecipeCategory implements IRecipeCategory<FertilizerRecip
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, FertilizerRecipe recipe, @NotNull IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 18, 33).addIngredients(recipe.getIngredient());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 99, 10).addItemStack(new ItemStack(Registration.FERTILISER.get()));
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<FertilizerRecipe> recipe, @NotNull IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 18, 33).addIngredients(recipe.value().getIngredient());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 99, 10).addItemStack(new ItemStack(Registration.FERTILIZER.get()));
     }
 
+//    @Override
+//    public void setRecipe(IRecipeLayoutBuilder builder, FertilizerRecipe recipe, @NotNull IFocusGroup focuses) {
+//        builder.addSlot(RecipeIngredientRole.INPUT, 18, 33).addIngredients(recipe.getIngredient());
+//        builder.addSlot(RecipeIngredientRole.OUTPUT, 99, 10).addItemStack(new ItemStack(Registration.FERTILIZER.get()));
+//    }
+
     @Override
-    public void draw(@NotNull FertilizerRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull PoseStack stack, double mouseX, double mouseY) {
+    public void draw(@NotNull RecipeHolder<FertilizerRecipe> recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull GuiGraphics guiGraphics, double mouseX, double mouseY) {
         IDrawableAnimated arrow = getArrow();
-        arrow.draw(stack, 71, 19);
+        arrow.draw(guiGraphics, 71, 19);
         IDrawableAnimated fuel = getFuel();
-        fuel.draw(stack, 3, 4);
+        fuel.draw(guiGraphics, 3, 4);
 
-        int[] outputs = recipe.getOutputs();
+        int[] outputs = recipe.value().getOutputs();
 
-        n.draw(stack, 41, 4, Math.max(0, 45 - outputs[0] / 100), 0, 0, 0);
-        p.draw(stack, 51, 4, Math.max(0, 45 - outputs[1] / 100), 0, 0, 0);
-        k.draw(stack, 61, 4, Math.max(0, 45 - outputs[2] / 100), 0, 0, 0);
+        n.draw(guiGraphics, 41, 4, Math.max(0, 45 - outputs[0] / 100), 0, 0, 0);
+        p.draw(guiGraphics, 51, 4, Math.max(0, 45 - outputs[1] / 100), 0, 0, 0);
+        k.draw(guiGraphics, 61, 4, Math.max(0, 45 - outputs[2] / 100), 0, 0, 0);
     }
 
     @Override
-    public @NotNull List<Component> getTooltipStrings(@NotNull FertilizerRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+    public @NotNull List<Component> getTooltipStrings(@NotNull RecipeHolder<FertilizerRecipe> recipe, @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         List<Component> hoveringText = new ArrayList<>();
         FertilizerProducerData.Data[] elements = {FertilizerProducerData.Data.N, FertilizerProducerData.Data.P, FertilizerProducerData.Data.K};
         int i = 0;
-        int[] elementValues = recipe.getOutputs();
+        int[] elementValues = recipe.value().getOutputs();
         for (FertilizerProducerData.Data element : elements) {
             if (isInRect(40 + (10 * i), 2, 8, 48, (int) mouseX, (int) mouseY)) {
                 hoveringText.add(Component.literal(element.name() + ": ").append(df.format(elementValues[i])));

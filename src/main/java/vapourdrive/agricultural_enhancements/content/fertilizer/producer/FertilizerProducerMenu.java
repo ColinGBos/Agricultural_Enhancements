@@ -1,28 +1,27 @@
 package vapourdrive.agricultural_enhancements.content.fertilizer.producer;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineContainer;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotFuel;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotOutput;
 import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.base.AbstractBaseMachineMenu;
+import vapourdrive.vapourware.shared.base.slots.SlotFuel;
+import vapourdrive.vapourware.shared.base.slots.SlotOutput;
 
 import java.util.Objects;
 
-public class FertilizerProducerContainer extends AbstractBaseMachineContainer {
+public class FertilizerProducerMenu extends AbstractBaseMachineMenu {
     // gui position of the player inventory grid
 
     public static final int OUTPUT_INVENTORY_XPOS = 125;
@@ -31,8 +30,8 @@ public class FertilizerProducerContainer extends AbstractBaseMachineContainer {
     protected final FertilizerProducerTile tileEntity;
 
 
-    public FertilizerProducerContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, FertilizerProducerData machineData) {
-        super(windowId, world, pos, inv, player, Registration.FERTILIZER_PRODUCER_CONTAINER.get(), machineData);
+    public FertilizerProducerMenu(int windowId, Level world, BlockPos pos, Inventory inv, Player player, FertilizerProducerData machineData) {
+        super(windowId, world, pos, inv, player, Registration.FERTILIZER_PRODUCER_MENU.get(), machineData);
         tileEntity = (FertilizerProducerTile) world.getBlockEntity(pos);
 
         //We use this vs the builtin method because we split all the shorts
@@ -41,14 +40,13 @@ public class FertilizerProducerContainer extends AbstractBaseMachineContainer {
         layoutPlayerInventorySlots(PLAYER_INVENTORY_XPOS, PLAYER_INVENTORY_YPOS);
 
         if (tileEntity != null) {
-            tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(h -> {
-                addSlot(new SlotFuel(h, 0, 8, 59));
-                addSlot(new FertilizerSlotIngredient(h, 1, 44, 49, this.world));
-                addSlot(new SlotOutput(h, 2, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 3, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 4, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS + 18));
-                addSlot(new SlotOutput(h, 5, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS + 18));
-            });
+            IItemHandler handler = tileEntity.getItemHandler(null);
+            addSlot(new SlotFuel(handler, 0, 8, 59));
+            addSlot(new FertilizerSlotIngredient(handler, 1, 44, 49, this.world));
+            addSlot(new SlotOutput(handler, 2, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
+            addSlot(new SlotOutput(handler, 3, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
+            addSlot(new SlotOutput(handler, 4, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS + 18));
+            addSlot(new SlotOutput(handler, 5, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS + 18));
         }
     }
 
@@ -88,13 +86,13 @@ public class FertilizerProducerContainer extends AbstractBaseMachineContainer {
             //Player Inventory
             else if (index <= 35) {
                 //Inventory to fuel
-                if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0.0) {
+                if (stack.getBurnTime(RecipeType.SMELTING) > 0.0) {
                     if (!this.moveItemStackTo(stack, 36, 37, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
                 //Inventory to infgredient
-                if (this.world.getRecipeManager().getRecipeFor(Registration.FERTILIZER_TYPE.get(), new SimpleContainer(stack), this.world).isPresent()) {
+                if (this.world.getRecipeManager().getRecipeFor(Registration.FERTILIZER_TYPE.get(), new SingleRecipeInput(stack), this.world).isPresent()) {
                     if (!this.moveItemStackTo(stack, 37, 38, false)) {
                         return ItemStack.EMPTY;
                     }

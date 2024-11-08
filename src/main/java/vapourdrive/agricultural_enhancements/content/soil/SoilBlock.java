@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.NotNull;
 
 public class SoilBlock extends TilledSoilBlock {
@@ -66,9 +67,16 @@ public class SoilBlock extends TilledSoilBlock {
     }
 
 
+//    @Override
+//    public boolean canSustainPlant(@NotNull BlockState state, @NotNull BlockGetter world, BlockPos pos, @NotNull Direction facing, net.minecraftforge.common.IPlantable plantable) {
+//        net.minecraftforge.common.PlantType type = plantable.getPlantType(world, pos.relative(facing));
+//        return net.minecraftforge.common.PlantType.PLAINS.equals(type);
+//    }
+
     @Override
-    public boolean canSustainPlant(@NotNull BlockState state, @NotNull BlockGetter world, BlockPos pos, @NotNull Direction facing, net.minecraftforge.common.IPlantable plantable) {
-        net.minecraftforge.common.PlantType type = plantable.getPlantType(world, pos.relative(facing));
-        return net.minecraftforge.common.PlantType.PLAINS.equals(type);
+    public @NotNull TriState canSustainPlant(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull Direction facing, BlockState plantState) {
+        return TriState.FALSE;
     }
+
+
 }

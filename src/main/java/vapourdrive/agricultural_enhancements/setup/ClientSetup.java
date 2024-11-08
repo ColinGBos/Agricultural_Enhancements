@@ -1,24 +1,32 @@
 package vapourdrive.agricultural_enhancements.setup;
 
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.content.fertilizer.producer.FertilizerProducerScreen;
 import vapourdrive.agricultural_enhancements.content.harvester.HarvesterScreen;
 import vapourdrive.agricultural_enhancements.content.irrigation.irrigation_controller.IrrigationControllerScreen;
 import vapourdrive.agricultural_enhancements.content.manager.CropManagerScreen;
 
-@Mod.EventBusSubscriber(modid = AgriculturalEnhancements.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = AgriculturalEnhancements.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 
-    public static void setup(final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            MenuScreens.register(Registration.HARVESTER_CONTAINER.get(), HarvesterScreen::new);
-            MenuScreens.register(Registration.IRRIGATION_CONTROLLER_CONTAINER.get(), IrrigationControllerScreen::new);
-            MenuScreens.register(Registration.FERTILIZER_PRODUCER_CONTAINER.get(), FertilizerProducerScreen::new);
-            MenuScreens.register(Registration.CROP_MANAGER_CONTAINER.get(), CropManagerScreen::new);
-        });
+//    public static void setup(final FMLClientSetupEvent event) {
+//        event.enqueueWork(() -> {
+//            MenuScreens.register(Registration.HARVESTER_MENU.get(), HarvesterScreen::new);
+//            MenuScreens.register(Registration.IRRIGATION_CONTROLLER_MENU.get(), IrrigationControllerScreen::new);
+//            MenuScreens.register(Registration.FERTILIZER_PRODUCER_MENU.get(), FertilizerProducerScreen::new);
+//            MenuScreens.register(Registration.CROP_MANAGER_MENU.get(), CropManagerScreen::new);
+//        });
+//    }
+
+    @SubscribeEvent
+    public static void registerMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(Registration.HARVESTER_MENU.get(), HarvesterScreen::new);
+        event.register(Registration.IRRIGATION_CONTROLLER_MENU.get(), IrrigationControllerScreen::new);
+        event.register(Registration.FERTILIZER_PRODUCER_MENU.get(), FertilizerProducerScreen::new);
+        event.register(Registration.CROP_MANAGER_MENU.get(), CropManagerScreen::new);
     }
 }

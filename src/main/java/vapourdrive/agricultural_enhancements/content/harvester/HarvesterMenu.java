@@ -8,18 +8,18 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineContainer;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotFuel;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotOutput;
 import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.base.AbstractBaseMachineMenu;
+import vapourdrive.vapourware.shared.base.slots.SlotFuel;
+import vapourdrive.vapourware.shared.base.slots.SlotOutput;
+import vapourdrive.vapourware.shared.base.slots.SlotTool;
 
 import java.util.Objects;
 
-public class HarvesterContainer extends AbstractBaseMachineContainer {
+public class HarvesterMenu extends AbstractBaseMachineMenu {
     // gui position of the player inventory grid
     public static final int PLAYER_INVENTORY_XPOS = 8;
     public static final int PLAYER_INVENTORY_YPOS = 84;
@@ -28,34 +28,33 @@ public class HarvesterContainer extends AbstractBaseMachineContainer {
     public static final int OUTPUT_INVENTORY_YPOS = 17;
 
 
-    public HarvesterContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, HarvesterData machineData) {
-        super(windowId, world, pos, inv, player, Registration.HARVESTER_CONTAINER.get(), machineData);
+    public HarvesterMenu(int windowId, Level world, BlockPos pos, Inventory inv, Player player, HarvesterData machineData) {
+        super(windowId, world, pos, inv, player, Registration.HARVESTER_MENU.get(), machineData);
 
         //We use this vs the builtin method because we split all the shorts
         addSplitDataSlots(machineData);
 
         layoutPlayerInventorySlots(PLAYER_INVENTORY_XPOS, PLAYER_INVENTORY_YPOS);
 
-        if (tileEntity != null) {
-            tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(h -> {
-                addSlot(new SlotFuel(h, 0, 8, 59));
-                addSlot(new SlotOutput(h, 1, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 2, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 3, OUTPUT_INVENTORY_XPOS + (18 * 2), OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 4, OUTPUT_INVENTORY_XPOS + (18 * 3), OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 5, OUTPUT_INVENTORY_XPOS + (18 * 4), OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 6, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS + 18));
-                addSlot(new SlotOutput(h, 7, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS + 18));
-                addSlot(new SlotOutput(h, 8, OUTPUT_INVENTORY_XPOS + (18 * 2), OUTPUT_INVENTORY_YPOS + 18));
-                addSlot(new SlotOutput(h, 9, OUTPUT_INVENTORY_XPOS + (18 * 3), OUTPUT_INVENTORY_YPOS + 18));
-                addSlot(new SlotOutput(h, 10, OUTPUT_INVENTORY_XPOS + (18 * 4), OUTPUT_INVENTORY_YPOS + 18));
-                addSlot(new SlotOutput(h, 11, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS + (18 * 2)));
-                addSlot(new SlotOutput(h, 12, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS + (18 * 2)));
-                addSlot(new SlotOutput(h, 13, OUTPUT_INVENTORY_XPOS + (18 * 2), OUTPUT_INVENTORY_YPOS + (18 * 2)));
-                addSlot(new SlotOutput(h, 14, OUTPUT_INVENTORY_XPOS + (18 * 3), OUTPUT_INVENTORY_YPOS + (18 * 2)));
-                addSlot(new SlotOutput(h, 15, OUTPUT_INVENTORY_XPOS + (18 * 4), OUTPUT_INVENTORY_YPOS + (18 * 2)));
-                addSlot(new HarvesterSlotIngredient(h, 16, 143, OUTPUT_INVENTORY_YPOS + (18 * 2), world));
-            });
+        if (tileEntity != null && tileEntity instanceof HarvesterTile machine) {
+            IItemHandler h = machine.getItemHandler(null);
+            addSlot(new SlotFuel(h, 0, 8, 59));
+            addSlot(new SlotOutput(h, 1, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
+            addSlot(new SlotOutput(h, 2, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
+            addSlot(new SlotOutput(h, 3, OUTPUT_INVENTORY_XPOS + (18 * 2), OUTPUT_INVENTORY_YPOS));
+            addSlot(new SlotOutput(h, 4, OUTPUT_INVENTORY_XPOS + (18 * 3), OUTPUT_INVENTORY_YPOS));
+            addSlot(new SlotOutput(h, 5, OUTPUT_INVENTORY_XPOS + (18 * 4), OUTPUT_INVENTORY_YPOS));
+            addSlot(new SlotOutput(h, 6, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS + 18));
+            addSlot(new SlotOutput(h, 7, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS + 18));
+            addSlot(new SlotOutput(h, 8, OUTPUT_INVENTORY_XPOS + (18 * 2), OUTPUT_INVENTORY_YPOS + 18));
+            addSlot(new SlotOutput(h, 9, OUTPUT_INVENTORY_XPOS + (18 * 3), OUTPUT_INVENTORY_YPOS + 18));
+            addSlot(new SlotOutput(h, 10, OUTPUT_INVENTORY_XPOS + (18 * 4), OUTPUT_INVENTORY_YPOS + 18));
+            addSlot(new SlotOutput(h, 11, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS + (18 * 2)));
+            addSlot(new SlotOutput(h, 12, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS + (18 * 2)));
+            addSlot(new SlotOutput(h, 13, OUTPUT_INVENTORY_XPOS + (18 * 2), OUTPUT_INVENTORY_YPOS + (18 * 2)));
+            addSlot(new SlotOutput(h, 14, OUTPUT_INVENTORY_XPOS + (18 * 3), OUTPUT_INVENTORY_YPOS + (18 * 2)));
+            addSlot(new SlotOutput(h, 15, OUTPUT_INVENTORY_XPOS + (18 * 4), OUTPUT_INVENTORY_YPOS + (18 * 2)));
+            addSlot(new SlotTool(h, 16, 143, OUTPUT_INVENTORY_YPOS + (18 * 2)));
         }
     }
 
@@ -101,7 +100,7 @@ public class HarvesterContainer extends AbstractBaseMachineContainer {
             //Player Inventory
             else if (index <= 35) {
                 //Inventory to fuel
-                if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0.0) {
+                if (stack.getBurnTime(RecipeType.SMELTING) > 0.0) {
                     if (!this.moveItemStackTo(stack, 36, 37, false)) {
                         return ItemStack.EMPTY;
                     }

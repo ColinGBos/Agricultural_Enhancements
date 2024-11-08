@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+  {
+    "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "neoforge:fertilizer"
+      }
+    }
+  ],
+  "type": "agriculturalenhancements:fertilizer",
+  "ingredient": {
+    "tag": "neoforge:fertilizer"
+  },
+  "n": 800,
+  "p": 800,
+  "k": 800
+}
+

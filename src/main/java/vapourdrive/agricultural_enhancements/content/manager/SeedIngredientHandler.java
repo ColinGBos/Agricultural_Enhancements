@@ -2,8 +2,8 @@ package vapourdrive.agricultural_enhancements.content.manager;
 
 import net.minecraft.world.item.ItemStack;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.IngredientHandler;
+import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
+import vapourdrive.vapourware.shared.base.itemhandlers.IngredientHandler;
 
 import javax.annotation.Nonnull;
 
@@ -14,7 +14,6 @@ public class SeedIngredientHandler extends IngredientHandler {
 
     @Override
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        AgriculturalEnhancements.debugLog("Why is the seed handler working?...");
         return AgriculturalEnhancements.seeds.contains(stack.getItem());
     }
 }

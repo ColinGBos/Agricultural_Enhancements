@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+          "value": {
+            "type": "neoforge:tag_empty",
+            "tag": "neoforge:gems/apatite"
+          }
+        }
+      ],
+        "type": "agriculturalenhancements:fertilizer",
+        "ingredient": {
+          "tag": "neoforge:gems/apatite"
+        },
+        "n": 400,
+        "p": 1600,
+        "k": 400
+}
+

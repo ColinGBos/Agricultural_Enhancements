@@ -1,36 +1,41 @@
 package vapourdrive.agricultural_enhancements.content.fertilizer.producer;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineBlock;
-import vapourdrive.agricultural_enhancements.utils.MachineUtils;
+import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.base.AbstractBaseMachineBlock;
+import vapourdrive.vapourware.shared.utils.MachineUtils;
 
 import javax.annotation.Nullable;
 
 
 public class FertilizerProducerBlock extends AbstractBaseMachineBlock {
 
+    public static final MapCodec<FertilizerProducerBlock> CODEC = simpleCodec(FertilizerProducerBlock::new);
+
+
     public FertilizerProducerBlock() {
-        super(BlockBehaviour.Properties.of(Material.STONE), 0.2f);
+        super(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASEDRUM), 0.2f);
+    }
+
+    public FertilizerProducerBlock(Properties properties) {
+        super(properties, 0.2f);
     }
 
     @Nullable
@@ -54,7 +59,7 @@ public class FertilizerProducerBlock extends AbstractBaseMachineBlock {
     }
 
     @Override
-    protected boolean sneakWrenchMachine(Player player, Level level, BlockPos pos) {
+    public boolean sneakWrenchMachine(Player player, Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof FertilizerProducerTile machine) {
             boolean poison = machine.ventElement();
@@ -67,47 +72,61 @@ public class FertilizerProducerBlock extends AbstractBaseMachineBlock {
         return true;
     }
 
+//    @Override
+//    protected void openContainer(Level level, @NotNull BlockPos pos, @NotNull Player player) {
+//        BlockEntity blockEntity = level.getBlockEntity(pos);
+//        if (blockEntity instanceof FertilizerProducerTile machine) {
+//            MenuProvider containerProvider = new MenuProvider() {
+//                @Override
+//                public @NotNull Component getDisplayName() {
+//                    return Component.translatable(AgriculturalEnhancements.MODID + ".fertilizer_producer");
+//                }
+//
+//                @Override
+//                public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
+//                    return new FertilizerProducerMenu(windowId, level, pos, playerInventory, playerEntity, machine.getFertilizerProducerData());
+//                }
+//            };
+//            NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
+//        } else {
+//            throw new IllegalStateException("Our named container provider is missing!");
+//        }
+//    }
+
     @Override
     protected void openContainer(Level level, @NotNull BlockPos pos, @NotNull Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof FertilizerProducerTile machine) {
-            MenuProvider containerProvider = new MenuProvider() {
-                @Override
-                public @NotNull Component getDisplayName() {
-                    return Component.translatable(AgriculturalEnhancements.MODID + ".fertilizer_producer");
-                }
-
-                @Override
-                public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-                    return new FertilizerProducerContainer(windowId, level, pos, playerInventory, playerEntity, machine.getFertilizerProducerData());
-                }
-            };
-            NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
-        } else {
-            throw new IllegalStateException("Our named container provider is missing!");
+        if (blockEntity instanceof FertilizerProducerTile) {
+            player.openMenu((MenuProvider) blockEntity, pos);
         }
     }
 
-
     @Override
-    @SuppressWarnings("deprecation")
     public void onRemove(BlockState state, @NotNull Level world, @NotNull BlockPos blockPos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity tileEntity = world.getBlockEntity(blockPos);
             if (tileEntity instanceof FertilizerProducerTile machine) {
-                AbstractBaseMachineBlock.dropContents(world, blockPos, machine.getItemHandler());
+                AbstractBaseMachineBlock.dropContents(world, blockPos, machine.getItemHandler(null));
             }
             super.onRemove(state, world, blockPos, newState, isMoving);
         }
     }
 
     @Override
-    protected CompoundTag putAdditionalInfo(CompoundTag tag, BlockEntity blockEntity) {
+    protected ItemStack putAdditionalInfo(ItemStack stack, BlockEntity blockEntity) {
         if (blockEntity instanceof FertilizerProducerTile machine) {
-            tag.putInt(AgriculturalEnhancements.MODID + ".n", machine.getCurrentElement(FertilizerProducerTile.Element.N));
-            tag.putInt(AgriculturalEnhancements.MODID + ".p", machine.getCurrentElement(FertilizerProducerTile.Element.P));
-            tag.putInt(AgriculturalEnhancements.MODID + ".k", machine.getCurrentElement(FertilizerProducerTile.Element.K));
+//            tag.putInt(AgriculturalEnhancements.MODID + ".n", machine.getCurrentElement(FertilizerProducerTile.Element.N));
+//            tag.putInt(AgriculturalEnhancements.MODID + ".p", machine.getCurrentElement(FertilizerProducerTile.Element.P));
+//            tag.putInt(AgriculturalEnhancements.MODID + ".k", machine.getCurrentElement(FertilizerProducerTile.Element.K));
+            stack.set(Registration.NITROGEN_DATA, machine.getCurrentElement(FertilizerProducerTile.Element.N));
+            stack.set(Registration.PHOSPHORUS_DATA, machine.getCurrentElement(FertilizerProducerTile.Element.P));
+            stack.set(Registration.POTASSIUM_DATA, machine.getCurrentElement(FertilizerProducerTile.Element.K));
         }
-        return tag;
+        return stack;
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 }

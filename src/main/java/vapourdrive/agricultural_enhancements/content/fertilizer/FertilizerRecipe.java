@@ -1,45 +1,38 @@
 package vapourdrive.agricultural_enhancements.content.fertilizer;
 
-import com.google.gson.JsonObject;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.SimpleContainer;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Lazy;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
-public class FertilizerRecipe implements Recipe<SimpleContainer> {
-    protected final ResourceLocation id;
-    protected final Lazy<Ingredient> ingredient;
+public class FertilizerRecipe implements Recipe<SingleRecipeInput> {
+    protected final Ingredient ingredient;
     protected final int n;
     protected final int p;
     protected final int k;
 
-    public FertilizerRecipe(ResourceLocation id, Ingredient ingredient, int n, int p, int k) {
-        this.id = id;
-        this.ingredient = Lazy.of(() -> ingredient);
+    public FertilizerRecipe(Ingredient ingredient, int n, int p, int k) {
+        this.ingredient = ingredient;
         this.n = n;
         this.p = p;
         this.k = k;
     }
 
     @Override
-    public boolean matches(@NotNull SimpleContainer pContainer, @NotNull Level pLevel) {
-        return this.getIngredient().test(pContainer.getItem(0));
+    public boolean matches(@NotNull SingleRecipeInput input, @NotNull Level pLevel) {
+        return this.getIngredient().test(input.getItem(0));
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull SimpleContainer pContainer) {
-        return getResultItem().copy();
+    public @NotNull ItemStack assemble(@NotNull SingleRecipeInput input, @NotNull HolderLookup.Provider access) {
+        return getResultItem(access).copy();
     }
 
     public int[] getOutputs() {
@@ -47,7 +40,7 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
     }
 
     public Ingredient getIngredient() {
-        return ingredient.get();
+        return ingredient;
     }
 
     @Override
@@ -55,15 +48,16 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
         return false;
     }
 
-    @Override
-    public @NotNull ItemStack getResultItem() {
-        return new ItemStack(Registration.FERTILISER.get());
-    }
 
     @Override
-    public @NotNull ResourceLocation getId() {
-        return id;
+    public @NotNull ItemStack getResultItem(@NotNull HolderLookup.Provider access) {
+        return new ItemStack(Registration.FERTILIZER.get());
     }
+
+//    @Override
+//    public @NotNull ResourceLocation getId() {
+//        return id;
+//    }
 
     @Override
     public @NotNull RecipeSerializer<?> getSerializer() {
@@ -87,32 +81,69 @@ public class FertilizerRecipe implements Recipe<SimpleContainer> {
     public static class Serializer implements RecipeSerializer<FertilizerRecipe> {
         public static final Serializer INSTANCE = new Serializer();
         @SuppressWarnings("unused")
-        public static final ResourceLocation ID = new ResourceLocation(AgriculturalEnhancements.MODID, "fertilizer");
+//        public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(AgriculturalEnhancements.MODID, "fertilizer");
+        public static final StreamCodec<RegistryFriendlyByteBuf, FertilizerRecipe> STREAM_CODEC = StreamCodec.of(FertilizerRecipe.Serializer::toNetwork, FertilizerRecipe.Serializer::fromNetwork);
 
-        @Override
-        public @NotNull FertilizerRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
-            Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient"));
-            int n = GsonHelper.getAsInt(json, "n");
-            int p = GsonHelper.getAsInt(json, "p");
-            int k = GsonHelper.getAsInt(json, "k");
+        private static final MapCodec<FertilizerRecipe> CODEC = RecordCodecBuilder.mapCodec((builder) -> {
+            return builder.group(Ingredient.CODEC.fieldOf("ingredient").forGetter((fertilizerRecipe) -> {
+                return fertilizerRecipe.ingredient;
+            }), Codec.INT.fieldOf("n").forGetter((fertilizerRecipe) -> {
+                return fertilizerRecipe.n;
+            }), Codec.INT.fieldOf("p").forGetter((fertilizerRecipe) -> {
+                return fertilizerRecipe.p;
+            }), Codec.INT.fieldOf("k").forGetter((fertilizerRecipe) -> {
+                return fertilizerRecipe.k;
+            })).apply(builder, FertilizerRecipe::new);
+        });
 
-            return new FertilizerRecipe(id, ingredient, n, p, k);
-        }
+//        @Override
+//        public @NotNull FertilizerRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
+//            Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient"));
+//            int n = GsonHelper.getAsInt(json, "n");
+//            int p = GsonHelper.getAsInt(json, "p");
+//            int k = GsonHelper.getAsInt(json, "k");
+//
+//            return new FertilizerRecipe(id, ingredient, n, p, k);
+//        }
 
-        @Override
-        public @Nullable FertilizerRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf pBuffer) {
-            Ingredient ingredient = Ingredient.fromNetwork(pBuffer);
-            int[] results = pBuffer.readVarIntArray();
+//        @Override
+//        public @Nullable FertilizerRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf pBuffer) {
+//            Ingredient ingredient = Ingredient.fromNetwork(pBuffer);
+//            int[] results = pBuffer.readVarIntArray();
+//            int n = results[0];
+//            int p = results[1];
+//            int k = results[2];
+//            return new FertilizerRecipe(id, ingredient, n, p, k);
+//        }
+//
+//        @Override
+//        public void toNetwork(@NotNull FriendlyByteBuf pBuffer, FertilizerRecipe pRecipe) {
+//            pRecipe.getIngredient().toNetwork(pBuffer);
+//            pBuffer.writeVarIntArray(new int[]{pRecipe.n, pRecipe.p, pRecipe.k});
+//        }
+
+        private static FertilizerRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+            Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
+            int[] results = buffer.readVarIntArray();
             int n = results[0];
             int p = results[1];
             int k = results[2];
-            return new FertilizerRecipe(id, ingredient, n, p, k);
+            return new FertilizerRecipe(ingredient, n, p, k);
+        }
+
+        private static void toNetwork(RegistryFriendlyByteBuf buffer, FertilizerRecipe recipe) {
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
+            buffer.writeVarIntArray(new int[]{recipe.n, recipe.p, recipe.k});
         }
 
         @Override
-        public void toNetwork(@NotNull FriendlyByteBuf pBuffer, FertilizerRecipe pRecipe) {
-            pRecipe.getIngredient().toNetwork(pBuffer);
-            pBuffer.writeVarIntArray(new int[]{pRecipe.n, pRecipe.p, pRecipe.k});
+        public @NotNull MapCodec<FertilizerRecipe> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public @NotNull StreamCodec<RegistryFriendlyByteBuf, FertilizerRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

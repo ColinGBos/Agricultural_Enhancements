@@ -6,9 +6,9 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.setup.Registration;
@@ -16,7 +16,7 @@ import vapourdrive.agricultural_enhancements.setup.Registration;
 import java.util.List;
 import java.util.Objects;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class HoeTilledToSoilHandler {
 
     @SubscribeEvent
@@ -32,17 +32,17 @@ public class HoeTilledToSoilHandler {
             return;
         }
 
-        if (ConfigSettings.SOIL_REQUIRES_FERTILIZER.get() && !offhandStack.is(Registration.FERTILISER.get()) && !state.is(Registration.SOIL_BLOCK.get())) {
+        if (ConfigSettings.SOIL_REQUIRES_FERTILIZER.get() && !offhandStack.is(Registration.FERTILIZER.get()) && !state.is(Registration.SOIL_BLOCK.get())) {
             return;
         }
 
         boolean consume = false;
-        if (offhandStack.is(Registration.FERTILISER.get())) {
+        if (offhandStack.is(Registration.FERTILIZER.get())) {
             nutrients = TilledSoilBlock.MAX_NUTRIENTS;
             consume = true;
         }
 
-        int baseMoisture = Math.max(0, TilledSoilBlock.getEnvMoisture(event.getLevel(), event.getPos())-1);
+        int baseMoisture = Math.max(0, TilledSoilBlock.getEnvMoisture(event.getLevel(), event.getPos()) - 1);
         if (state.hasProperty(TilledSoilBlock.SOIL_NUTRIENTS) && state.hasProperty(TilledSoilBlock.SOIL_MOISTURE)) {
             nutrients = Math.max(nutrients, state.getValue(TilledSoilBlock.SOIL_NUTRIENTS));
             baseMoisture = Math.max(baseMoisture, state.getValue(TilledSoilBlock.SOIL_MOISTURE));
@@ -57,6 +57,6 @@ public class HoeTilledToSoilHandler {
         List<Block> blocks = List.of(Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.DIRT_PATH, Blocks.FARMLAND, Registration.SOIL_BLOCK.get());
         if (!blocks.contains(block)) {
             return true;
-        } else return !level.getBlockState(pos.above()).getMaterial().isReplaceable();
+        } else return !level.getBlockState(pos.above()).canBeReplaced();
     }
 }

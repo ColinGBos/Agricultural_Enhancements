@@ -1,12 +1,12 @@
 package vapourdrive.agricultural_enhancements.content.irrigation;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.PositionImpl;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -17,28 +17,36 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.PipeBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
+    public static final MapCodec<IrrigationPipeBlock> CODEC = simpleCodec(IrrigationPipeBlock::new);
 
     public static final IntegerProperty IRRIGATION = IntegerProperty.create("irrigation", 0, 15);
 
     public IrrigationPipeBlock() {
-        super(0.125F, BlockBehaviour.Properties.of(Material.METAL)
-                .sound(SoundType.METAL)
+        super(0.125F, BlockBehaviour.Properties.of()
+                .mapColor(MapColor.STONE)
+                .instrument(NoteBlockInstrument.BASEDRUM)
                 .strength(1.5f)
                 .requiresCorrectToolForDrops()
         );
+        this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, Boolean.FALSE).setValue(EAST, Boolean.FALSE).setValue(SOUTH, Boolean.FALSE).setValue(WEST, Boolean.FALSE).setValue(UP, Boolean.FALSE).setValue(DOWN, Boolean.FALSE).setValue(IRRIGATION, 0));
+    }
+
+    public IrrigationPipeBlock(Properties properties) {
+        super(0.125F, properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(NORTH, Boolean.FALSE).setValue(EAST, Boolean.FALSE).setValue(SOUTH, Boolean.FALSE).setValue(WEST, Boolean.FALSE).setValue(UP, Boolean.FALSE).setValue(DOWN, Boolean.FALSE).setValue(IRRIGATION, 0));
     }
 
@@ -117,7 +125,6 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onPlace(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, BlockState pOldState, boolean pIsMoving) {
         if (!pOldState.is(pState.getBlock()) && !pLevel.isClientSide) {
             pState = this.updateIrrigationStrength(pLevel, pPos, pState);
@@ -139,7 +146,6 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onRemove(BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pState.is(pNewState.getBlock())) {
             super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
@@ -176,7 +182,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
     }
 
     public void bringNeighboursDown(Direction fromDirection, Level pLevel, BlockPos pPos, int level, BlockPos originPos) {
-        if (!pPos.closerToCenterThan(new PositionImpl(originPos.getX(), originPos.getY(), originPos.getZ()), 16)) {
+        if (!pPos.closerToCenterThan(new Vec3(originPos.getX(), originPos.getY(), originPos.getZ()), 16)) {
             return;
         }
         for (Direction direction : Direction.values()) {
@@ -195,8 +201,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult trace) {
+    protected @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (level.isClientSide) {
             ItemStack stick = player.getMainHandItem();
             if (stick.is(Items.STICK)) {
@@ -217,7 +222,7 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
                 AgriculturalEnhancements.debugLog("Irrigation: " + state.getValue(IRRIGATION));
             }
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     /**
@@ -227,7 +232,6 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
      * Note that this method should ideally consider only the specific direction passed in.
      */
     @Override
-    @SuppressWarnings("deprecation")
     public @NotNull BlockState updateShape(@NotNull BlockState pState, @NotNull Direction pFacing, @NotNull BlockState pFacingState, @NotNull LevelAccessor pLevel, @NotNull BlockPos pCurrentPos, @NotNull BlockPos pFacingPos) {
 //        AgriculturalEnhancements.debugLog("Direction: "+ pFacing);
         if (pFacing == Direction.UP) {
@@ -243,10 +247,13 @@ public class IrrigationPipeBlock extends PipeBlock implements IIrrigationBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public boolean isPathfindable(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull PathComputationType pType) {
+    protected boolean isPathfindable(@NotNull BlockState state, @NotNull PathComputationType pathComputationType) {
         return true;
     }
 
 
+    @Override
+    protected @NotNull MapCodec<? extends PipeBlock> codec() {
+        return CODEC;
+    }
 }

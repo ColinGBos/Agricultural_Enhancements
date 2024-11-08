@@ -1,30 +1,33 @@
 package vapourdrive.agricultural_enhancements.content.irrigation.irrigation_controller;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineBlock;
+import vapourdrive.vapourware.shared.base.AbstractBaseMachineBlock;
 
 import javax.annotation.Nullable;
 
 public class IrrigationControllerBlock extends AbstractBaseMachineBlock {
 
+    public static final MapCodec<IrrigationControllerBlock> CODEC = simpleCodec(IrrigationControllerBlock::new);
+
     public IrrigationControllerBlock() {
-        super(BlockBehaviour.Properties.of(Material.STONE), 0.2f);
+        super(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM), 0.2f);
+    }
+
+    public IrrigationControllerBlock(Properties properties) {
+        super(properties, 0.2f);
     }
 
     @Nullable
@@ -50,21 +53,8 @@ public class IrrigationControllerBlock extends AbstractBaseMachineBlock {
     @Override
     protected void openContainer(Level level, @NotNull BlockPos pos, @NotNull Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof IrrigationControllerTile machine) {
-            MenuProvider containerProvider = new MenuProvider() {
-                @Override
-                public @NotNull Component getDisplayName() {
-                    return Component.translatable(AgriculturalEnhancements.MODID + ".irrigation_controller");
-                }
-
-                @Override
-                public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-                    return new IrrigationControllerContainer(windowId, level, pos, playerInventory, playerEntity, machine.getMachineData());
-                }
-            };
-            NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
-        } else {
-            throw new IllegalStateException("Our named container provider is missing!");
+        if (blockEntity instanceof IrrigationControllerTile) {
+            player.openMenu((MenuProvider) blockEntity, pos);
         }
     }
 
@@ -76,10 +66,14 @@ public class IrrigationControllerBlock extends AbstractBaseMachineBlock {
             BlockEntity tileEntity = world.getBlockEntity(blockPos);
             if (tileEntity instanceof IrrigationControllerTile machine) {
                 machine.changeSurroundingBlocks(state, 0);
-                dropContents(world, blockPos, machine.getItemHandler());
+                dropContents(world, blockPos, machine.getItemHandler(null));
             }
             super.onRemove(state, world, blockPos, newState, isMoving);
         }
     }
 
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
 }

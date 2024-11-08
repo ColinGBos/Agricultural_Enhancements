@@ -1,36 +1,45 @@
 package vapourdrive.agricultural_enhancements.content.manager;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
-import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineBlock;
+import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.base.AbstractBaseMachineBlock;
 
 import javax.annotation.Nullable;
 
 
 public class CropManagerBlock extends AbstractBaseMachineBlock {
 
+    public static final MapCodec<CropManagerBlock> CODEC = simpleCodec(CropManagerBlock::new);
+
     public CropManagerBlock() {
-        super(BlockBehaviour.Properties.of(Material.STONE), 0.4f);
+        super(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM), 0.4f);
+    }
+
+    public CropManagerBlock(Properties properties) {
+        super(properties, 0.4f);
     }
 
     @Override
-    protected boolean sneakWrenchMachine(Player player, Level level, BlockPos pos) {
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    public boolean sneakWrenchMachine(Player player, Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof CropManagerTile machine) {
             machine.resetTillage(level.getBlockState(pos));
@@ -62,42 +71,36 @@ public class CropManagerBlock extends AbstractBaseMachineBlock {
     @Override
     protected void openContainer(Level level, @NotNull BlockPos pos, @NotNull Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof CropManagerTile machine) {
-            MenuProvider containerProvider = new MenuProvider() {
-                @Override
-                public @NotNull Component getDisplayName() {
-                    return Component.translatable(AgriculturalEnhancements.MODID + ".crop_manager");
-                }
-
-                @Override
-                public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-                    return new CropManagerContainer(windowId, level, pos, playerInventory, playerEntity, machine.getMachineData());
-                }
-            };
-            NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
-        } else {
-            throw new IllegalStateException("Our named container provider is missing!");
+        if (blockEntity instanceof CropManagerTile) {
+            player.openMenu((MenuProvider) blockEntity, pos);
         }
     }
 
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onRemove(BlockState state, @NotNull Level world, @NotNull BlockPos blockPos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity tileEntity = world.getBlockEntity(blockPos);
             if (tileEntity instanceof CropManagerTile machine) {
-                AbstractBaseMachineBlock.dropContents(world, blockPos, machine.getItemHandler());
+                AbstractBaseMachineBlock.dropContents(world, blockPos, machine.getItemHandler(null));
             }
             super.onRemove(state, world, blockPos, newState, isMoving);
         }
     }
 
+//    @Override
+//    protected CompoundTag putAdditionalInfo(CompoundTag tag, BlockEntity blockEntity) {
+//        if (blockEntity instanceof CropManagerTile machine) {
+//            tag.putInt(AgriculturalEnhancements.MODID + ".fertilizer", machine.getCurrentFertilizer());
+//        }
+//        return tag;
+//    }
+
     @Override
-    protected CompoundTag putAdditionalInfo(CompoundTag tag, BlockEntity blockEntity) {
-        if (blockEntity instanceof CropManagerTile machine) {
-            tag.putInt(AgriculturalEnhancements.MODID + ".fertilizer", machine.getCurrentFertilizer());
+    protected ItemStack putAdditionalInfo(ItemStack stack, BlockEntity blockEntity) {
+        if(blockEntity instanceof CropManagerTile machine) {
+            stack.set(Registration.FERTILIZER_DATA, machine.getCurrentFertilizer());
         }
-        return tag;
+        return stack;
     }
 }

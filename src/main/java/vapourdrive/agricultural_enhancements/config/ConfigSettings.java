@@ -1,62 +1,63 @@
 package vapourdrive.agricultural_enhancements.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
+
 
 public class ConfigSettings {
     public static final String CATEGORY_MOD = "agricultural_enhancements";
 
-    public static final ForgeConfigSpec SERVER_CONFIG;
-    //    public static ForgeConfigSpec CLIENT_CONFIG;
+    public static final ModConfigSpec SERVER_CONFIG;
+    //    public static ModConfigSpec CLIENT_CONFIG;
     public static final String SUBCATEGORY_FERTILIZER_PRODUCER = "fertilizer_producer";
-    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_FUEL_STORAGE;
-    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER;
-    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_MAX_NUTRIENTS;
-    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_FUEL_TO_WORK;
-    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_INGREDIENT_TIME;
-    public static ForgeConfigSpec.IntValue FERTILIZER_PRODUCER_PRODUCE_TIME;
+    public static ModConfigSpec.IntValue FERTILIZER_PRODUCER_FUEL_STORAGE;
+    public static ModConfigSpec.IntValue FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER;
+    public static ModConfigSpec.IntValue FERTILIZER_PRODUCER_MAX_NUTRIENTS;
+    public static ModConfigSpec.IntValue FERTILIZER_PRODUCER_FUEL_TO_WORK;
+    public static ModConfigSpec.IntValue FERTILIZER_PRODUCER_INGREDIENT_TIME;
+    public static ModConfigSpec.IntValue FERTILIZER_PRODUCER_PRODUCE_TIME;
 
     public static final String SUBCATEGORY_HARVESTER = "harvester";
-    public static ForgeConfigSpec.IntValue HARVESTER_FUEL_STORAGE;
-    public static ForgeConfigSpec.IntValue HARVESTER_FUEL_TO_WORK;
-    public static ForgeConfigSpec.IntValue HARVESTER_PROCESS_TIME;
-    public static ForgeConfigSpec.BooleanValue HARVESTER_NON_DESTRUCTIVE_HARVESTING;
+    public static ModConfigSpec.IntValue HARVESTER_FUEL_STORAGE;
+    public static ModConfigSpec.IntValue HARVESTER_FUEL_TO_WORK;
+    public static ModConfigSpec.IntValue HARVESTER_PROCESS_TIME;
+    public static ModConfigSpec.BooleanValue HARVESTER_NON_DESTRUCTIVE_HARVESTING;
 
     public static final String SUBCATEGORY_IRRIGATION_CONTROLLER = "irrigation_controller";
-    public static ForgeConfigSpec.IntValue IRRIGATION_CONTROLLER_FUEL_STORAGE;
-    public static ForgeConfigSpec.IntValue IRRIGATION_CONTROLLER_FUEL_TO_WORK;
-    public static ForgeConfigSpec.IntValue IRRIGATION_CONTROLLER_PROCESS_TIME;
+    public static ModConfigSpec.IntValue IRRIGATION_CONTROLLER_FUEL_STORAGE;
+    public static ModConfigSpec.IntValue IRRIGATION_CONTROLLER_FUEL_TO_WORK;
+    public static ModConfigSpec.IntValue IRRIGATION_CONTROLLER_PROCESS_TIME;
 
     public static final String SUBCATEGORY_CROP_MANAGER = "crop_manager";
-    public static ForgeConfigSpec.IntValue CROP_MANAGER_FUEL_STORAGE;
-    public static ForgeConfigSpec.IntValue CROP_MANAGER_FERTILIZER_STORAGE;
-    public static ForgeConfigSpec.IntValue CROP_MANAGER_FUEL_TO_WORK;
-    public static ForgeConfigSpec.IntValue CROP_MANAGER_SOIL_PROCESS_TIME;
-    public static ForgeConfigSpec.IntValue CROP_MANAGER_CROP_PROCESS_TIME;
+    public static ModConfigSpec.IntValue CROP_MANAGER_FUEL_STORAGE;
+    public static ModConfigSpec.IntValue CROP_MANAGER_FERTILIZER_STORAGE;
+    public static ModConfigSpec.IntValue CROP_MANAGER_FUEL_TO_WORK;
+    public static ModConfigSpec.IntValue CROP_MANAGER_SOIL_PROCESS_TIME;
+    public static ModConfigSpec.IntValue CROP_MANAGER_CROP_PROCESS_TIME;
 
     public static final String SUBCATEGORY_SOIL = "soil";
-    public static ForgeConfigSpec.BooleanValue SOIL_SOFT_TRAMPLE;
-    public static ForgeConfigSpec.BooleanValue SOIL_REQUIRES_FERTILIZER;
-    public static ForgeConfigSpec.DoubleValue SOIL_CHANCE_TO_BOOST_CROP_GROWTH;
-    public static ForgeConfigSpec.DoubleValue SOIL_CHANCE_TO_LOSE_NUTRIENTS;
-    public static ForgeConfigSpec.BooleanValue SOIL_BOOST_CROP_DROPS;
-    public static ForgeConfigSpec.DoubleValue SOIL_CHANCE_PER_NUTRIENT_LEVEL_TO_BOOST_DROPS;
-    public static ForgeConfigSpec.IntValue SOIL_MAX_ADDITIONAL_DROPS;
+    public static ModConfigSpec.BooleanValue SOIL_SOFT_TRAMPLE;
+    public static ModConfigSpec.BooleanValue SOIL_REQUIRES_FERTILIZER;
+    public static ModConfigSpec.DoubleValue SOIL_CHANCE_TO_BOOST_CROP_GROWTH;
+    public static ModConfigSpec.DoubleValue SOIL_CHANCE_TO_LOSE_NUTRIENTS;
+    public static ModConfigSpec.BooleanValue SOIL_BOOST_CROP_DROPS;
+    public static ModConfigSpec.DoubleValue SOIL_CHANCE_PER_NUTRIENT_LEVEL_TO_BOOST_DROPS;
+    public static ModConfigSpec.IntValue SOIL_MAX_ADDITIONAL_DROPS;
 
     public static final String SUBCATEGORY_SPRAYER = "sprayer";
-    public static ForgeConfigSpec.DoubleValue SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH;
-    public static ForgeConfigSpec.DoubleValue SPRAYER_CHANCE_TO_ANIMATE;
-    public static ForgeConfigSpec.IntValue SPRAYER_CROP_TICK_COUNT;
-    public static ForgeConfigSpec.IntValue SPRAYER_VERTICAL_RANGE;
+    public static ModConfigSpec.DoubleValue SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH;
+    public static ModConfigSpec.DoubleValue SPRAYER_CHANCE_TO_ANIMATE;
+    public static ModConfigSpec.IntValue SPRAYER_CROP_TICK_COUNT;
+    public static ModConfigSpec.IntValue SPRAYER_VERTICAL_RANGE;
 
     public static final String SUBCATEGORY_MIXINS = "mixins";
-    public static ForgeConfigSpec.BooleanValue REPLACE_CROP_BLOCK_SHAPE;
-    public static ForgeConfigSpec.BooleanValue REPLACE_BEETROOT_SHAPE;
-    public static ForgeConfigSpec.BooleanValue REPLACE_POTATO_SHAPE;
-    public static ForgeConfigSpec.BooleanValue REPLACE_CARROT_SHAPE;
+    public static ModConfigSpec.BooleanValue REPLACE_CROP_BLOCK_SHAPE;
+    public static ModConfigSpec.BooleanValue REPLACE_BEETROOT_SHAPE;
+    public static ModConfigSpec.BooleanValue REPLACE_POTATO_SHAPE;
+    public static ModConfigSpec.BooleanValue REPLACE_CARROT_SHAPE;
 
     static {
-        ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
-//        ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+        ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
+//        ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
 
         SERVER_BUILDER.comment("Agricultural Enhancements Settings").push(CATEGORY_MOD);
 
@@ -69,7 +70,7 @@ public class ConfigSettings {
 //        CLIENT_CONFIG = CLIENT_BUILDER.build();
     }
 
-    private static void setupFirstBlockConfig(ForgeConfigSpec.Builder SERVER_BUILDER) {
+    private static void setupFirstBlockConfig(ModConfigSpec.Builder SERVER_BUILDER) {
         SERVER_BUILDER.comment("Fertilizer Producer Settings").push(SUBCATEGORY_FERTILIZER_PRODUCER);
         FERTILIZER_PRODUCER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Fertilizer Producer").defineInRange("fertilizerProducerFuelStorage", 128000, 5, 1000000);
         FERTILIZER_PRODUCER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed to break down one ingredient").defineInRange("fertilizerProducerFuelConsumption", 1000, 100, 10000);

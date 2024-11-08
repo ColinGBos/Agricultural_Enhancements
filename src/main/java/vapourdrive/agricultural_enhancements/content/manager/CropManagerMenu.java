@@ -8,22 +8,21 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineContainer;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotFuel;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotOutput;
 import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.base.AbstractBaseMachineMenu;
+import vapourdrive.vapourware.shared.base.slots.SlotFuel;
+import vapourdrive.vapourware.shared.base.slots.SlotOutput;
 
 import java.util.Objects;
 
 import static vapourdrive.agricultural_enhancements.AgriculturalEnhancements.seeds;
 
-public class CropManagerContainer extends AbstractBaseMachineContainer {
+public class CropManagerMenu extends AbstractBaseMachineMenu {
     // gui position of the player inventory grid
     public static final int PLAYER_INVENTORY_XPOS = 8;
     public static final int PLAYER_INVENTORY_YPOS = 84;
@@ -34,8 +33,8 @@ public class CropManagerContainer extends AbstractBaseMachineContainer {
     protected final CropManagerTile tileEntity;
 
 
-    public CropManagerContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, CropManagerData machineData) {
-        super(windowId, world, pos, inv, player, Registration.CROP_MANAGER_CONTAINER.get(), machineData);
+    public CropManagerMenu(int windowId, Level world, BlockPos pos, Inventory inv, Player player, CropManagerData machineData) {
+        super(windowId, world, pos, inv, player, Registration.CROP_MANAGER_MENU.get(), machineData);
         tileEntity = (CropManagerTile) world.getBlockEntity(pos);
 
         //We use this vs the builtin method because we split all the shorts
@@ -43,29 +42,28 @@ public class CropManagerContainer extends AbstractBaseMachineContainer {
 
         layoutPlayerInventorySlots(PLAYER_INVENTORY_XPOS, PLAYER_INVENTORY_YPOS);
 
-        if (tileEntity != null) {
-            tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(h -> {
-                addSlot(new SlotFuel(h, 0, 8, 59));
-                addSlot(new SlotFertilzer(h, 1, 32, 59, this.world));
-                addSlot(new SlotOutput(h, 2, 56, 23));
-                addSlot(new SlotOutput(h, 3, 56, 23 + 18));
-                addSlot(new SlotOutput(h, 4, 56, 23 + 18 * 2));
-                addSlot(new SlotSeed(h, 5, SEED_INV_XPOS, SEED_INV_YPOS, this.world));
-                addSlot(new SlotSeed(h, 6, SEED_INV_XPOS + 18, SEED_INV_YPOS, this.world));
-                addSlot(new SlotSeed(h, 7, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS, this.world));
-                addSlot(new SlotSeed(h, 8, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS, this.world));
-                addSlot(new SlotSeed(h, 9, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS, this.world));
-                addSlot(new SlotSeed(h, 10, SEED_INV_XPOS, SEED_INV_YPOS + 18, this.world));
-                addSlot(new SlotSeed(h, 11, SEED_INV_XPOS + 18, SEED_INV_YPOS + 18, this.world));
-                addSlot(new SlotSeed(h, 12, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS + 18, this.world));
-                addSlot(new SlotSeed(h, 13, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS + 18, this.world));
-                addSlot(new SlotSeed(h, 14, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS + 18, this.world));
-                addSlot(new SlotSeed(h, 15, SEED_INV_XPOS, SEED_INV_YPOS + (18 * 2), this.world));
-                addSlot(new SlotSeed(h, 16, SEED_INV_XPOS + 18, SEED_INV_YPOS + (18 * 2), this.world));
-                addSlot(new SlotSeed(h, 17, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS + (18 * 2), this.world));
-                addSlot(new SlotSeed(h, 18, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS + (18 * 2), this.world));
-                addSlot(new SlotSeed(h, 19, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS + (18 * 2), this.world));
-            });
+        if (tileEntity != null && tileEntity instanceof CropManagerTile managerTile) {
+            IItemHandler handler = managerTile.getItemHandler(null);
+            addSlot(new SlotFuel(handler, 0, 8, 59));
+            addSlot(new SlotFertilzer(handler, 1, 32, 59));
+            addSlot(new SlotOutput(handler, 2, 56, 23));
+            addSlot(new SlotOutput(handler, 3, 56, 23 + 18));
+            addSlot(new SlotOutput(handler, 4, 56, 23 + 18 * 2));
+            addSlot(new SlotSeed(handler, 5, SEED_INV_XPOS, SEED_INV_YPOS));
+            addSlot(new SlotSeed(handler, 6, SEED_INV_XPOS + 18, SEED_INV_YPOS));
+            addSlot(new SlotSeed(handler, 7, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS));
+            addSlot(new SlotSeed(handler, 8, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS));
+            addSlot(new SlotSeed(handler, 9, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS));
+            addSlot(new SlotSeed(handler, 10, SEED_INV_XPOS, SEED_INV_YPOS + 18));
+            addSlot(new SlotSeed(handler, 11, SEED_INV_XPOS + 18, SEED_INV_YPOS + 18));
+            addSlot(new SlotSeed(handler, 12, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS + 18));
+            addSlot(new SlotSeed(handler, 13, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS + 18));
+            addSlot(new SlotSeed(handler, 14, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS + 18));
+            addSlot(new SlotSeed(handler, 15, SEED_INV_XPOS, SEED_INV_YPOS + (18 * 2)));
+            addSlot(new SlotSeed(handler, 16, SEED_INV_XPOS + 18, SEED_INV_YPOS + (18 * 2)));
+            addSlot(new SlotSeed(handler, 17, SEED_INV_XPOS + (18 * 2), SEED_INV_YPOS + (18 * 2)));
+            addSlot(new SlotSeed(handler, 18, SEED_INV_XPOS + (18 * 3), SEED_INV_YPOS + (18 * 2)));
+            addSlot(new SlotSeed(handler, 19, SEED_INV_XPOS + (18 * 4), SEED_INV_YPOS + (18 * 2)));
         }
     }
 
@@ -104,7 +102,7 @@ public class CropManagerContainer extends AbstractBaseMachineContainer {
             //Player Inventory
             else if (index <= 35) {
                 //Inventory to fertilizer
-                if (stack.is(Registration.FERTILISER.get())) {
+                if (stack.is(Registration.FERTILIZER.get())) {
                     if (!this.moveItemStackTo(stack, 37, 38, false)) {
                         return ItemStack.EMPTY;
                     }
@@ -116,7 +114,7 @@ public class CropManagerContainer extends AbstractBaseMachineContainer {
                     }
                 }
                 //Inventory to fuel
-                else if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0.0) {
+                else if (stack.getBurnTime(RecipeType.SMELTING) > 0.0) {
                     if (!this.moveItemStackTo(stack, 36, 37, false)) {
                         return ItemStack.EMPTY;
                     }

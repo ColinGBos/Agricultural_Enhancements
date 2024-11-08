@@ -1,6 +1,5 @@
 package vapourdrive.agricultural_enhancements.integrations.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -11,6 +10,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -54,9 +54,14 @@ public class SeedRecipeCategory implements IRecipeCategory<SeedRecipeWrapper> {
     }
 
     @Override
-    public void draw(@NotNull SeedRecipeWrapper recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull PoseStack stack, double mouseX, double mouseY) {
-        slot.draw(stack);
+    public void draw(@NotNull SeedRecipeWrapper recipe, @NotNull IRecipeSlotsView recipeSlotsView,
+                     @NotNull GuiGraphics graphics,
+                     double mouseX, double mouseY) {
+//        if (background != null) {
+//            background.draw(graphics);
+//        }
+        slot.draw(graphics);
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.font.draw(stack, recipe.getBlockName(), 22, 5, 0xFF808080);
+        graphics.drawString(minecraft.font, recipe.getBlockName(), 22, 5, 0xFFFFFFFF);
     }
 }

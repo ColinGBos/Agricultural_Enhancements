@@ -7,6 +7,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -28,8 +29,8 @@ import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.content.soil.TilledSoilBlock;
+import vapourdrive.agricultural_enhancements.setup.Registration;
 
-import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -51,16 +52,19 @@ public class WateringCan extends Item {
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
         if (getWater(pPlayer.getItemInHand(pUsedHand)) < getMaxWater()) {
             BlockPos pos;
-            BlockHitResult blockhitresult = getPlayerPOVHitResult(pPlayer.getLevel(), pPlayer, ClipContext.Fluid.SOURCE_ONLY);
+            BlockHitResult blockhitresult = getPlayerPOVHitResult(pPlayer.level(), pPlayer, ClipContext.Fluid.SOURCE_ONLY);
             if (blockhitresult.getType() == HitResult.Type.BLOCK) {
                 pos = blockhitresult.getBlockPos();
                 BlockState state = pLevel.getBlockState(pos);
                 if (state.getBlock() instanceof LiquidBlock liquidBlock) {
-                    if (liquidBlock.getFluidState(state).isSourceOfType(Fluids.WATER)) {
+//                    if (liquidBlock.getFluidState(state).isSourceOfType(Fluids.WATER)) {
+//                        setWater(pPlayer.getItemInHand(pUsedHand), getMaxWater());
+//                        liquidBlock.pickupBlock(pLevel, pos, state);
+//                    }
+                    if (pLevel.getFluidState(pos).isSourceOfType(Fluids.WATER)){
                         setWater(pPlayer.getItemInHand(pUsedHand), getMaxWater());
-                        liquidBlock.pickupBlock(pLevel, pos, state);
+                        liquidBlock.pickupBlock(pPlayer, pLevel, pos, state);
                     }
-
                 }
             }
         }
@@ -75,6 +79,7 @@ public class WateringCan extends Item {
 
     public void water(BlockPos pos, Level level, ItemStack can) {
         AgriculturalEnhancements.debugLog("Water: " + getWater(can));
+        RandomSource rand = level.getRandom();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 int soilOffset = 0;
@@ -82,16 +87,19 @@ public class WateringCan extends Item {
                 BlockState state = level.getBlockState(blockPos);
                 if (!state.isAir() && state.getBlock() instanceof CropBlock crop) {
                     soilOffset = -1;
-                    if (level.getRandom().nextFloat() > 0.5) {
+                    if (rand.nextFloat() > 0.5) {
                         if (!level.isClientSide()) {
-                            crop.randomTick(state, (ServerLevel) level, blockPos, level.getRandom());
+//                            crop.randomTick(state, (ServerLevel) level, blockPos, rand);
+                            if (rand.nextFloat() > 0.85){
+                                crop.performBonemeal((ServerLevel) level, rand, blockPos, state);
+                            }
                         }
                     }
                 }
                 BlockPos soilPos = pos.offset(i, soilOffset, j);
                 BlockState soilState = level.getBlockState(soilPos);
                 if (!soilState.isAir() && soilState.getBlock() instanceof TilledSoilBlock) {
-                    if (level.getRandom().nextFloat() > 0.5) {
+                    if (rand.nextFloat() > 0.5) {
                         if (!level.isClientSide()) {
                             int moisture = soilState.getValue(TilledSoilBlock.SOIL_MOISTURE);
                             level.setBlock(soilPos, soilState.setValue(TilledSoilBlock.SOIL_MOISTURE, Math.min(TilledSoilBlock.MAX_MOISTURE, moisture + 2)), 19);
@@ -112,7 +120,8 @@ public class WateringCan extends Item {
         }
     }
 
-    public void onUsingTick(ItemStack stack, LivingEntity pLivingEntity, int count) {
+    @Override
+    public void onUseTick(@NotNull Level level, @NotNull LivingEntity pLivingEntity, @NotNull ItemStack stack, int count) {
         if (getWater(stack) <= 0) {
             return;
         }
@@ -121,16 +130,16 @@ public class WateringCan extends Item {
             AgriculturalEnhancements.debugLog("Tick");
             if (pLivingEntity instanceof Player player) {
                 BlockPos pos = player.getOnPos().relative(Direction.UP).relative(player.getDirection());
-                BlockHitResult blockhitresult = getPlayerPOVHitResult(player.getLevel(), player, ClipContext.Fluid.NONE);
+                BlockHitResult blockhitresult = getPlayerPOVHitResult(player.level(), player, ClipContext.Fluid.NONE);
                 if (blockhitresult.getType() == HitResult.Type.BLOCK) {
                     pos = blockhitresult.getBlockPos();
                 }
                 if (count % 10 == 0) {
                     AgriculturalEnhancements.debugLog("Count: " + count);
-                    water(pos, pLivingEntity.getLevel(), stack);
+                    water(pos, pLivingEntity.level(), stack);
                     consumeWater(stack, 50);
                 }
-                splash(pLivingEntity.getLevel(), pos);
+                splash(pLivingEntity.level(), pos);
             }
         }
     }
@@ -157,44 +166,48 @@ public class WateringCan extends Item {
     }
 
     @Override
-    public int getUseDuration(@NotNull ItemStack pStack) {
+    public int getUseDuration(@NotNull ItemStack stack, @NotNull LivingEntity entity) {
         return 1000;
     }
 
     @Override
     public @NotNull ItemStack getDefaultInstance() {
         ItemStack stack = new ItemStack(this);
-        stack.getOrCreateTag().putInt("Water", 0);
+        stack.set(Registration.WATER_DATA, 0);
         return stack;
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack pStack, @Nullable Level pLevel, List<Component> list, @NotNull TooltipFlag pIsAdvanced) {
-        String water = df.format(getWater(pStack)) + "/" + df.format(getMaxWater());
-        list.add(Component.translatable("agriculturalenhancements.watering_can.water", water).withStyle(ChatFormatting.BLUE));
-        list.add(Component.translatable("agriculturalenhancements.watering_can.info").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(@NotNull ItemStack stack, Item.@NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+        String water = df.format(getWater(stack)) + "/" + df.format(getMaxWater());
+        tooltipComponents.add(Component.translatable("agriculturalenhancements.watering_can.water", water).withStyle(ChatFormatting.BLUE));
+        tooltipComponents.add(Component.translatable("agriculturalenhancements.watering_can.info").withStyle(ChatFormatting.GRAY));
     }
 
     public int getWater(ItemStack stack) {
-        if (!stack.hasTag()) {
-            return 0;
-        } else {
-            assert stack.getTag() != null;
-            return stack.getTag().getInt("Water");
-        }
+//        if (!stack.hasTag()) {
+//            return 0;
+//        } else {
+//            assert stack.getTag() != null;
+//            return stack.getTag().getInt("Water");
+//        }
+        return stack.getOrDefault(Registration.WATER_DATA, 0);
     }
 
     public void setWater(ItemStack stack, int water) {
-        stack.getOrCreateTag().putInt("Water", Math.min(water, getMaxWater()));
+//        stack.getOrCreateTag().putInt("Water", Math.min(water, getMaxWater()));
+        stack.set(Registration.WATER_DATA, Math.min(water, getMaxWater()));
     }
 
     public void consumeWater(ItemStack stack, int water) {
         AgriculturalEnhancements.debugLog("Consuming: " + water);
-        stack.getOrCreateTag().putInt("Water", Math.max(getWater(stack) - water, 0));
+//        stack.getOrCreateTag().putInt("Water", Math.max(getWater(stack) - water, 0));
+        stack.set(Registration.WATER_DATA, Math.max(getWater(stack) - water, 0));
     }
 
     public static int getMaxWater() {
         return maxWater;
     }
+
 
 }

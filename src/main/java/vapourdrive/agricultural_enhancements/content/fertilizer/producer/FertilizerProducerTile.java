@@ -2,34 +2,48 @@ package vapourdrive.agricultural_enhancements.content.fertilizer.producer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.FuelHandler;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.IngredientHandler;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.OutputHandler;
 import vapourdrive.agricultural_enhancements.content.fertilizer.FertilizerUtils;
+import vapourdrive.agricultural_enhancements.content.manager.FertilizerIngredientHandler;
 import vapourdrive.agricultural_enhancements.setup.Registration;
-import vapourdrive.agricultural_enhancements.utils.MachineUtils;
+import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
+import vapourdrive.vapourware.shared.base.itemhandlers.FuelHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.IngredientHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.OutputHandler;
+import vapourdrive.vapourware.shared.utils.MachineUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collections;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.FERTILIZER_PRODUCER_TILE;
-import static vapourdrive.agricultural_enhancements.utils.MachineUtils.canPushAllOutputs;
-import static vapourdrive.agricultural_enhancements.utils.MachineUtils.pushOutput;
+import static vapourdrive.vapourware.shared.utils.MachineUtils.canPushAllOutputs;
+import static vapourdrive.vapourware.shared.utils.MachineUtils.pushOutput;
 
-public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
+public class FertilizerProducerTile extends AbstractBaseFuelUserTile implements MenuProvider {
+
+    @Override
+    public @NotNull Component getDisplayName() {
+        return Component.translatable(AgriculturalEnhancements.MODID+".fertilizer_producer");
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int id, @NotNull Inventory inventory, @NotNull Player player) {
+        return new FertilizerProducerMenu(id, this.level, this.worldPosition, player.getInventory(), player, this.getFertilizerProducerData());
+    }
 
     public enum Element {
         N,
@@ -39,11 +53,11 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
 
     public final int[] INGREDIENT_SLOT = {0};
     private final FuelHandler fuelHandler = new FuelHandler(this, FUEL_SLOT.length);
-    private final IngredientHandler ingredientHandler = new IngredientHandler(this, INGREDIENT_SLOT.length);
+    private final FertilizerIngredientHandler ingredientHandler = new FertilizerIngredientHandler(this, INGREDIENT_SLOT.length);
     private final OutputHandler outputHandler = new OutputHandler(this, OUTPUT_SLOTS.length);
-    private final LazyOptional<OutputHandler> lazyOutputHandler = LazyOptional.of(() -> outputHandler);
+//    private final LazyOptional<OutputHandler> lazyOutputHandler = LazyOptional.of(() -> outputHandler);
     private final CombinedInvWrapper combined = new CombinedInvWrapper(fuelHandler, ingredientHandler, outputHandler);
-    private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
+//    private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
 
     public final FertilizerProducerData fertilizerProducerData = new FertilizerProducerData();
     public final int[] elementToAdd = {0, 0, 0};
@@ -60,7 +74,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
 
     public void tickServer(BlockState state) {
         super.tickServer(state);
-        ItemStack ingredient = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
+        ItemStack ingredient = getStackInSlot(MachineUtils.Area.INGREDIENT_1, 0);
         doWorkProcesses(ingredient, state);
 
         createFertTimer++;
@@ -84,8 +98,8 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
             if (!consumeElement(Element.N, i, true) || !consumeElement(Element.P, i, true) || !consumeElement(Element.K, i, true)) {
                 return;
             }
-            if (canPushAllOutputs(Collections.singletonList(new ItemStack(Registration.FERTILISER.get())), this)) {
-                pushOutput(new ItemStack(Registration.FERTILISER.get()), false, this);
+            if (canPushAllOutputs(Collections.singletonList(new ItemStack(Registration.FERTILIZER.get())), this)) {
+                pushOutput(new ItemStack(Registration.FERTILIZER.get()), false, this);
                 consumeElement(Element.N, i, false);
                 consumeElement(Element.P, i, false);
                 consumeElement(Element.K, i, false);
@@ -96,6 +110,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
     public void doConsumeProcess(ItemStack stack) {
         if (consumerTimer == 0 && consumeFuel(minWorkFuel, true) && !stack.isEmpty()) {
             int[] toAdds = tryConsumeStack(stack);
+
             if (toAdds != null) {
                 for (Element element : Element.values()) {
                     int emnt = toAdds[element.ordinal()];
@@ -105,6 +120,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
                             setElementToAdd(element, getMaxElement() - getCurrentElement(element));
                         }
                         setIncrementalElementToAdd(element, getElementToAdd(element) / consumeMaxTime);
+                        AgriculturalEnhancements.debugLog("Imcremental: "+getElementToAdd(element) / consumeMaxTime);
                     }
                 }
             }
@@ -113,6 +129,9 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         for (Element element : Element.values()) {
             if (getElementToAdd(element) > 0) {
                 increment = true;
+                if(getElementToAdd(element)<getIncrementalElementToAdd(element)){
+                    setIncrementalElementToAdd(element, getElementToAdd(element));
+                }
                 addElement(element, getIncrementalElementToAdd(element), false);
                 setElementToAdd(element, getElementToAdd(element) - getIncrementalElementToAdd(element));
             }
@@ -145,7 +164,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
                     }
                 }
                 if (hasSpace) {
-                    removeFromSlot(MachineUtils.Area.INGREDIENT, 0, 1, false);
+                    removeFromSlot(MachineUtils.Area.INGREDIENT_1, 0, 1, false);
                     return emnts;
                 }
             }
@@ -232,25 +251,12 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         return ret;
     }
 
-//    @Override
-//    public boolean canWork(BlockState state) {
-//        boolean canWork = true;
-//        if(Objects.requireNonNull(this.getLevel()).hasNeighborSignal(this.worldPosition)){
-//            canWork = false;
-//        }
-//        else if (getCurrentFuel() < getMinFuelToWork()) {
-//            canWork = false;
-//        }
-//        changeStateIfNecessary(state, canWork);
-//        return canWork;
-//    }
-
     @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
-        outputHandler.deserializeNBT(tag.getCompound("invOut"));
-        ingredientHandler.deserializeNBT(tag.getCompound("invIngr"));
-        fuelHandler.deserializeNBT(tag.getCompound("invFuel"));
+    public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.loadAdditional(tag, registries);
+        outputHandler.deserializeNBT(registries,tag.getCompound("invOut"));
+        ingredientHandler.deserializeNBT(registries,tag.getCompound("invIngr"));
+        fuelHandler.deserializeNBT(registries,tag.getCompound("invFuel"));
 
         fertilizerProducerData.set(FertilizerProducerData.Data.FUEL, tag.getInt("fuel"));
         fertilizerProducerData.set(FertilizerProducerData.Data.N, tag.getInt("n"));
@@ -260,15 +266,14 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         createFertTimer = tag.getInt("fertTimer");
         consumerTimer = tag.getInt("ingredientTimer");
 
-        super.load(tag);
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.put("invOut", outputHandler.serializeNBT());
-        tag.put("invIngr", ingredientHandler.serializeNBT());
-        tag.put("invFuel", fuelHandler.serializeNBT());
+    public void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.saveAdditional(tag,registries);
+        tag.put("invOut", outputHandler.serializeNBT(registries));
+        tag.put("invIngr", ingredientHandler.serializeNBT(registries));
+        tag.put("invFuel", fuelHandler.serializeNBT(registries));
 
         tag.putInt("fuel", getCurrentFuel());
         tag.putInt("fertTimer", createFertTimer);
@@ -278,19 +283,23 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         tag.putInt("k", getCurrentElement(Element.K));
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side) {
-        if (capability == ForgeCapabilities.ITEM_HANDLER) {
-            if (side == Direction.DOWN) {
-                return lazyOutputHandler.cast();
-            }
-            return combinedHandler.cast();
-        }
-        return super.getCapability(capability, side);
-    }
+//    @Nonnull
+//    @Override
+//    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side) {
+//        if (capability == ForgeCapabilities.ITEM_HANDLER) {
+//            if (side == Direction.DOWN) {
+//                return lazyOutputHandler.cast();
+//            }
+//            return combinedHandler.cast();
+//        }
+//        return super.getCapability(capability, side);
+//    }
 
-    public IItemHandler getItemHandler() {
+    public IItemHandler getItemHandler(@org.jetbrains.annotations.Nullable Direction side) {
+//        return combined;
+        if (side == Direction.DOWN) {
+            return outputHandler;
+        }
         return combined;
     }
 
@@ -331,8 +340,8 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.getStackInSlot(FUEL_SLOT[index]);
             case OUTPUT -> outputHandler.getStackInSlot(OUTPUT_SLOTS[index]);
-            case INGREDIENT -> ingredientHandler.getStackInSlot(INGREDIENT_SLOT[index]);
-            case INGREDIENT_2 -> ItemStack.EMPTY;
+            case INGREDIENT_1 -> ingredientHandler.getStackInSlot(INGREDIENT_SLOT[index]);
+            default -> ItemStack.EMPTY;
         };
     }
 
@@ -341,7 +350,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         switch (area) {
             case FUEL -> fuelHandler.extractItem(FUEL_SLOT[index], amount, simulate);
             case OUTPUT -> outputHandler.extractItem(OUTPUT_SLOTS[index], amount, simulate);
-            case INGREDIENT -> ingredientHandler.extractItem(INGREDIENT_SLOT[index], amount, simulate);
+            case INGREDIENT_1 -> ingredientHandler.extractItem(INGREDIENT_SLOT[index], amount, simulate);
         }
     }
 
@@ -350,8 +359,8 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.insertItem(FUEL_SLOT[index], stack, simulate);
             case OUTPUT -> outputHandler.insertItem(OUTPUT_SLOTS[index], stack, simulate, true);
-            case INGREDIENT -> ingredientHandler.insertItem(INGREDIENT_SLOT[index], stack, simulate);
-            case INGREDIENT_2 -> ItemStack.EMPTY;
+            case INGREDIENT_1 -> ingredientHandler.insertItem(INGREDIENT_SLOT[index], stack, simulate);
+            default -> ItemStack.EMPTY;
         };
     }
 }

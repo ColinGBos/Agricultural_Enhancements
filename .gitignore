@@ -20,9 +20,8 @@ build
 # other
 eclipse
 run
-RAW
-RAW_temp
+runs
+run-data
 libs
-
-# Files from Forge MDK
-forge*changelog.txt
+repo
+RAW

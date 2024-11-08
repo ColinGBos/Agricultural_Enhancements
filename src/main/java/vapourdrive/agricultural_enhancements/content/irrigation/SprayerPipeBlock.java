@@ -18,6 +18,7 @@ import vapourdrive.agricultural_enhancements.content.soil.TilledSoilBlock;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigationBlock {
+
     public SprayerPipeBlock() {
         this.registerDefaultState(this.stateDefinition.any().setValue(IRRIGATION, 0).setValue(NORTH, false).setValue(EAST, false).setValue(SOUTH, false).setValue(WEST, false).setValue(UP, false).setValue(DOWN, false));
     }
@@ -54,6 +55,8 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
      */
     @Override
     public @NotNull BlockState updateShape(@NotNull BlockState pState, @NotNull Direction pFacing, @NotNull BlockState pFacingState, @NotNull LevelAccessor pLevel, @NotNull BlockPos pCurrentPos, @NotNull BlockPos pFacingPos) {
+        pLevel.scheduleTick(pCurrentPos, this, pLevel.getRandom().nextInt(20) + 10);
+
         if (pFacing != Direction.DOWN) {
             int irrigation = pState.getValue(IRRIGATION);
             if (pFacingState.hasProperty(IRRIGATION)) {
@@ -76,12 +79,13 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
     }
 
     @Override
-    public boolean isRandomlyTicking(BlockState pState) {
-        return pState.getValue(IRRIGATION) > 0;
+    public boolean isRandomlyTicking(@NotNull BlockState pState) {
+        return false;
+
+//        return pState.getValue(IRRIGATION) > 0;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean canSurvive(@NotNull BlockState pState, @NotNull LevelReader pLevel, @NotNull BlockPos pPos) {
         AgriculturalEnhancements.debugLog("Checking if the block can survive");
         for (int x = -2; x <= 2; x++) {
@@ -104,31 +108,39 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
     }
 
     @Override
-    @SuppressWarnings("deprecation")
+    public void tick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+        if (pState.getValue(IRRIGATION)>0){
+            performGrowAndWater(pLevel, pPos, pRandom);
+        }
+        pLevel.scheduleTick(pPos, this, pRandom.nextInt(40) + 60);
+    }
+
+    @Override
     public void randomTick(@NotNull BlockState pState, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                for (int k = -1; k > -ConfigSettings.SPRAYER_VERTICAL_RANGE.get(); k--) {
+//        performGrowAndWater(pLevel, pPos, pRandom);
+    }
+
+    public void performGrowAndWater(@NotNull ServerLevel pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                for (int y = -1; y > -ConfigSettings.SPRAYER_VERTICAL_RANGE.get(); y--) {
                     boolean stop = false;
-                    int soilOffset = 0;
-                    BlockPos blockPos = pPos.offset(i, k, j);
+                    BlockPos blockPos = pPos.offset(x, y, z);
                     BlockState state = pLevel.getBlockState(blockPos);
-                    if (!state.isAir() && state.getBlock() instanceof CropBlock crop) {
-                        soilOffset = -1;
-                        if (pLevel.getRandom().nextFloat() <= ConfigSettings.SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH.get()) {
-                            for (int l = 0; l < ConfigSettings.SPRAYER_CROP_TICK_COUNT.get(); l++) {
-                                crop.randomTick(state, pLevel, blockPos, pRandom);
+                    if (!state.isAir()){
+                        if (pRandom.nextFloat() > 0.7f && state.getBlock() instanceof CropBlock crop) {
+                            if (pRandom.nextFloat() <= ConfigSettings.SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH.get()) {
+                                for (int l = 0; l < ConfigSettings.SPRAYER_CROP_TICK_COUNT.get(); l++) {
+                                    if (pRandom.nextFloat() > 0.85){
+                                        crop.performBonemeal(pLevel, pRandom, blockPos, state);
+                                    }
+                                }
                             }
                         }
                         stop = true;
+                        performWater(x, y, z, pLevel, pPos);
                     }
-                    BlockPos soilPos = pPos.offset(i, k - soilOffset, j);
-                    BlockState soilState = pLevel.getBlockState(soilPos);
-                    if (!soilState.isAir() && soilState.getBlock() instanceof TilledSoilBlock) {
-                        if (!pLevel.isClientSide()) {
-                            pLevel.setBlockAndUpdate(soilPos, soilState.setValue(TilledSoilBlock.SOIL_MOISTURE, TilledSoilBlock.MAX_MOISTURE));
-                        }
-                    }
+
                     if (stop) {
                         break;
                     }
@@ -137,16 +149,34 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
         }
     }
 
+    public void performWater(int x, int y, int z, @NotNull ServerLevel pLevel, @NotNull BlockPos pPos){
+        for (int l = y; l >= -3; l--) {
+            BlockPos soilPos = pPos.offset(x, y, z);
+            BlockState soilState = pLevel.getBlockState(soilPos);
+            if (!soilState.isAir() && soilState.getBlock() instanceof TilledSoilBlock) {
+                if (!pLevel.isClientSide()) {
+                    pLevel.setBlockAndUpdate(soilPos, soilState.setValue(TilledSoilBlock.SOIL_MOISTURE, TilledSoilBlock.MAX_MOISTURE));
+                    break;
+                }
+            }
+        }
+    }
+
     @Override
     public void animateTick(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
+        animateSprinkles(pState, pLevel, pPos, pRandom);
+
+    }
+
+    public void animateSprinkles(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos, @NotNull RandomSource pRandom) {
         if (pLevel.getRandom().nextFloat() > ConfigSettings.SPRAYER_CHANCE_TO_ANIMATE.get() || pState.getValue(IRRIGATION) <= 0) {
             return;
         }
         for (int l = 0; l <= 100; l++) {
             double d0 = (pRandom.nextDouble() - 0.5) * 0.15;
             double d2 = (pRandom.nextDouble() - 0.5) * 0.15;
-//                AgriculturalEnhancements.debugLog("X speed: "+d0+" Z speed"+d2);
             pLevel.addParticle(ParticleTypes.SPLASH, pPos.getX() + 0.5 + d0 * 10, pPos.getY() + 0.2, pPos.getZ() + 0.5 + d2 * 10, d0, 0.0D, d2);
         }
     }
+
 }

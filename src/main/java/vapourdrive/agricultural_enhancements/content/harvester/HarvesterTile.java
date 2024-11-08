@@ -2,47 +2,51 @@ package vapourdrive.agricultural_enhancements.content.harvester;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseFuelUserTile;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.FuelHandler;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.IngredientHandler;
-import vapourdrive.agricultural_enhancements.content.base.itemhandlers.OutputHandler;
-import vapourdrive.agricultural_enhancements.utils.MachineUtils;
+import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
+import vapourdrive.vapourware.shared.base.itemhandlers.FuelHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.IngredientHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.OutputHandler;
+import vapourdrive.vapourware.shared.base.itemhandlers.ToolHandler;
+import vapourdrive.vapourware.shared.utils.MachineUtils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.HARVESTER_TILE;
 
-public class HarvesterTile extends AbstractBaseFuelUserTile {
+public class HarvesterTile extends AbstractBaseFuelUserTile implements MenuProvider {
 
     public final int[] INGREDIENT_SLOT = {0};
     private final FuelHandler fuelHandler = new FuelHandler(this, FUEL_SLOT.length);
     private final OutputHandler outputHandler = new OutputHandler(this, OUTPUT_SLOTS.length);
-    private final IngredientHandler ingredientHandler = new HarvesterIngredientHandler(this, INGREDIENT_SLOT.length);
-    private final LazyOptional<OutputHandler> lazyOutputHandler = LazyOptional.of(() -> outputHandler);
+    private final IngredientHandler ingredientHandler = new ToolHandler(this, INGREDIENT_SLOT.length);
+//    private final LazyOptional<OutputHandler> lazyOutputHandler = LazyOptional.of(() -> outputHandler);
     private final CombinedInvWrapper combined = new CombinedInvWrapper(fuelHandler, outputHandler, ingredientHandler);
-    private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
+//    private final LazyOptional<CombinedInvWrapper> combinedHandler = LazyOptional.of(() -> combined);
     public final HarvesterData harvesterData = new HarvesterData();
     private int harvestTimer = 0;
 
@@ -68,10 +72,12 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
             assert this.level != null;
             for (int i = 1; i <= 9; i++) {
                 BlockState targetState = this.level.getBlockState(this.worldPosition.relative(direction, i));
-                if(targetState.getBlock() instanceof CropBlock || targetState.getBlock() instanceof BushBlock) {
+                if (targetState.getBlock() instanceof CropBlock || targetState.getBlock() instanceof BushBlock) {
                     BlockPos pos = this.worldPosition.relative(direction, i);
-                    ItemStack tool = getStackInSlot(MachineUtils.Area.INGREDIENT, 0);
-                    LootContext.Builder builder = (new LootContext.Builder((ServerLevel) level)).withRandom(level.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, tool);
+                    ItemStack tool = getStackInSlot(MachineUtils.Area.INGREDIENT_1, 0);
+                    LootParams.Builder builder =
+                            (new LootParams.Builder((ServerLevel) level)).withParameter(LootContextParams.ORIGIN,
+                                    Vec3.atCenterOf(pos)).withParameter(LootContextParams.TOOL, tool);
 
                     if (targetState.getBlock() instanceof CropBlock crop) {
                         if (crop.isMaxAge(targetState)) {
@@ -97,7 +103,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
                         }
                     } else if (targetState.getBlock() instanceof BushBlock) {
                         List<ItemStack> drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
-                        if(MachineUtils.getTotalCount(drops) > 1){
+                        if (MachineUtils.getTotalCount(drops) > 1) {
 //                          We re-run the drops so they aren't always including bonus drops
                             drops = MachineUtils.cleanItemStacks(targetState.getDrops(builder));
                             if (MachineUtils.canPushAllOutputs(drops, this)) {
@@ -117,9 +123,9 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         }
     }
 
-    public List<ItemStack> cullSeed(List<ItemStack> drops, ItemStack seed){
+    public List<ItemStack> cullSeed(List<ItemStack> drops, ItemStack seed) {
         for (ItemStack drop : drops) {
-            if (ItemStack.isSame(drop, seed)) {
+            if (ItemStack.isSameItem(drop, seed)) {
                 drop.shrink(1);
                 if (drop.isEmpty()) {
                     drops.remove(drop);
@@ -138,8 +144,8 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         }
     }
 
-    public void setMode(boolean isNonDestructive){
-        if(isNonDestructive){
+    public void setMode(boolean isNonDestructive) {
+        if (isNonDestructive) {
             harvesterData.set(HarvesterData.Data.MODE, 1);
         } else {
             harvesterData.set(HarvesterData.Data.MODE, 0);
@@ -162,53 +168,57 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
     @Override
     public boolean canWork(BlockState state) {
         boolean canWork = true;
-        if(Objects.requireNonNull(this.getLevel()).hasNeighborSignal(this.worldPosition)){
+        if ((Objects.requireNonNull(this.getLevel())).hasNeighborSignal(this.worldPosition)) {
             canWork = false;
-        }else if (getCurrentFuel() < getMinFuelToWork()) {
+        } else if (this.getCurrentFuel() < this.getMinFuelToWork()) {
+            canWork = false;
+        } else if (outputHandler.isFull()) {
             canWork = false;
         }
-        else if (outputHandler.isFull()) {
-            canWork = false;
-        }
-        changeStateIfNecessary(state, canWork);
+        this.changeStateIfNecessary(state, canWork);
         return canWork;
     }
 
+
     @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
-        outputHandler.deserializeNBT(tag.getCompound("invOut"));
-        fuelHandler.deserializeNBT(tag.getCompound("invFuel"));
-        ingredientHandler.deserializeNBT(tag.getCompound("invIngredient"));
+    public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.loadAdditional(tag, registries);
+        outputHandler.deserializeNBT(registries, tag.getCompound("invOut"));
+        fuelHandler.deserializeNBT(registries, tag.getCompound("invFuel"));
+        ingredientHandler.deserializeNBT(registries, tag.getCompound("invIngredient"));
         harvesterData.set(HarvesterData.Data.FUEL, tag.getInt("fuel"));
         harvesterData.set(HarvesterData.Data.MODE, tag.getInt("mode"));
         harvestTimer = tag.getInt("harvestTimer");
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag tag) {
-        super.saveAdditional(tag);
-        tag.put("invOut", outputHandler.serializeNBT());
-        tag.put("invFuel", fuelHandler.serializeNBT());
-        tag.put("invIngredient", ingredientHandler.serializeNBT());
+    public void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.put("invOut", outputHandler.serializeNBT(registries));
+        tag.put("invFuel", fuelHandler.serializeNBT(registries));
+        tag.put("invIngredient", ingredientHandler.serializeNBT(registries));
         tag.putInt("fuel", getCurrentFuel());
         tag.putInt("harvestTimer", harvestTimer);
         tag.putInt("mode", harvesterData.get(HarvesterData.Data.MODE));
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side) {
-        if (capability == ForgeCapabilities.ITEM_HANDLER) {
-            if (side == Direction.DOWN) {
-                return lazyOutputHandler.cast();
-            }
-            return combinedHandler.cast();
-        }
-        return super.getCapability(capability, side);
-    }
+//    @Nonnull
+//    @Override
+//    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side) {
+//        if (capability == ForgeCapabilities.ITEM_HANDLER) {
+//            if (side == Direction.DOWN) {
+//                return lazyOutputHandler.cast();
+//            }
+//            return combinedHandler.cast();
+//        }
+//        return super.getCapability(capability, side);
+//    }
 
-    public IItemHandler getItemHandler() {
+    public IItemHandler getItemHandler(@org.jetbrains.annotations.Nullable Direction side) {
+//        return combined;
+        if (side == Direction.DOWN) {
+            return outputHandler;
+        }
         return combined;
     }
 
@@ -250,8 +260,8 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.getStackInSlot(FUEL_SLOT[index]);
             case OUTPUT -> outputHandler.getStackInSlot(OUTPUT_SLOTS[index]);
-            case INGREDIENT -> ingredientHandler.getStackInSlot(INGREDIENT_SLOT[index]);
-            case INGREDIENT_2 -> ItemStack.EMPTY;
+            case INGREDIENT_1 -> ingredientHandler.getStackInSlot(INGREDIENT_SLOT[index]);
+            default -> ItemStack.EMPTY;
         };
     }
 
@@ -260,7 +270,7 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         switch (area) {
             case FUEL -> fuelHandler.extractItem(FUEL_SLOT[index], amount, simulate);
             case OUTPUT -> outputHandler.extractItem(OUTPUT_SLOTS[index], amount, simulate);
-            case INGREDIENT -> ingredientHandler.extractItem(INGREDIENT_SLOT[index], amount, simulate);
+            case INGREDIENT_1 -> ingredientHandler.extractItem(INGREDIENT_SLOT[index], amount, simulate);
         }
     }
 
@@ -269,8 +279,18 @@ public class HarvesterTile extends AbstractBaseFuelUserTile {
         return switch (area) {
             case FUEL -> fuelHandler.insertItem(FUEL_SLOT[index], stack, simulate);
             case OUTPUT -> outputHandler.insertItem(OUTPUT_SLOTS[index], stack, simulate, true);
-            case INGREDIENT -> ingredientHandler.insertItem(INGREDIENT_SLOT[index], stack, simulate);
-            case INGREDIENT_2 -> ItemStack.EMPTY;
+            case INGREDIENT_1 -> ingredientHandler.insertItem(INGREDIENT_SLOT[index], stack, simulate);
+            default -> ItemStack.EMPTY;
         };
+    }
+
+    @Override
+    public @NotNull Component getDisplayName() {
+        return Component.translatable(AgriculturalEnhancements.MODID+".harvester");
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int id, @NotNull Inventory inventory, @NotNull Player player) {
+        return new HarvesterMenu(id, this.level, this.worldPosition, player.getInventory(), player, this.getHarvesterData());
     }
 }

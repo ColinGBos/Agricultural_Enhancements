@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
@@ -33,12 +34,13 @@ import java.util.Objects;
 @JeiPlugin
 public class JEI_Plugin implements IModPlugin {
 
-    public static final RecipeType<FertilizerRecipe> FERTILIZER_TYPE = new RecipeType<>(FertilizerRecipeCategory.UID, FertilizerRecipe.class);
+    public static final RecipeType<RecipeHolder<FertilizerRecipe>> FERTILIZER_TYPE = RecipeType.createRecipeHolderType(FertilizerRecipeCategory.UID);
+//    public static final RecipeType<FertilizerRecipe> FERTILIZER_TYPE = new RecipeType<>(FertilizerRecipeCategory.UID, FertilizerRecipe.class);
     public static final RecipeType<SeedRecipeWrapper> SEEDS = RecipeType.create(AgriculturalEnhancements.MODID, "crop_manager", SeedRecipeWrapper.class);
 
     @Override
     public @NotNull ResourceLocation getPluginUid() {
-        return new ResourceLocation(AgriculturalEnhancements.MODID, "jei_plugin");
+        return ResourceLocation.fromNamespaceAndPath(AgriculturalEnhancements.MODID, "jei_plugin");
     }
 
     @Override
@@ -65,18 +67,19 @@ public class JEI_Plugin implements IModPlugin {
         registration.addIngredientInfo(new ItemStack(Registration.FERTILIZER_PRODUCER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.fertilizer_producer.info", ConfigSettings.FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER.get()));
         registration.addIngredientInfo(new ItemStack(Registration.CROP_MANAGER_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.crop_manager.info"));
         registration.addIngredientInfo(new ItemStack(Registration.SOIL_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.soil.info"));
-        if(ConfigSettings.SOIL_REQUIRES_FERTILIZER.get()) {
+        if (ConfigSettings.SOIL_REQUIRES_FERTILIZER.get()) {
             registration.addIngredientInfo(new ItemStack(Registration.TILLED_SOIL_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.tilled_soil.info"), Component.translatable("agriculturalenhancements.tilled_soil.fertilizer_true.info"));
         } else {
             registration.addIngredientInfo(new ItemStack(Registration.TILLED_SOIL_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.tilled_soil.info"), Component.translatable("agriculturalenhancements.tilled_soil.fertilizer_false.info"));
         }
         registration.addIngredientInfo(new ItemStack(Registration.IRRIGATION_PIPE_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.irrigation_pipe.info"));
         registration.addIngredientInfo(new ItemStack(Registration.SPRAYER_PIPE_ITEM.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.sprayer_pipe.info", ConfigSettings.SPRAYER_VERTICAL_RANGE.get()));
-        registration.addIngredientInfo(new ItemStack(Registration.FARMER_WRENCH.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.farmer_wrench.info"));
         registration.addIngredientInfo(new ItemStack(Registration.WATERING_CAN.get()), VanillaTypes.ITEM_STACK, Component.translatable("agriculturalenhancements.watering_can.info"));
 
         RecipeManager recipeManager = Objects.requireNonNull(Minecraft.getInstance().level).getRecipeManager();
-        List<FertilizerRecipe> recipeList = recipeManager.getAllRecipesFor(FertilizerRecipe.Type.INSTANCE);
+//        List<FertilizerRecipe> recipeList = recipeManager.getAllRecipesFor(FertilizerRecipe.Type.INSTANCE);
+        List<RecipeHolder<FertilizerRecipe>> recipeList = recipeManager.getAllRecipesFor(Registration.FERTILIZER_TYPE.get());
+//        List<FertilizerRecipe> fert = recipeList.
         registration.addRecipes(FERTILIZER_TYPE, recipeList);
         registration.addRecipes(SEEDS, getSeedRecipes());
     }

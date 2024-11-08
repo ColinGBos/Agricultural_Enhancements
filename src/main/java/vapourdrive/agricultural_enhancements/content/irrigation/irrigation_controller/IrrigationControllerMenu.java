@@ -8,18 +8,17 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
-import vapourdrive.agricultural_enhancements.content.base.AbstractBaseMachineContainer;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotFuel;
-import vapourdrive.agricultural_enhancements.content.base.slots.SlotOutput;
 import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.base.AbstractBaseMachineMenu;
+import vapourdrive.vapourware.shared.base.slots.SlotFuel;
+import vapourdrive.vapourware.shared.base.slots.SlotOutput;
 
 import java.util.Objects;
 
-public class IrrigationControllerContainer extends AbstractBaseMachineContainer {
+public class IrrigationControllerMenu extends AbstractBaseMachineMenu {
     // gui position of the player inventory grid
     public static final int PLAYER_INVENTORY_XPOS = 8;
     public static final int PLAYER_INVENTORY_YPOS = 84;
@@ -27,22 +26,21 @@ public class IrrigationControllerContainer extends AbstractBaseMachineContainer 
     public static final int OUTPUT_INVENTORY_XPOS = 62;
     public static final int OUTPUT_INVENTORY_YPOS = 58;
 
-    public IrrigationControllerContainer(int windowId, Level world, BlockPos pos, Inventory inv, Player player, IrrigationControllerData machineData) {
-        super(windowId, world, pos, inv, player, Registration.IRRIGATION_CONTROLLER_CONTAINER.get(), machineData);
+    public IrrigationControllerMenu(int windowId, Level world, BlockPos pos, Inventory inv, Player player, IrrigationControllerData machineData) {
+        super(windowId, world, pos, inv, player, Registration.IRRIGATION_CONTROLLER_MENU.get(), machineData);
 
         //We use this vs the builtin method because we split all the shorts
         addSplitDataSlots(machineData);
 
         layoutPlayerInventorySlots(PLAYER_INVENTORY_XPOS, PLAYER_INVENTORY_YPOS);
 
-        if (tileEntity != null) {
-            tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(h -> {
-                addSlot(new SlotFuel(h, 0, 39, 58));
-                addSlot(new SlotOutput(h, 1, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 2, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 3, OUTPUT_INVENTORY_XPOS + (18 * 2), OUTPUT_INVENTORY_YPOS));
-                addSlot(new SlotOutput(h, 4, OUTPUT_INVENTORY_XPOS + (18 * 3), OUTPUT_INVENTORY_YPOS));
-            });
+        if (tileEntity != null && tileEntity instanceof  IrrigationControllerTile machine) {
+            IItemHandler handler = machine.getItemHandler(null);
+            addSlot(new SlotFuel(handler, 0, 39, 58));
+            addSlot(new SlotOutput(handler, 1, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
+            addSlot(new SlotOutput(handler, 2, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
+            addSlot(new SlotOutput(handler, 3, OUTPUT_INVENTORY_XPOS + (18 * 2), OUTPUT_INVENTORY_YPOS));
+            addSlot(new SlotOutput(handler, 4, OUTPUT_INVENTORY_XPOS + (18 * 3), OUTPUT_INVENTORY_YPOS));
         }
     }
 
@@ -82,7 +80,7 @@ public class IrrigationControllerContainer extends AbstractBaseMachineContainer 
             //Player Inventory
             else if (index <= 35) {
                 //Inventory to fuel
-                if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0.0) {
+                if (stack.getBurnTime(RecipeType.SMELTING) > 0.0) {
                     if (!this.moveItemStackTo(stack, 36, 37, false)) {
                         return ItemStack.EMPTY;
                     }
