@@ -3,6 +3,7 @@
   "pools": [
     {
       "rolls": 1.0,
+      "name": "pool1",
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -13,7 +14,7 @@
               "source": "block_entity"
             }
           ],
-          "name": "agriculturalenhancements:harvester"
+          "name": "agriculturalenhancements:fertilizer_producer"
         }
       ],
       "conditions": [

@@ -13,7 +13,7 @@
       "tag": "minecraft:stone_tool_materials"
     },
     "C": {
-      "tag": "forge:chests/wooden"
+      "tag": "c:chests/wooden"
     },
     "H": {
       "item": "minecraft:iron_axe"
@@ -23,7 +23,7 @@
     }
   },
   "result": {
-    "item": "agriculturalenhancements:harvester",
+    "id": "agriculturalenhancements:harvester",
     "count": 1
   }
 }

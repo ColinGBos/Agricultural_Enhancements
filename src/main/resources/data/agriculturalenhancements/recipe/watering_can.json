@@ -7,17 +7,17 @@
   ],
   "key": {
     "C": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "S": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "result": {
-    "item": "agriculturalenhancements:watering_can",
+    "id": "agriculturalenhancements:watering_can",
     "count": 1
   }
 }

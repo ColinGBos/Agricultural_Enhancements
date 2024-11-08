@@ -4,13 +4,13 @@
       "type": "neoforge:not",
           "value": {
             "type": "neoforge:tag_empty",
-            "tag": "neoforge:slag"
+            "tag": "c:slag"
           }
         }
       ],
         "type": "agriculturalenhancements:fertilizer",
         "ingredient": {
-          "tag": "neoforge:slag"
+          "tag": "c:slag"
         },
         "n": 0,
         "p": 1200,

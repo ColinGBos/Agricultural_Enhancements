@@ -1,23 +1,16 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "neoforge:conditions": [
     {
-      "conditions": [
-        {
-          "type": "forge:item_exists",
-          "item": "thermal:phytogro"
-        }
-      ],
-      "recipe": {
-        "type": "agriculturalenhancements:fertilizer",
-        "ingredient": {
-          "item": "thermal:phytogro"
-        },
-        "n": 800,
-        "p": 800,
-        "k": 800
-      }
+      "type": "neoforge:item_exists",
+      "item": "thermal:phytogro"
     }
-  ]
+  ],
+  "type": "agriculturalenhancements:fertilizer",
+  "ingredient": {
+    "item": "thermal:phytogro"
+  },
+  "n": 800,
+  "p": 800,
+  "k": 800
 }
 

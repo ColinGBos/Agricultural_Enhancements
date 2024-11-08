@@ -7,14 +7,14 @@
           "type": "neoforge:not",
           "value": {
             "type": "neoforge:tag_empty",
-            "tag": "neoforge:dusts/niter"
+            "tag": "c:dusts/niter"
           }
         }
       ],
       "recipe": {
         "type": "agriculturalenhancements:fertilizer",
         "ingredient": {
-          "tag": "neoforge:dusts/niter"
+          "tag": "c:dusts/niter"
         },
         "n": 1200,
         "p": 0,

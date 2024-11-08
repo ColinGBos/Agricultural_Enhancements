@@ -10,14 +10,14 @@
       "item": "minecraft:leather"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "S": {
-      "tag": "forge:rods/wooden"
+      "tag": "c:rods/wooden"
     }
   },
   "result": {
-    "item": "agriculturalenhancements:farmer_wrench",
+    "id": "agriculturalenhancements:farmer_wrench",
     "count": 1
   }
 }

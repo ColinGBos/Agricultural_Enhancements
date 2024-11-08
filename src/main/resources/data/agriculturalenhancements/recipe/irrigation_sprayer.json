@@ -9,11 +9,11 @@
       "item": "agriculturalenhancements:irrigation_pipe"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     }
   },
   "result": {
-    "item": "agriculturalenhancements:sprayer_pipe",
+    "id": "agriculturalenhancements:sprayer_pipe",
     "count": 1
   }
 }

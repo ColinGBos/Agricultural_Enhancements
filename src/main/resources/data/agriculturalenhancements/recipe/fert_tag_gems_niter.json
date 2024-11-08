@@ -4,13 +4,13 @@
       "type": "neoforge:not",
           "value": {
             "type": "neoforge:tag_empty",
-            "tag": "neoforge:gems/niter"
+            "tag": "c:gems/niter"
           }
         }
       ],
         "type": "agriculturalenhancements:fertilizer",
         "ingredient": {
-          "tag": "neoforge:gems/niter"
+          "tag": "c:gems/niter"
         },
         "n": 1200,
         "p": 0,

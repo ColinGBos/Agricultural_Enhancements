@@ -4,13 +4,13 @@
     "type": "neoforge:not",
       "value": {
         "type": "neoforge:tag_empty",
-        "tag": "neoforge:fertilizer"
+        "tag": "c:fertilizer"
       }
     }
   ],
   "type": "agriculturalenhancements:fertilizer",
   "ingredient": {
-    "tag": "neoforge:fertilizer"
+    "tag": "c:fertilizer"
   },
   "n": 800,
   "p": 800,

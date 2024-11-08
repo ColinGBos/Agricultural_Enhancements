@@ -4,13 +4,13 @@
       "type": "neoforge:not",
           "value": {
             "type": "neoforge:tag_empty",
-            "tag": "neoforge:fuels/bio"
+            "tag": "c:fuels/bio"
           }
         }
       ],
         "type": "agriculturalenhancements:fertilizer",
         "ingredient": {
-          "tag": "neoforge:fuels/bio"
+          "tag": "c:fuels/bio"
         },
         "n": 800,
         "p": 800,

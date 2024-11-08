@@ -4,13 +4,13 @@
       "type": "neoforge:not",
           "value": {
             "type": "neoforge:tag_empty",
-            "tag": "neoforge:dusts/saltpeter"
+            "tag": "c:dusts/saltpeter"
           }
         }
       ],
         "type": "agriculturalenhancements:fertilizer",
         "ingredient": {
-          "tag": "neoforge:dusts/saltpeter"
+          "tag": "c:dusts/saltpeter"
         },
         "n": 1200,
         "p": 0,

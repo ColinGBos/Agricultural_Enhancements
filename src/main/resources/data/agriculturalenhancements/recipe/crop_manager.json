@@ -13,7 +13,7 @@
       "tag": "minecraft:stone_tool_materials"
     },
     "C": {
-      "tag": "forge:chests/wooden"
+      "tag": "c:chests/wooden"
     },
     "H": {
       "item": "minecraft:iron_hoe"
@@ -26,7 +26,7 @@
     }
   },
   "result": {
-    "item": "agriculturalenhancements:crop_manager",
+    "id": "agriculturalenhancements:crop_manager",
     "count": 1
   }
 }
