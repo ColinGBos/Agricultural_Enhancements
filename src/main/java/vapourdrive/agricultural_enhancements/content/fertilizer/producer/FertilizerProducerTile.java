@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.fertilizer.FertilizerUtils;
+import vapourdrive.agricultural_enhancements.content.manager.FertilizerIngredientHandler;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
 import vapourdrive.vapourware.shared.base.itemhandlers.FuelHandler;
@@ -39,7 +40,7 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile {
 
     public final int[] INGREDIENT_SLOT = {0};
     private final FuelHandler fuelHandler = new FuelHandler(this, FUEL_SLOT.length);
-    private final IngredientHandler ingredientHandler = new IngredientHandler(this, INGREDIENT_SLOT.length);
+    private final IngredientHandler ingredientHandler = new FertilizerIngredientHandler(this, INGREDIENT_SLOT.length);
     private final OutputHandler outputHandler = new OutputHandler(this, OUTPUT_SLOTS.length);
     private final LazyOptional<OutputHandler> lazyOutputHandler = LazyOptional.of(() -> outputHandler);
     private final CombinedInvWrapper combined = new CombinedInvWrapper(fuelHandler, ingredientHandler, outputHandler);
