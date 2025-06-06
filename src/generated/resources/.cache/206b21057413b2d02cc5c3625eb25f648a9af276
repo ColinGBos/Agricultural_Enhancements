@@ -1,0 +1,6 @@
+// 1.21.1	2025-05-31T09:48:23.2525563	Tags for minecraft:block mod id agriculturalenhancements
+31f7104d910529aa4155d1e96bb3f684973bbe7d data/agriculturalenhancements/tags/block/incorrect_for_duskbloom_tool.json
+32b13946c4cd1f944b029659ccce5fcb2adad4ff data/agriculturalenhancements/tags/block/needs_duskbloom_tool.json
+847e0b2a583469e72bb0e856a6d0f11c433ce78c data/c/tags/block/storage_blocks/duskbloom_glob.json
+1d68c5e88e75b13218647272ce173ce89e05e91c data/c/tags/block/storage_blocks/duskbloom_shard.json
+1d68c5e88e75b13218647272ce173ce89e05e91c data/minecraft/tags/block/beacon_base_blocks.json

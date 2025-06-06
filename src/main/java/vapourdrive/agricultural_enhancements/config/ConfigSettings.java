@@ -112,8 +112,8 @@ public class ConfigSettings {
         SERVER_BUILDER.pop();
 
         SERVER_BUILDER.comment("Irrigation Sprayer Settings").push(SUBCATEGORY_SPRAYER);
-        SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH = SERVER_BUILDER.comment("Chance per random tick to tick crops within radius; every random tick").defineInRange("sprayerChanceToBoostCropTicks", 1f, 0f, 1f);
-        SPRAYER_CROP_TICK_COUNT = SERVER_BUILDER.comment("Number of ticks for each crop to potentially be updated during").defineInRange("sprayerCropUpdateTickCount", 10, 1, 25);
+        SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH = SERVER_BUILDER.comment("Chance per random tick to tick crops within radius; every random tick").defineInRange("sprayerChanceToBoostCropTicks", 0.5f, 0f, 1f);
+        SPRAYER_CROP_TICK_COUNT = SERVER_BUILDER.comment("Number of ticks for each crop to potentially be updated during").defineInRange("sprayerCropUpdateTickCount", 4, 1, 25);
         SPRAYER_VERTICAL_RANGE = SERVER_BUILDER.comment("Max number of blocks down from the sprayer the crop can be").defineInRange("sprayerMaxVerticalRange", 8, 2, 15);
         SPRAYER_CHANCE_TO_ANIMATE = SERVER_BUILDER.comment("Chance per animation tick for the sprayer to spawn particles").defineInRange("sprayerChanceToAnimate", 0.2f, 0f, 1f);
         SERVER_BUILDER.pop();

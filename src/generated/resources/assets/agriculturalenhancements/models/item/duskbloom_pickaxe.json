@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "agriculturalenhancements:item/duskbloom_pickaxe"
+  }
+}

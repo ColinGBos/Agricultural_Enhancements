@@ -1,0 +1,28 @@
+{
+  "type": "agriculturalenhancements:add_item",
+  "conditions": [
+    {
+      "condition": "minecraft:random_chance_with_enchanted_bonus",
+      "enchantment": "minecraft:fortune",
+      "enchanted_chance": {
+        "type": "linear",
+        "base": 0.15,
+        "per_level_above_first": 0.05
+      },
+      "unenchanted_chance": 0.1
+    },
+    {
+      "condition": "minecraft:time_check",
+      "period": 24000,
+      "value": {
+        "min": 12500,
+        "max": 13500
+      }
+    },
+    {
+      "condition": "block_state_property",
+      "block": "minecraft:tall_grass"
+    }
+  ],
+  "item": "agriculturalenhancements:duskbloom_seeds"
+}

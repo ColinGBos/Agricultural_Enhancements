@@ -1,6 +1,7 @@
 package vapourdrive.agricultural_enhancements.content.soil;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -14,7 +15,6 @@ import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.setup.Registration;
 
 import java.util.List;
-import java.util.Objects;
 
 @EventBusSubscriber
 public class HoeTilledToSoilHandler {
@@ -22,7 +22,12 @@ public class HoeTilledToSoilHandler {
     @SubscribeEvent
     public static void hoeTillEvent(BlockEvent.BlockToolModificationEvent event) {
         AgriculturalEnhancements.debugLog("Hoe use " + event.getFinalState());
-        ItemStack offhandStack = Objects.requireNonNull(event.getPlayer()).getOffhandItem();
+
+        ItemStack potentialFert = ItemStack.EMPTY;
+        Player player = event.getPlayer();
+        if (player != null) {
+            potentialFert = player.getOffhandItem();
+        }
         int nutrients = 0;
 
         BlockState state = event.getFinalState();
@@ -32,12 +37,12 @@ public class HoeTilledToSoilHandler {
             return;
         }
 
-        if (ConfigSettings.SOIL_REQUIRES_FERTILIZER.get() && !offhandStack.is(Registration.FERTILIZER.get()) && !state.is(Registration.SOIL_BLOCK.get())) {
+        if (ConfigSettings.SOIL_REQUIRES_FERTILIZER.get() && !potentialFert.is(Registration.FERTILIZER.get()) && !state.is(Registration.SOIL_BLOCK.get())) {
             return;
         }
 
         boolean consume = false;
-        if (offhandStack.is(Registration.FERTILIZER.get())) {
+        if (potentialFert.is(Registration.FERTILIZER.get())) {
             nutrients = TilledSoilBlock.MAX_NUTRIENTS;
             consume = true;
         }
@@ -49,7 +54,7 @@ public class HoeTilledToSoilHandler {
         }
         event.setFinalState(Registration.TILLED_SOIL_BLOCK.get().defaultBlockState().setValue(TilledSoilBlock.SOIL_MOISTURE, baseMoisture).setValue(TilledSoilBlock.SOIL_NUTRIENTS, nutrients));
         if (consume) {
-            offhandStack.shrink(1);
+            potentialFert.shrink(1);
         }
     }
 

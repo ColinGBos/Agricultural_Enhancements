@@ -202,18 +202,6 @@ public class HarvesterTile extends AbstractBaseFuelUserTile implements MenuProvi
         tag.putInt("mode", harvesterData.get(HarvesterData.Data.MODE));
     }
 
-//    @Nonnull
-//    @Override
-//    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side) {
-//        if (capability == ForgeCapabilities.ITEM_HANDLER) {
-//            if (side == Direction.DOWN) {
-//                return lazyOutputHandler.cast();
-//            }
-//            return combinedHandler.cast();
-//        }
-//        return super.getCapability(capability, side);
-//    }
-
     public IItemHandler getItemHandler(@org.jetbrains.annotations.Nullable Direction side) {
 //        return combined;
         if (side == Direction.DOWN) {

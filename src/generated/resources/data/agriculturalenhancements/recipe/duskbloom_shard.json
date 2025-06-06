@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "agriculturalenhancements:duskbloom_shard_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "agriculturalenhancements:duskbloom_shard"
+  }
+}

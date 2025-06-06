@@ -1,0 +1,10 @@
+{
+  "values": {
+    "agriculturalenhancements:duskbloom_glob": {
+      "burn_time": 400
+    },
+    "agriculturalenhancements:duskbloom_glob_block": {
+      "burn_time": 3600
+    }
+  }
+}

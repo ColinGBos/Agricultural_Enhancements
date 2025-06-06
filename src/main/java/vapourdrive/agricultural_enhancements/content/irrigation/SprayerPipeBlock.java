@@ -128,12 +128,10 @@ public class SprayerPipeBlock extends IrrigationPipeBlock implements IIrrigation
                     BlockPos blockPos = pPos.offset(x, y, z);
                     BlockState state = pLevel.getBlockState(blockPos);
                     if (!state.isAir()){
-                        if (pRandom.nextFloat() > 0.7f && state.getBlock() instanceof CropBlock crop) {
+                        if (pRandom.nextFloat() > 0.9f && state.getBlock() instanceof CropBlock crop) {
                             if (pRandom.nextFloat() <= ConfigSettings.SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH.get()) {
                                 for (int l = 0; l < ConfigSettings.SPRAYER_CROP_TICK_COUNT.get(); l++) {
-                                    if (pRandom.nextFloat() > 0.85){
-                                        crop.performBonemeal(pLevel, pRandom, blockPos, state);
-                                    }
+                                    crop.performBonemeal(pLevel, pRandom, blockPos, state);
                                 }
                             }
                         }

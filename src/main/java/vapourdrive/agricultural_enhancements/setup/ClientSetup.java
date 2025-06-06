@@ -15,10 +15,7 @@ public class ClientSetup {
 
 //    public static void setup(final FMLClientSetupEvent event) {
 //        event.enqueueWork(() -> {
-//            MenuScreens.register(Registration.HARVESTER_MENU.get(), HarvesterScreen::new);
-//            MenuScreens.register(Registration.IRRIGATION_CONTROLLER_MENU.get(), IrrigationControllerScreen::new);
-//            MenuScreens.register(Registration.FERTILIZER_PRODUCER_MENU.get(), FertilizerProducerScreen::new);
-//            MenuScreens.register(Registration.CROP_MANAGER_MENU.get(), CropManagerScreen::new);
+//            ItemBlockRenderTypes.setRenderLayer(Registration.DUSKBLOOM_BLOCK.get(), RenderType.cutout());
 //        });
 //    }
 

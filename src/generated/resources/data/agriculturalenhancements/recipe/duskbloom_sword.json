@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "tag": "c:gems/duskbloom_shard"
+    },
+    "R": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    " H ",
+    " H ",
+    " R "
+  ],
+  "result": {
+    "count": 1,
+    "id": "agriculturalenhancements:duskbloom_sword"
+  }
+}

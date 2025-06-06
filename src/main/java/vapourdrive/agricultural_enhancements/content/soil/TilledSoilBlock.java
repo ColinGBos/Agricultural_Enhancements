@@ -232,9 +232,23 @@ public class TilledSoilBlock extends Block {
 
     @Override
     public @NotNull TriState canSustainPlant(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull Direction facing, BlockState plantState) {
-        if (plantState.getBlock() instanceof CropBlock) {
+//        if (plantState.getBlock() instanceof CropBlock) {
+//            return TriState.TRUE;
+//        }
+//        return TriState.DEFAULT;
+        if (facing != Direction.UP) return TriState.FALSE;
+        if (plantState.getBlock() instanceof CactusBlock)
             return TriState.TRUE;
-        }
+
+        if (plantState.getBlock() instanceof SugarCaneBlock)
+            return TriState.TRUE;
+
+        if (plantState.getBlock() == Blocks.BAMBOO || plantState.getBlock() == Blocks.BAMBOO_SAPLING)
+            return TriState.TRUE;
+
+        if (plantState.getBlock() instanceof BushBlock)
+            return TriState.TRUE;
+
         return TriState.DEFAULT;
     }
 }

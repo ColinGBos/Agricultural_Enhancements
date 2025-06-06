@@ -22,11 +22,9 @@ import vapourdrive.agricultural_enhancements.content.manager.FertilizerIngredien
 import vapourdrive.agricultural_enhancements.setup.Registration;
 import vapourdrive.vapourware.shared.base.AbstractBaseFuelUserTile;
 import vapourdrive.vapourware.shared.base.itemhandlers.FuelHandler;
-import vapourdrive.vapourware.shared.base.itemhandlers.IngredientHandler;
 import vapourdrive.vapourware.shared.base.itemhandlers.OutputHandler;
 import vapourdrive.vapourware.shared.utils.MachineUtils;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static vapourdrive.agricultural_enhancements.setup.Registration.FERTILIZER_PRODUCER_TILE;

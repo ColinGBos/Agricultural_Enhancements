@@ -1,0 +1,35 @@
+{
+	"credit": "Made with Blockbench",
+	"ambientocclusion": false,
+	"render_type": "minecraft:cutout",
+	"textures": {
+		"2": "agriculturalenhancements:block/duskbloom_side_7",
+		"3": "agriculturalenhancements:block/duskbloom_top_7",
+		"particle": "agriculturalenhancements:block/duskbloom_side_7"
+	},
+	"elements": [
+		{
+			"from": [5, 0, 3],
+			"to": [15, 12, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [5, 0, 3]},
+			"faces": {
+				"north": {"uv": [1, 4, 11, 16], "texture": "#2"},
+				"east": {"uv": [1, 4, 11, 16], "texture": "#2"},
+				"south": {"uv": [1, 4, 11, 16], "texture": "#2"},
+				"west": {"uv": [1, 4, 11, 16], "texture": "#2"},
+				"up": {"uv": [11, 13, 1, 3], "rotation": 270, "texture": "#3"},
+				"down": {"uv": [1, 13, 11, 3], "rotation": 270, "texture": "#3"}
+			}
+		},
+		{
+			"from": [1, 0, 8],
+			"to": [9, 15, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [1, 0, 8]},
+			"shade": false,
+			"faces": {
+				"north": {"uv": [7, 1, 15, 16], "texture": "#2"},
+				"south": {"uv": [15, 1, 7, 16], "texture": "#2"}
+			}
+		}
+	]
+}

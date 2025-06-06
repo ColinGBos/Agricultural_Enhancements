@@ -1,0 +1,172 @@
+{
+  "variants": {
+    "age=0": [
+      {
+        "model": "agriculturalenhancements:block/duskbloom_0",
+        "y": 270,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_0",
+        "y": 90,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_0",
+        "y": 180,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_0",
+        "weight": 4
+      }
+    ],
+    "age=1": [
+      {
+        "model": "agriculturalenhancements:block/duskbloom_1",
+        "y": 270,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_1",
+        "y": 90,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_1",
+        "y": 180,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_1",
+        "weight": 4
+      }
+    ],
+    "age=2": [
+      {
+        "model": "agriculturalenhancements:block/duskbloom_2",
+        "y": 270,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_2",
+        "y": 90,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_2",
+        "y": 180,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_2",
+        "weight": 4
+      }
+    ],
+    "age=3": [
+      {
+        "model": "agriculturalenhancements:block/duskbloom_3",
+        "y": 270,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_3",
+        "y": 90,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_3",
+        "y": 180,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_3",
+        "weight": 4
+      }
+    ],
+    "age=4": [
+      {
+        "model": "agriculturalenhancements:block/duskbloom_4",
+        "y": 270,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_4",
+        "y": 90,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_4",
+        "y": 180,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_4",
+        "weight": 4
+      }
+    ],
+    "age=5": [
+      {
+        "model": "agriculturalenhancements:block/duskbloom_5",
+        "y": 270,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_5",
+        "y": 90,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_5",
+        "y": 180,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_5",
+        "weight": 4
+      }
+    ],
+    "age=6": [
+      {
+        "model": "agriculturalenhancements:block/duskbloom_6",
+        "y": 270,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_6",
+        "y": 90,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_6",
+        "y": 180,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_6",
+        "weight": 4
+      }
+    ],
+    "age=7": [
+      {
+        "model": "agriculturalenhancements:block/duskbloom_7",
+        "y": 270,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_7",
+        "y": 90,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_7",
+        "y": 180,
+        "weight": 4
+      },
+      {
+        "model": "agriculturalenhancements:block/duskbloom_7",
+        "weight": 4
+      }
+    ]
+  }
+}
