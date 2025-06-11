@@ -73,7 +73,7 @@ public class ConfigSettings {
     private static void setupFirstBlockConfig(ModConfigSpec.Builder SERVER_BUILDER) {
         SERVER_BUILDER.comment("Fertilizer Producer Settings").push(SUBCATEGORY_FERTILIZER_PRODUCER);
         FERTILIZER_PRODUCER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Fertilizer Producer").defineInRange("fertilizerProducerFuelStorage", 128000, 5, 1000000);
-        FERTILIZER_PRODUCER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed to break down one ingredient").defineInRange("fertilizerProducerFuelConsumption", 1000, 100, 10000);
+        FERTILIZER_PRODUCER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed to break down one ingredient").defineInRange("fertilizerProducerFuelConsumption", 2400, 100, 10000);
         FERTILIZER_PRODUCER_NUTRIENTS_PER_FERTILIZER = SERVER_BUILDER.comment("Amount of each nutrient for making one fertilizer").defineInRange("nutrientPerFertilizer", 250, 10, 5000);
         FERTILIZER_PRODUCER_MAX_NUTRIENTS = SERVER_BUILDER.comment("Amount of each nutrient for making one fertilizer").defineInRange("fertilizerProducerNutrientStorage", 25600, 1000, 10000000);
         FERTILIZER_PRODUCER_INGREDIENT_TIME = SERVER_BUILDER.comment("Ticks to break down one ingredient").defineInRange("fertilizerProducerTimeToConsumeIngredient", 40, 20, 320);
@@ -82,14 +82,14 @@ public class ConfigSettings {
 
         SERVER_BUILDER.comment("Harvester Settings").push(SUBCATEGORY_HARVESTER);
         HARVESTER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Harvester").defineInRange("harvesterFuelStorage", 64000, 5, 1000000);
-        HARVESTER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed to harvest one crop").defineInRange("harvesterFuelConsumption", 2400, 100, 10000);
+        HARVESTER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed to harvest one crop").defineInRange("harvesterFuelConsumption", 4800, 100, 10000);
         HARVESTER_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between harvests").defineInRange("harvesterTicksBetweenHarvests", 20, 20, 320);
         HARVESTER_NON_DESTRUCTIVE_HARVESTING = SERVER_BUILDER.comment("Enables the non-destructing harvesting of the Harvester - no need to replant crops").define("harvesterNonDestructive", true);
         SERVER_BUILDER.pop();
 
         SERVER_BUILDER.comment("Irrigation Controller Settings").push(SUBCATEGORY_IRRIGATION_CONTROLLER);
         IRRIGATION_CONTROLLER_FUEL_STORAGE = SERVER_BUILDER.comment("Fuel Storage for the Irrigation Controller").defineInRange("irrigationControllerFuelStorage", 32000, 5, 1000000);
-        IRRIGATION_CONTROLLER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed while working, consumed once per second").defineInRange("irrigationControllerFuelConsumption", 100, 10, 10000);
+        IRRIGATION_CONTROLLER_FUEL_TO_WORK = SERVER_BUILDER.comment("Fuel consumed while working, consumed once per second").defineInRange("irrigationControllerFuelConsumption", 500, 10, 10000);
         IRRIGATION_CONTROLLER_PROCESS_TIME = SERVER_BUILDER.comment("Ticks between pipe pressurizing events").defineInRange("irrigationControllerTicksBetweenWork", 20, 20, 320);
         SERVER_BUILDER.pop();
 
@@ -112,9 +112,9 @@ public class ConfigSettings {
         SERVER_BUILDER.pop();
 
         SERVER_BUILDER.comment("Irrigation Sprayer Settings").push(SUBCATEGORY_SPRAYER);
-        SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH = SERVER_BUILDER.comment("Chance per random tick to tick crops within radius; every random tick").defineInRange("sprayerChanceToBoostCropTicks", 0.5f, 0f, 1f);
-        SPRAYER_CROP_TICK_COUNT = SERVER_BUILDER.comment("Number of ticks for each crop to potentially be updated during").defineInRange("sprayerCropUpdateTickCount", 4, 1, 25);
-        SPRAYER_VERTICAL_RANGE = SERVER_BUILDER.comment("Max number of blocks down from the sprayer the crop can be").defineInRange("sprayerMaxVerticalRange", 8, 2, 15);
+        SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH = SERVER_BUILDER.comment("Chance per random tick to tick crops within radius; every random tick").defineInRange("sprayerChanceToBoostCropTicks", 0.2f, 0f, 1f);
+        SPRAYER_CROP_TICK_COUNT = SERVER_BUILDER.comment("Number of ticks for each crop to potentially be updated during").defineInRange("sprayerCropUpdateTickCount", 4, 1, 15);
+        SPRAYER_VERTICAL_RANGE = SERVER_BUILDER.comment("Max number of blocks down from the sprayer the crop can be").defineInRange("sprayerMaxVerticalRange", 5, 2, 10);
         SPRAYER_CHANCE_TO_ANIMATE = SERVER_BUILDER.comment("Chance per animation tick for the sprayer to spawn particles").defineInRange("sprayerChanceToAnimate", 0.2f, 0f, 1f);
         SERVER_BUILDER.pop();
 

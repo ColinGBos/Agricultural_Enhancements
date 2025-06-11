@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.content.duskbloom;
+package vapourdrive.agricultural_enhancements.content.duskbloom.tools;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -18,7 +18,7 @@ public class DuskBloomHoe extends HoeItem {
 
     @Override
     public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
-        DuskBloomTools.inventoryTick(stack, level, entity, slotId, isSelected);
+        DuskBloomTools.inventoryTick(stack, level);
 
     }
 
@@ -26,5 +26,10 @@ public class DuskBloomHoe extends HoeItem {
     public void appendHoverText(@NotNull ItemStack stack, Item.@NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
         tooltipComponents.add(CompUtils.getComp(AgriculturalEnhancements.MODID, "duskbloom_tool").withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+    }
+
+    @Override
+    public boolean shouldCauseReequipAnimation(@NotNull ItemStack oldStack, @NotNull ItemStack newStack, boolean slotChanged) {
+        return false;
     }
 }

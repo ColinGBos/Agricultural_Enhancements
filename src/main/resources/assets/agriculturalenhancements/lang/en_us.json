@@ -3,7 +3,7 @@
   "agriculturalenhancements.crop_manager.info": "Fuel-powered machine that plants crops and fertilizes soil up to 9 blocks away behind itself.\nConsumes fertilizer more efficiently than hand-use.\nTills soil up to 9 blocks away when using the Farmer's Wrench",
   "agriculturalenhancements.crop_manager.info_1": "Plants crops and fertilizes soil",
   "agriculturalenhancements.crop_manager.wrench": "Crouch-right-click with the Farmer's wrench to till soil up to 9 blocks away",
-  "agriculturalenhancements.duskbloom_seeds": "Rare drop from grass at a certain time of day",
+  "agriculturalenhancements.duskbloom_seed": "Rare drop from grass at a certain time of day",
   "agriculturalenhancements.duskbloom_tool": "Repairs at dusk",
   "agriculturalenhancements.duskbloom_glob": "Oily glob that is edible and burnable",
   "agriculturalenhancements.duskbloom_shard": "Crystallized potential tool material",
@@ -29,7 +29,7 @@
   "agriculturalenhancements.irrigation_controller": "Irrigation Controller",
   "agriculturalenhancements.irrigation_controller.info": "Fuel-powered machine that pressurizes irrigation pipes up to 15 blocks away from itself.\nConnects through the back or top.\nRequires a water source block underneath but won't consume it.",
   "agriculturalenhancements.irrigation_controller.info_1": "Pressurizes irrigation pipes; requires water-source below",
-  "agriculturalenhancements.irrigation_pipe.info": "Used in irrigation systems to keep soil moist and speed up crop growth.\nRequires an Irrigation Controller to remain pressurized.",
+  "agriculturalenhancements.irrigation_pipe": "Used in irrigation systems to keep soil moist and speed up crop growth.\nRequires an Irrigation Controller to remain pressurized.",
   "agriculturalenhancements.k": "K: %d",
   "agriculturalenhancements.moisture": "Moisture: %d",
   "agriculturalenhancements.n": "N: %d",
@@ -38,7 +38,7 @@
   "agriculturalenhancements.seedslot": "Seed Slot",
   "agriculturalenhancements.soil": "Like dirt, but has moisture and nutrition information.\nTills into Tilled Soil.",
   "agriculturalenhancements.tilled_soil": "Like dirt, but has moisture and nutrition information.\nSupports crops.",
-  "agriculturalenhancements.sprayer_pipe.info": "Sprayer component of irrigation systems.\nCannot be placed within 2 blocks of another sprayer.\nConnect with Irrigation Pipes.\nPlace no higher than %d blocks above crops.",
+  "agriculturalenhancements.sprayer_pipe": "Sprayer component of irrigation systems.\nCannot be placed within 2 blocks of another sprayer.\nConnect with Irrigation Pipes.\nPlace no higher than %d blocks above crops.",
   "agriculturalenhancements.tilled_soil.fertilizer_false.info": "Is created when using a hoe instead of farmland",
   "agriculturalenhancements.tilled_soil.fertilizer_true.info": "Requires fertilizer in off-hand to create when using a hoe",
   "agriculturalenhancements.tilled_soil.info": "Like farmland, but has moisture and nutrition information.\nMoisture passes naturally between soil (including tilled)",
@@ -70,5 +70,9 @@
   "item.agriculturalenhancements.duskbloom_axe": "Duskbloom Axe",
   "item.agriculturalenhancements.duskbloom_sword": "Duskbloom Sword",
   "item.agriculturalenhancements.duskbloom_hoe": "Duskbloom Hoe",
-  "item.agriculturalenhancements.duskbloom_shovel": "Duskbloom Shovel"
+  "item.agriculturalenhancements.duskbloom_shovel": "Duskbloom Shovel",
+  "item.agriculturalenhancements.duskbloom_helmet": "Duskbloom Helmet",
+  "item.agriculturalenhancements.duskbloom_chestplate": "Duskbloom Chestplate",
+  "item.agriculturalenhancements.duskbloom_leggings": "Duskbloom Leggings",
+  "item.agriculturalenhancements.duskbloom_boots": "Duskbloom Boots"
 }

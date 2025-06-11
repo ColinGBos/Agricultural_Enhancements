@@ -6,10 +6,10 @@
       "enchantment": "minecraft:fortune",
       "enchanted_chance": {
         "type": "linear",
-        "base": 0.15,
-        "per_level_above_first": 0.05
+        "base": 0.08,
+        "per_level_above_first": 0.03
       },
-      "unenchanted_chance": 0.1
+      "unenchanted_chance": 0.05
     },
     {
       "condition": "minecraft:time_check",

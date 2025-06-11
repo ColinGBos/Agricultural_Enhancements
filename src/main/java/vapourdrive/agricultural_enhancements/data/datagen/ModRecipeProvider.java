@@ -71,7 +71,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(output);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, Registration.DUSKBLOOM_SHOVEL.get())
-                .pattern(" H ").pattern(" H ").pattern(" R ")
+                .pattern(" H ").pattern(" R ").pattern(" R ")
                 .define('H', getIngredientFromTag("c", "gems/duskbloom_shard"))
                 .define('R', getIngredientFromTag("c", "rods/wooden"))
                 .unlockedBy("has_duskbloom_shard", has(ModTags.Items.GEM_DUSKBLOOM_SHARD))
@@ -81,6 +81,30 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .pattern("HH ").pattern(" R ").pattern(" R ")
                 .define('H', getIngredientFromTag("c", "gems/duskbloom_shard"))
                 .define('R', getIngredientFromTag("c", "rods/wooden"))
+                .unlockedBy("has_duskbloom_shard", has(ModTags.Items.GEM_DUSKBLOOM_SHARD))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, Registration.DUSKBLOOM_HELMET.get())
+                .pattern("HHH").pattern("H H")
+                .define('H', getIngredientFromTag("c", "gems/duskbloom_shard"))
+                .unlockedBy("has_duskbloom_shard", has(ModTags.Items.GEM_DUSKBLOOM_SHARD))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, Registration.DUSKBLOOM_LEGGINGS.get())
+                .pattern("HHH").pattern("H H").pattern("H H")
+                .define('H', getIngredientFromTag("c", "gems/duskbloom_shard"))
+                .unlockedBy("has_duskbloom_shard", has(ModTags.Items.GEM_DUSKBLOOM_SHARD))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, Registration.DUSKBLOOM_CHESTPLATE.get())
+                .pattern("H H").pattern("HHH").pattern("HHH")
+                .define('H', getIngredientFromTag("c", "gems/duskbloom_shard"))
+                .unlockedBy("has_duskbloom_shard", has(ModTags.Items.GEM_DUSKBLOOM_SHARD))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, Registration.DUSKBLOOM_BOOTS.get())
+                .pattern("H H").pattern("H H")
+                .define('H', getIngredientFromTag("c", "gems/duskbloom_shard"))
                 .unlockedBy("has_duskbloom_shard", has(ModTags.Items.GEM_DUSKBLOOM_SHARD))
                 .save(output);
 

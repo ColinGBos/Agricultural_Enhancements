@@ -3,6 +3,7 @@ package vapourdrive.agricultural_enhancements.data.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +35,15 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
     private void registerMinecraftTags() {
         tag(net.minecraft.tags.ItemTags.VILLAGER_PLANTABLE_SEEDS).add(Registration.DUSKBLOOM_SEEDS.get());
+        tag(ItemTags.FOOT_ARMOR_ENCHANTABLE).add(Registration.DUSKBLOOM_BOOTS.get());
+        tag(ItemTags.LEG_ARMOR_ENCHANTABLE).add(Registration.DUSKBLOOM_LEGGINGS.get());
+        tag(ItemTags.CHEST_ARMOR_ENCHANTABLE).add(Registration.DUSKBLOOM_CHESTPLATE.get());
+        tag(ItemTags.HEAD_ARMOR_ENCHANTABLE).add(Registration.DUSKBLOOM_HELMET.get());
+        tag(ItemTags.PICKAXES).add(Registration.DUSKBLOOM_PICKAXE.get());
+        tag(ItemTags.AXES).add(Registration.DUSKBLOOM_AXE.get());
+        tag(ItemTags.SHOVELS).add(Registration.DUSKBLOOM_SHOVEL.get());
+        tag(ItemTags.HOES).add(Registration.DUSKBLOOM_HOE.get());
+        tag(ItemTags.SWORDS).add(Registration.DUSKBLOOM_SWORD.get());
 
     }
 

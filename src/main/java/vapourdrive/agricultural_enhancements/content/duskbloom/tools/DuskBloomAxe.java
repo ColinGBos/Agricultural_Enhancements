@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.content.duskbloom;
+package vapourdrive.agricultural_enhancements.content.duskbloom.tools;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -11,14 +11,15 @@ import vapourdrive.vapourware.shared.utils.CompUtils;
 
 import java.util.List;
 
-public class DuskBloomSword extends SwordItem {
-    public DuskBloomSword(Tier tier, Properties properties) {
+public class DuskBloomAxe extends AxeItem {
+    public DuskBloomAxe(Tier tier, Properties properties) {
         super(tier, properties);
     }
 
     @Override
     public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
-        DuskBloomTools.inventoryTick(stack, level, entity, slotId, isSelected);
+        DuskBloomTools.inventoryTick(stack, level);
+
     }
 
     @Override
@@ -26,4 +27,10 @@ public class DuskBloomSword extends SwordItem {
         tooltipComponents.add(CompUtils.getComp(AgriculturalEnhancements.MODID, "duskbloom_tool").withStyle(ChatFormatting.GRAY));
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
+
+    @Override
+    public boolean shouldCauseReequipAnimation(@NotNull ItemStack oldStack, @NotNull ItemStack newStack, boolean slotChanged) {
+        return false;
+    }
+
 }

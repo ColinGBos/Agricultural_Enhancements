@@ -1,4 +1,4 @@
-package vapourdrive.agricultural_enhancements.content.duskbloom;
+package vapourdrive.agricultural_enhancements.content.duskbloom.tools;
 
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;

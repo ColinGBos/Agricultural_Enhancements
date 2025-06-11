@@ -2,15 +2,20 @@ package vapourdrive.agricultural_enhancements.setup;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -30,7 +35,10 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
-import vapourdrive.agricultural_enhancements.content.duskbloom.*;
+import vapourdrive.agricultural_enhancements.content.duskbloom.AddItemModifier;
+import vapourdrive.agricultural_enhancements.content.duskbloom.DuskBloomBlock;
+import vapourdrive.agricultural_enhancements.content.duskbloom.armor.DuskbloomArmorItem;
+import vapourdrive.agricultural_enhancements.content.duskbloom.tools.*;
 import vapourdrive.agricultural_enhancements.content.fertilizer.Fertilizer;
 import vapourdrive.agricultural_enhancements.content.fertilizer.FertilizerRecipe;
 import vapourdrive.agricultural_enhancements.content.fertilizer.producer.*;
@@ -47,6 +55,8 @@ import vapourdrive.vapourware.shared.base.BaseInfoItem;
 import vapourdrive.vapourware.shared.base.BaseInfoItemBlock;
 import vapourdrive.vapourware.shared.utils.DeferredComponent;
 
+import java.util.EnumMap;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static vapourdrive.agricultural_enhancements.AgriculturalEnhancements.MODID;
@@ -59,6 +69,7 @@ public class Registration {
     private static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(BuiltInRegistries.MENU, MODID);
     private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, MODID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, MODID);
+    public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS = DeferredRegister.create(BuiltInRegistries.ARMOR_MATERIAL, MODID);
 
 //    DATA FOR TILES
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WATER_DATA = REGISTRAR.registerComponentType(
@@ -79,17 +90,6 @@ public class Registration {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> DESTRUCTIVE_DATA = REGISTRAR.registerComponentType(
             "destructive", builder -> builder.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL)
     );
-
-//    private static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, MODID);
-//    public static final RecipeType<FertilizerRecipe> FERTILIZER_RECIPE = register("fertilizer");
-//
-//    static <T extends Recipe<?>> RecipeType<T> register(final String identifier) {
-//        return (RecipeType) Registry.register(BuiltInRegistries.RECIPE_TYPE, ResourceLocation.withDefaultNamespace(identifier), new RecipeType<T>() {
-//            public String toString() {
-//                return identifier;
-//            }
-//        });
-//    }
 
 //    HARVESTER
     public static final Supplier<HarvesterBlock> HARVESTER_BLOCK = BLOCKS.register("harvester", () -> new HarvesterBlock());
@@ -189,15 +189,49 @@ public class Registration {
             "duskbloom_hoe", () -> new DuskBloomHoe(DuskBloomToolTier.DUSKBLOOM, new Item.Properties().attributes(HoeItem.createAttributes(DuskBloomToolTier.DUSKBLOOM, -1.75F, -1.0F)))
     );
 
+    public static final Holder<ArmorMaterial> DUSKBLOOM_ARMOR_MATERIAL =
+            Registration.ARMOR_MATERIALS.register("duskbloom", () -> new ArmorMaterial(
+                    Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                        map.put(ArmorItem.Type.BOOTS, 2);
+                        map.put(ArmorItem.Type.LEGGINGS, 5);
+                        map.put(ArmorItem.Type.CHESTPLATE, 6);
+                        map.put(ArmorItem.Type.HELMET, 2);
+                        map.put(ArmorItem.Type.BODY, 5);
+                    }),
+                    18,
+                    SoundEvents.ARMOR_EQUIP_GENERIC,
+                    () -> Ingredient.of(ModTags.Items.GEM_DUSKBLOOM_SHARD),
+                    List.of(
+                            new ArmorMaterial.Layer(
+                                    ResourceLocation.fromNamespaceAndPath(AgriculturalEnhancements.MODID, "duskbloom")
+                            )
+                    ),
+                    1.0F,
+                    0
+            ));
+
+    public static final Supplier<ArmorItem> DUSKBLOOM_HELMET = ITEMS.register("duskbloom_helmet", () -> new DuskbloomArmorItem(
+            DUSKBLOOM_ARMOR_MATERIAL,
+            ArmorItem.Type.HELMET,
+            new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(22))
+    ));
+    public static final Supplier<ArmorItem> DUSKBLOOM_CHESTPLATE = ITEMS.register("duskbloom_chestplate", () -> new DuskbloomArmorItem(
+            DUSKBLOOM_ARMOR_MATERIAL,
+            ArmorItem.Type.CHESTPLATE,
+            new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(22))
+    ));
+    public static final Supplier<ArmorItem> DUSKBLOOM_LEGGINGS = ITEMS.register("duskbloom_leggings", () -> new DuskbloomArmorItem(
+            DUSKBLOOM_ARMOR_MATERIAL,
+            ArmorItem.Type.LEGGINGS,
+            new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(22))
+    ));
+    public static final Supplier<ArmorItem> DUSKBLOOM_BOOTS = ITEMS.register("duskbloom_boots", () -> new DuskbloomArmorItem(
+            DUSKBLOOM_ARMOR_MATERIAL,
+            ArmorItem.Type.BOOTS,
+            new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(22))
+    ));
+
     public static final Supplier<WateringCan> WATERING_CAN = ITEMS.register("watering_can", () -> new WateringCan(new Item.Properties()));
-
-
-
-
-
-
-
-
 
     public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS, AgriculturalEnhancements.MODID);
     public static final Supplier<MapCodec<? extends IGlobalLootModifier>> ADD_ITEM = LOOT_MODIFIERS.register("add_item", AddItemModifier.CODEC);
@@ -209,6 +243,7 @@ public class Registration {
         MENUS.register(eventBus);
         RECIPE_TYPES.register(eventBus);
         RECIPE_SERIALIZERS.register(eventBus);
+        ARMOR_MATERIALS.register(eventBus);
         REGISTRAR.register(eventBus);
         LOOT_MODIFIERS.register(eventBus);
     }
@@ -236,6 +271,10 @@ public class Registration {
             event.accept(DUSKBLOOM_SWORD.get());
             event.accept(DUSKBLOOM_SHOVEL.get());
             event.accept(DUSKBLOOM_HOE.get());
+            event.accept(DUSKBLOOM_HELMET.get());
+            event.accept(DUSKBLOOM_CHESTPLATE.get());
+            event.accept(DUSKBLOOM_LEGGINGS.get());
+            event.accept(DUSKBLOOM_BOOTS.get());
         }
     }
 }

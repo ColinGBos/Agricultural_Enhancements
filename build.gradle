@@ -34,6 +34,10 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+    }
     mavenCentral()
 }
 
@@ -154,6 +158,10 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     // at runtime, use the full JEI jar for Forge
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+
+    compileOnly "dev.emi:emi-neoforge:${emi_version}+${minecraft_version}:api"
+    runtimeOnly "dev.emi:emi-neoforge:${emi_version}+${minecraft_version}"
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation "curse.maven:jade-324717:${jade_id}"
     implementation files("libs/vapourware-${minecraft_version}-${vapourware_version}.jar")
