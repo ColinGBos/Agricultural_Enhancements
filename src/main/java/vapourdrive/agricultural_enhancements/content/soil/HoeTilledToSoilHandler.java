@@ -41,6 +41,13 @@ public class HoeTilledToSoilHandler {
             return;
         }
 
+        if (ConfigSettings.SOIL_SNEAK_PREVENTION.get()) {
+            assert player != null;
+            if (player.isCrouching()) {
+                return;
+            }
+        }
+
         boolean consume = false;
         if (potentialFert.is(Registration.FERTILIZER.get())) {
             nutrients = TilledSoilBlock.MAX_NUTRIENTS;

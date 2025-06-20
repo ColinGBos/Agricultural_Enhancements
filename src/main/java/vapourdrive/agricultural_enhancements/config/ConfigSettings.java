@@ -37,6 +37,7 @@ public class ConfigSettings {
     public static final String SUBCATEGORY_SOIL = "soil";
     public static ModConfigSpec.BooleanValue SOIL_SOFT_TRAMPLE;
     public static ModConfigSpec.BooleanValue SOIL_REQUIRES_FERTILIZER;
+    public static ModConfigSpec.BooleanValue SOIL_SNEAK_PREVENTION;
     public static ModConfigSpec.DoubleValue SOIL_CHANCE_TO_BOOST_CROP_GROWTH;
     public static ModConfigSpec.DoubleValue SOIL_CHANCE_TO_LOSE_NUTRIENTS;
     public static ModConfigSpec.BooleanValue SOIL_BOOST_CROP_DROPS;
@@ -103,8 +104,9 @@ public class ConfigSettings {
 
         SERVER_BUILDER.comment("Soil Settings").push(SUBCATEGORY_SOIL);
         SOIL_SOFT_TRAMPLE = SERVER_BUILDER.comment("Enables the soft trample feature (plants drop to minimum age on trample)").define("soilEnableSoftTrample", true);
-        SOIL_REQUIRES_FERTILIZER = SERVER_BUILDER.comment("When tilling dirt with a hoe, will only turn into soil with use of fertilizer in off-hand").define("soilTillsWithFertilizer", true);
-        SOIL_CHANCE_TO_BOOST_CROP_GROWTH = SERVER_BUILDER.comment("Chance per random tick to tick crops planted above; every random tick").defineInRange("soilChanceToBoostCropTicks", 0.15f, 0f, 1f);
+        SOIL_REQUIRES_FERTILIZER = SERVER_BUILDER.comment("When tilling dirt with a hoe, will only turn into soil with use of fertilizer in off-hand").define("soilTillsWithFertilizer", false);
+        SOIL_SNEAK_PREVENTION = SERVER_BUILDER.comment("When tilling dirt with a hoe, sneaking will prevent soil creation").define("soilPreventedBySneaking", true);
+        SOIL_CHANCE_TO_BOOST_CROP_GROWTH = SERVER_BUILDER.comment("Chance per random tick to tick crops planted above; every random tick").defineInRange("soilChanceToBoostCropTicks", 0.1f, 0f, 1f);
         SOIL_CHANCE_TO_LOSE_NUTRIENTS = SERVER_BUILDER.comment("Chance per crop boost that the soil loses nutrients").defineInRange("soilChanceToLoseNutrients", 0.1f, 0f, 1f);
         SOIL_BOOST_CROP_DROPS = SERVER_BUILDER.comment("Enables the drop additions for the tilled soil").define("soilEnableAdditionalDrops", true);
         SOIL_CHANCE_PER_NUTRIENT_LEVEL_TO_BOOST_DROPS = SERVER_BUILDER.comment("Chance per nutrient level to boost crop drops").defineInRange("soilChancePerNutrientLevelToBoostDrops", 0.2f, 0f, 1f);
@@ -112,8 +114,8 @@ public class ConfigSettings {
         SERVER_BUILDER.pop();
 
         SERVER_BUILDER.comment("Irrigation Sprayer Settings").push(SUBCATEGORY_SPRAYER);
-        SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH = SERVER_BUILDER.comment("Chance per random tick to tick crops within radius; every random tick").defineInRange("sprayerChanceToBoostCropTicks", 0.2f, 0f, 1f);
-        SPRAYER_CROP_TICK_COUNT = SERVER_BUILDER.comment("Number of ticks for each crop to potentially be updated during").defineInRange("sprayerCropUpdateTickCount", 4, 1, 15);
+        SPRAYER_CHANCE_TO_BOOST_CROP_GROWTH = SERVER_BUILDER.comment("Chance per random tick to tick crops within radius; every random tick").defineInRange("sprayerChanceToBoostCropTicks", 0.25f, 0f, 1f);
+        SPRAYER_CROP_TICK_COUNT = SERVER_BUILDER.comment("Number of ticks for each crop to potentially be updated during").defineInRange("sprayerCropUpdateTickCount", 1, 1, 15);
         SPRAYER_VERTICAL_RANGE = SERVER_BUILDER.comment("Max number of blocks down from the sprayer the crop can be").defineInRange("sprayerMaxVerticalRange", 5, 2, 10);
         SPRAYER_CHANCE_TO_ANIMATE = SERVER_BUILDER.comment("Chance per animation tick for the sprayer to spawn particles").defineInRange("sprayerChanceToAnimate", 0.2f, 0f, 1f);
         SERVER_BUILDER.pop();

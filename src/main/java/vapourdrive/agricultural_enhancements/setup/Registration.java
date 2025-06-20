@@ -159,7 +159,7 @@ public class Registration {
 
 //    DUSKBLOOK MATERIAL
     public static final Supplier<Item> DUSKBLOOM_GLOB = ITEMS.register("duskbloom_glob",
-            () -> new BaseInfoItem(new Item.Properties().food((new FoodProperties.Builder()).nutrition(4).saturationModifier(0.8F).build()) ,new DeferredComponent(MODID, "duskbloom_glob")));
+            () -> new BaseInfoItem(new Item.Properties().food((new FoodProperties.Builder()).nutrition(4).saturationModifier(0.35F).build()) ,new DeferredComponent(MODID, "duskbloom_glob")));
     public static final Supplier<Item> DUSKBLOOM_SHARD = ITEMS.register("duskbloom_shard",
             () -> new BaseInfoItem(new Item.Properties() ,new DeferredComponent(MODID, "duskbloom_shard")));
 
