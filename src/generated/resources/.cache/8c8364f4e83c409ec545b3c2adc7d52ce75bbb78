@@ -1,9 +1,0 @@
-// 1.21.1	2025-05-31T09:48:23.2525563	Tags for minecraft:item mod id vanilla
-d7a4c398cd73371ea4f3059df6a9b14d72c1f3bd data/c/tags/item/foods.json
-d7a4c398cd73371ea4f3059df6a9b14d72c1f3bd data/c/tags/item/foods/vegetable.json
-d7a4c398cd73371ea4f3059df6a9b14d72c1f3bd data/c/tags/item/gems/duskbloom_glob.json
-84f76bb1a9a782fee21004bcd087dbfb52401995 data/c/tags/item/gems/duskbloom_shard.json
-cc81c67d352b34182c5f899bd54f86957256e7a2 data/c/tags/item/seeds.json
-847e0b2a583469e72bb0e856a6d0f11c433ce78c data/c/tags/item/storage_blocks/duskbloom_glob.json
-1d68c5e88e75b13218647272ce173ce89e05e91c data/c/tags/item/storage_blocks/duskbloom_shard.json
-cc81c67d352b34182c5f899bd54f86957256e7a2 data/minecraft/tags/item/villager_plantable_seeds.json
