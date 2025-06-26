@@ -1,6 +1,7 @@
 package vapourdrive.agricultural_enhancements.content.duskbloom.armor;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +31,11 @@ public class DuskbloomArmorItem extends ArmorItem {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, Item.@NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
-        tooltipComponents.add(CompUtils.getComp(AgriculturalEnhancements.MODID, "duskbloom_tool").withStyle(ChatFormatting.GRAY));
+        if(Screen.hasShiftDown()) {
+            tooltipComponents.add(CompUtils.getComp(AgriculturalEnhancements.MODID, "duskbloom_tool").withStyle(ChatFormatting.GRAY));
+        } else {
+            CompUtils.addShiftInfo(tooltipComponents);
+        }
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 }

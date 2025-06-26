@@ -1,6 +1,7 @@
 package vapourdrive.agricultural_enhancements.content.irrigation;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.content.soil.TilledSoilBlock;
 import vapourdrive.agricultural_enhancements.setup.Registration;
+import vapourdrive.vapourware.shared.utils.CompUtils;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -181,7 +183,11 @@ public class WateringCan extends Item {
     public void appendHoverText(@NotNull ItemStack stack, Item.@NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
         String water = df.format(getWater(stack)) + "/" + df.format(getMaxWater());
         tooltipComponents.add(Component.translatable("agriculturalenhancements.watering_can.water", water).withStyle(ChatFormatting.BLUE));
-        tooltipComponents.add(Component.translatable("agriculturalenhancements.watering_can.info").withStyle(ChatFormatting.GRAY));
+        if(Screen.hasShiftDown()) {
+            tooltipComponents.add(Component.translatable("agriculturalenhancements.watering_can.info").withStyle(ChatFormatting.GRAY));
+        } else {
+            CompUtils.addShiftInfo(tooltipComponents);
+        }
     }
 
     public int getWater(ItemStack stack) {

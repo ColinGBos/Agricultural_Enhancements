@@ -1,6 +1,7 @@
 package vapourdrive.agricultural_enhancements.content.fertilizer;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
@@ -13,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.soil.TilledSoilBlock;
+import vapourdrive.vapourware.VapourWare;
+import vapourdrive.vapourware.shared.utils.CompUtils;
 
 import java.util.List;
 
@@ -22,11 +25,15 @@ public class Fertilizer extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
-        tooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.info").withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.info_1").withStyle(ChatFormatting.GRAY));
-        if (ConfigSettings.SOIL_REQUIRES_FERTILIZER.get()) {
-            tooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.tilling.info").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+        if(Screen.hasShiftDown()) {
+            tooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.info").withStyle(ChatFormatting.GRAY));
+            tooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.info_1").withStyle(ChatFormatting.GRAY));
+            if (ConfigSettings.SOIL_REQUIRES_FERTILIZER.get()) {
+                tooltipComponents.add(Component.translatable("agriculturalenhancements.fertiliser.tilling.info").withStyle(ChatFormatting.GRAY));
+            }
+        } else {
+            CompUtils.addShiftInfo(tooltipComponents);
         }
     }
 

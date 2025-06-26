@@ -38,7 +38,7 @@ public class TilledSoilBlock extends Block {
 
     public TilledSoilBlock() {
         super(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).instrument(NoteBlockInstrument.BANJO).strength(0.6f).sound(SoundType.GRAVEL));
-        this.registerDefaultState(this.stateDefinition.any().setValue(SOIL_MOISTURE, 0).setValue(SOIL_NUTRIENTS, 3));
+        this.registerDefaultState(this.stateDefinition.any().setValue(SOIL_MOISTURE, 0).setValue(SOIL_NUTRIENTS, 0));
     }
 
     @Override

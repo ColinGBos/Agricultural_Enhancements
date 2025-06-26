@@ -170,7 +170,7 @@ public class Registration {
             () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).instrument(NoteBlockInstrument.SNARE).sound(SoundType.METAL).requiresCorrectToolForDrops()
                     .strength(5.0F, 6.0F)));
     public static final Supplier<Item> DUSKBLOOM_GLOB_BLOCK_ITEM = ITEMS.register("duskbloom_glob_block", () -> new BlockItem(DUSKBLOOM_GLOB_BLOCK.get(), new Item.Properties()));
-    public static final Supplier<Item> DUSKBLOOM_SHARD_BLOCK_ITEM = ITEMS.register("duskbloom_shard_block", () -> new BlockItem(DUSKBLOOM_SHARD_BLOCK.get(), new Item.Properties()));
+    public static final Supplier<Item> DUSKBLOOM_SHARD_BLOCK_ITEM = ITEMS.register("duskbloom_shard_block", () -> new BaseInfoItemBlock(DUSKBLOOM_SHARD_BLOCK.get(), new Item.Properties(),new DeferredComponent(MODID, "duskbloom_shard_block")));
 
     //    DUSKBLOOK TOOLS
     public static final Supplier<Item> DUSKBLOOM_PICKAXE = ITEMS.register(

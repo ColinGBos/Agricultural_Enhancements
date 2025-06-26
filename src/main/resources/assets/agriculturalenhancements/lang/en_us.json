@@ -44,6 +44,7 @@
   "agriculturalenhancements.tilled_soil.info": "Like farmland, but has moisture and nutrition information.\nMoisture passes naturally between soil (including tilled)",
   "agriculturalenhancements.watering_can.info": "Holds 1 bucket worth of water.\nSpeeds crop growth and irrigates soil.\nWorks in a 3x3 area.",
   "agriculturalenhancements.watering_can.water": "Water: %d mB",
+  "agriculturalenhancements.duskbloom_shard_block": "Usable for Beacon Base",
   "block.agriculturalenhancements.crop_manager": "Crop Manager",
   "block.agriculturalenhancements.fertilizer_producer": "Fertilizer Producer",
   "block.agriculturalenhancements.harvester": "Harvester",
