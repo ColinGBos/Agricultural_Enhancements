@@ -10,6 +10,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
@@ -316,6 +317,11 @@ public class CropManagerTile extends AbstractBaseFuelUserTile implements MenuPro
             case INGREDIENT_2 -> seedHandler.insertItem(SEED_SLOTS[index], stack, simulate);
             default -> ItemStack.EMPTY;
         };
+    }
+
+    @Override
+    public ContainerData getContainerData() {
+        return this.getMachineData();
     }
 
     public int getMaxFertilizer() {

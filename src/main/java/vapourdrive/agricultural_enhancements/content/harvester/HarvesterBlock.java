@@ -61,27 +61,6 @@ public class HarvesterBlock extends AbstractBaseMachineBlock {
         }
     }
 
-//    @Override
-//    protected void openContainer(Level level, @NotNull BlockPos pos, @NotNull Player player) {
-//        BlockEntity blockEntity = level.getBlockEntity(pos);
-//        if (blockEntity instanceof HarvesterTile machine) {
-//            MenuProvider containerProvider = new MenuProvider() {
-//                @Override
-//                public @NotNull Component getDisplayName() {
-//                    return Component.translatable(AgriculturalEnhancements.MODID + ".harvester");
-//                }
-//
-//                @Override
-//                public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-//                    return new HarvesterMenu(windowId, level, pos, playerInventory, playerEntity, machine.getHarvesterData());
-//                }
-//            };
-//            NetworkHooks.openScreen((ServerPlayer) player, containerProvider, blockEntity.getBlockPos());
-//        } else {
-//            throw new IllegalStateException("Our named container provider is missing!");
-//        }
-//    }
-
     @Override
     protected void openContainer(Level level, @NotNull BlockPos pos, @NotNull Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
@@ -90,20 +69,9 @@ public class HarvesterBlock extends AbstractBaseMachineBlock {
         }
     }
 
-
-    @Override
-    public void onRemove(BlockState state, @NotNull Level world, @NotNull BlockPos blockPos, BlockState newState, boolean isMoving) {
-        if (state.getBlock() != newState.getBlock()) {
-            BlockEntity tileEntity = world.getBlockEntity(blockPos);
-            if (tileEntity instanceof HarvesterTile machine) {
-                AbstractBaseMachineBlock.dropContents(world, blockPos, machine.getItemHandler(null));
-            }
-            super.onRemove(state, world, blockPos, newState, isMoving);
-        }
-    }
-
     @Override
     protected ItemStack putAdditionalInfo(ItemStack stack, BlockEntity blockEntity) {
+        super.putAdditionalInfo(stack,blockEntity);
         if (blockEntity instanceof HarvesterTile machine) {
             stack.set(Registration.DESTRUCTIVE_DATA, machine.isNonDestructive());
         }

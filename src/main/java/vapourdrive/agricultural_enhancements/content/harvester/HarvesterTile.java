@@ -11,6 +11,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
@@ -270,6 +271,11 @@ public class HarvesterTile extends AbstractBaseFuelUserTile implements MenuProvi
             case INGREDIENT_1 -> ingredientHandler.insertItem(INGREDIENT_SLOT[index], stack, simulate);
             default -> ItemStack.EMPTY;
         };
+    }
+
+    @Override
+    public ContainerData getContainerData() {
+        return this.getHarvesterData();
     }
 
     @Override

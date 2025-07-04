@@ -52,10 +52,6 @@ public class CropManagerScreen extends AbstractBaseMachineScreen<CropManagerMenu
             hoveringText.add(Component.translatable("item.agriculturalenhancements.fertilizer").append(": ").append(df.format(m) + "/" + df.format(this.machineContainer.getMaxFertilizer())));
         }
 
-
-        // If the mouse is over the experience bar, add hovering text
-
-        // If hoveringText is not empty draw the hovering text.  Otherwise, use vanilla to render tooltip for the slots
         if (!hoveringText.isEmpty()) {
             graphics.renderComponentTooltip(this.font, hoveringText, mouseX, mouseY);
         }

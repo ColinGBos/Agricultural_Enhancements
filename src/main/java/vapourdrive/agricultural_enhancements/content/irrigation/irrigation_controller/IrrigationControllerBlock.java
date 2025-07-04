@@ -60,13 +60,11 @@ public class IrrigationControllerBlock extends AbstractBaseMachineBlock {
 
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onRemove(BlockState state, @NotNull Level world, @NotNull BlockPos blockPos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity tileEntity = world.getBlockEntity(blockPos);
             if (tileEntity instanceof IrrigationControllerTile machine) {
                 machine.changeSurroundingBlocks(state, 0);
-                dropContents(world, blockPos, machine.getItemHandler(null));
             }
             super.onRemove(state, world, blockPos, newState, isMoving);
         }

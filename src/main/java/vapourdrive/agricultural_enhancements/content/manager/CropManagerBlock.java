@@ -76,28 +76,9 @@ public class CropManagerBlock extends AbstractBaseMachineBlock {
         }
     }
 
-
-    @Override
-    public void onRemove(BlockState state, @NotNull Level world, @NotNull BlockPos blockPos, BlockState newState, boolean isMoving) {
-        if (state.getBlock() != newState.getBlock()) {
-            BlockEntity tileEntity = world.getBlockEntity(blockPos);
-            if (tileEntity instanceof CropManagerTile machine) {
-                AbstractBaseMachineBlock.dropContents(world, blockPos, machine.getItemHandler(null));
-            }
-            super.onRemove(state, world, blockPos, newState, isMoving);
-        }
-    }
-
-//    @Override
-//    protected CompoundTag putAdditionalInfo(CompoundTag tag, BlockEntity blockEntity) {
-//        if (blockEntity instanceof CropManagerTile machine) {
-//            tag.putInt(AgriculturalEnhancements.MODID + ".fertilizer", machine.getCurrentFertilizer());
-//        }
-//        return tag;
-//    }
-
     @Override
     protected ItemStack putAdditionalInfo(ItemStack stack, BlockEntity blockEntity) {
+        super.putAdditionalInfo(stack,blockEntity);
         if(blockEntity instanceof CropManagerTile machine) {
             stack.set(Registration.FERTILIZER_DATA, machine.getCurrentFertilizer());
         }

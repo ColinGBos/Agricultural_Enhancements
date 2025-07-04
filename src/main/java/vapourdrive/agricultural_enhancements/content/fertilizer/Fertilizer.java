@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
 import vapourdrive.agricultural_enhancements.content.soil.TilledSoilBlock;
-import vapourdrive.vapourware.VapourWare;
 import vapourdrive.vapourware.shared.utils.CompUtils;
 
 import java.util.List;

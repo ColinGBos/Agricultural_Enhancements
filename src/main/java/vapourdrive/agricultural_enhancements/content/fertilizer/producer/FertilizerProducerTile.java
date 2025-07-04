@@ -9,6 +9,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -281,18 +282,6 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile implements 
         tag.putInt("k", getCurrentElement(Element.K));
     }
 
-//    @Nonnull
-//    @Override
-//    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side) {
-//        if (capability == ForgeCapabilities.ITEM_HANDLER) {
-//            if (side == Direction.DOWN) {
-//                return lazyOutputHandler.cast();
-//            }
-//            return combinedHandler.cast();
-//        }
-//        return super.getCapability(capability, side);
-//    }
-
     public IItemHandler getItemHandler(@org.jetbrains.annotations.Nullable Direction side) {
 //        return combined;
         if (side == Direction.DOWN) {
@@ -360,5 +349,10 @@ public class FertilizerProducerTile extends AbstractBaseFuelUserTile implements 
             case INGREDIENT_1 -> ingredientHandler.insertItem(INGREDIENT_SLOT[index], stack, simulate);
             default -> ItemStack.EMPTY;
         };
+    }
+
+    @Override
+    public ContainerData getContainerData() {
+        return this.fertilizerProducerData;
     }
 }
