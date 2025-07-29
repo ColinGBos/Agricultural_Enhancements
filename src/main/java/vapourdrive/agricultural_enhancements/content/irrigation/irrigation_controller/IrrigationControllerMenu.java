@@ -25,9 +25,10 @@ public class IrrigationControllerMenu extends AbstractBaseMachineMenu {
 
     public static final int OUTPUT_INVENTORY_XPOS = 62;
     public static final int OUTPUT_INVENTORY_YPOS = 58;
-
+    protected final IrrigationControllerTile tileEntity;
     public IrrigationControllerMenu(int windowId, Level world, BlockPos pos, Inventory inv, Player player, IrrigationControllerData machineData) {
         super(windowId, world, pos, inv, player, Registration.IRRIGATION_CONTROLLER_MENU.get(), machineData);
+        tileEntity = (IrrigationControllerTile) world.getBlockEntity(pos);
 
         //We use this vs the builtin method because we split all the shorts
         addSplitDataSlots(machineData);
@@ -35,7 +36,7 @@ public class IrrigationControllerMenu extends AbstractBaseMachineMenu {
         layoutPlayerInventorySlots(PLAYER_INVENTORY_XPOS, PLAYER_INVENTORY_YPOS);
 
         if (tileEntity != null && tileEntity instanceof  IrrigationControllerTile machine) {
-            IItemHandler handler = machine.getItemHandler(null);
+            IItemHandler handler = tileEntity.getItemHandler(null);
             addSlot(new SlotFuel(handler, 0, 39, 58));
             addSlot(new SlotOutput(handler, 1, OUTPUT_INVENTORY_XPOS, OUTPUT_INVENTORY_YPOS));
             addSlot(new SlotOutput(handler, 2, OUTPUT_INVENTORY_XPOS + 18, OUTPUT_INVENTORY_YPOS));
