@@ -16,7 +16,7 @@ public class ModDataMapProvider extends DataMapProvider {
 
     @Override
     protected void gather() {
-        builder(NeoForgeDataMaps.FURNACE_FUELS).add(Registration.DUSKBLOOM_GLOB.get().builtInRegistryHolder(), new FurnaceFuel(400), false);
-        builder(NeoForgeDataMaps.FURNACE_FUELS).add(Registration.DUSKBLOOM_GLOB_BLOCK_ITEM.get().builtInRegistryHolder(), new FurnaceFuel(400*9), false);
+        builder(NeoForgeDataMaps.FURNACE_FUELS).add(Registration.DUSKBLOOM_GLOB.get().builtInRegistryHolder(), new FurnaceFuel(600), false);
+        builder(NeoForgeDataMaps.FURNACE_FUELS).add(Registration.DUSKBLOOM_GLOB_BLOCK_ITEM.get().builtInRegistryHolder(), new FurnaceFuel(600*9), false);
     }
 }

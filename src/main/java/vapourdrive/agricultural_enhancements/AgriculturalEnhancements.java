@@ -20,7 +20,7 @@ public class AgriculturalEnhancements {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "agriculturalenhancements";
-    public static final boolean debugMode = true;
+    public static final boolean debugMode = false;
     public static final ArrayList<ItemLike> seeds = new ArrayList<>();
 
     public AgriculturalEnhancements(ModContainer container) {
@@ -35,6 +35,7 @@ public class AgriculturalEnhancements {
 //        eventBus.addListener((FMLCommonSetupEvent event) -> ModSetup.init());
         eventBus.addListener(ModSetup::init);
         eventBus.addListener(Registration::buildContents);
+        eventBus.addListener(Registration::registerCapabilities);
     }
 
     public static void debugLog(String toLog) {

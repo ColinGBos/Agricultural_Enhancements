@@ -96,32 +96,6 @@ public class FertilizerRecipe implements Recipe<SingleRecipeInput> {
             })).apply(builder, FertilizerRecipe::new);
         });
 
-//        @Override
-//        public @NotNull FertilizerRecipe fromJson(@NotNull ResourceLocation id, @NotNull JsonObject json) {
-//            Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "ingredient"));
-//            int n = GsonHelper.getAsInt(json, "n");
-//            int p = GsonHelper.getAsInt(json, "p");
-//            int k = GsonHelper.getAsInt(json, "k");
-//
-//            return new FertilizerRecipe(id, ingredient, n, p, k);
-//        }
-
-//        @Override
-//        public @Nullable FertilizerRecipe fromNetwork(@NotNull ResourceLocation id, @NotNull FriendlyByteBuf pBuffer) {
-//            Ingredient ingredient = Ingredient.fromNetwork(pBuffer);
-//            int[] results = pBuffer.readVarIntArray();
-//            int n = results[0];
-//            int p = results[1];
-//            int k = results[2];
-//            return new FertilizerRecipe(id, ingredient, n, p, k);
-//        }
-//
-//        @Override
-//        public void toNetwork(@NotNull FriendlyByteBuf pBuffer, FertilizerRecipe pRecipe) {
-//            pRecipe.getIngredient().toNetwork(pBuffer);
-//            pBuffer.writeVarIntArray(new int[]{pRecipe.n, pRecipe.p, pRecipe.k});
-//        }
-
         private static FertilizerRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
             Ingredient ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
             int[] results = buffer.readVarIntArray();

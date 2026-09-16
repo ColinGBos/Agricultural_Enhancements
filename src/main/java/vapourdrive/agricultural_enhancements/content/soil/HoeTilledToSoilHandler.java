@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import vapourdrive.agricultural_enhancements.AgriculturalEnhancements;
 import vapourdrive.agricultural_enhancements.config.ConfigSettings;
@@ -22,14 +23,16 @@ public class HoeTilledToSoilHandler {
     @SubscribeEvent
     public static void hoeTillEvent(BlockEvent.BlockToolModificationEvent event) {
         AgriculturalEnhancements.debugLog("Hoe use " + event.getFinalState());
-
-        ItemStack potentialFert = ItemStack.EMPTY;
         Player player = event.getPlayer();
-        if (player != null) {
-            potentialFert = player.getOffhandItem();
+        if (player == null) {
+            return;
         }
+        ItemStack toolStack = event.getHeldItemStack();
+        if (!toolStack.canPerformAction(ItemAbilities.HOE_TILL)){
+            return;
+        }
+        ItemStack potentialFert = player.getOffhandItem();
         int nutrients = 0;
-
         BlockState state = event.getFinalState();
 
         Block block = state.getBlock();
@@ -42,7 +45,6 @@ public class HoeTilledToSoilHandler {
         }
 
         if (ConfigSettings.SOIL_SNEAK_PREVENTION.get()) {
-            assert player != null;
             if (player.isCrouching()) {
                 return;
             }

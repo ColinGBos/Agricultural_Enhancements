@@ -27,6 +27,8 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -159,7 +161,7 @@ public class Registration {
 
 //    DUSKBLOOK MATERIAL
     public static final Supplier<Item> DUSKBLOOM_GLOB = ITEMS.register("duskbloom_glob",
-            () -> new BaseInfoItem(new Item.Properties().food((new FoodProperties.Builder()).nutrition(4).saturationModifier(0.35F).build()) ,new DeferredComponent(MODID, "duskbloom_glob")));
+            () -> new BaseInfoItem(new Item.Properties().food((new FoodProperties.Builder()).nutrition(5).saturationModifier(0.5F).build()) ,new DeferredComponent(MODID, "duskbloom_glob")));
     public static final Supplier<Item> DUSKBLOOM_SHARD = ITEMS.register("duskbloom_shard",
             () -> new BaseInfoItem(new Item.Properties() ,new DeferredComponent(MODID, "duskbloom_shard")));
 
@@ -276,5 +278,12 @@ public class Registration {
             event.accept(DUSKBLOOM_LEGGINGS.get());
             event.accept(DUSKBLOOM_BOOTS.get());
         }
+    }
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, HARVESTER_TILE.get(), HarvesterTile::getItemHandler);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CROP_MANAGER_TILE.get(), CropManagerTile::getItemHandler);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, FERTILIZER_PRODUCER_TILE.get(), FertilizerProducerTile::getItemHandler);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, IRRIGATION_CONTROLLER_TILE.get(), IrrigationControllerTile::getItemHandler);
     }
 }
